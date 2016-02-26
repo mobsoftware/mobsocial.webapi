@@ -1,4 +1,4 @@
-# mobsocial.webapi
+# MobSocial.WebAPI
 
 WebAPI for MobSocial a free Open Source Social Network
 
