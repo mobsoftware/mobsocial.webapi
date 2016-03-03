@@ -67,9 +67,19 @@ namespace Nop.Plugin.WebApi.MobSocial
             //this.AddOrUpdatePluginLocaleResource("Plugins.ProductCarousel.Cache", "true");
             //It's required to set initializer to null (for SQL Server Compact).
             //otherwise, you'll get something like "The model backing the 'your context name' context has changed since the database was created. Consider using Code First Migrations to update the database"
+            
 
+            //first check if it's an upgrade to existing plugin, then we won't be doing any insertions
+            var mobSocialSettings =_settingService.LoadSetting<mobSocialSettings>();
+
+            if (mobSocialSettings != null)
+            {
+                //an installation is already there, so let's skip the step
+                base.Install();
+                return;
+            }
             //settings
-            var mobSocialSettings = new mobSocialSettings() {
+            mobSocialSettings = new mobSocialSettings() {
                 Version = MobSocialConstant.ReleaseVersion,
                 ProfilePictureSize = 100,
                 WidgetZone = "after_header_links",
@@ -203,39 +213,7 @@ namespace Nop.Plugin.WebApi.MobSocial
         {
 
 
-            var menuItem = new Nop.Web.Framework.Menu.SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.Text"),
-                ControllerName = "TeamPage",
-                ActionName = "Index",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-            };
-
-            var manageTeamSubMenu = new Nop.Web.Framework.Menu.SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.SubMenu.ManageTeamPage"),
-                ControllerName = "TeamPage",
-                ActionName = "Index",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-            };
-
-
-
-
-            var manageEventsSubMenu = new Nop.Web.Framework.Menu.SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.SubMenu.ManageEventPage"),
-                ControllerName = "ManageEventPage",
-                ActionName = "List",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-
-            };
-
-            menuItem.ChildNodes.Add(manageTeamSubMenu);
-            menuItem.ChildNodes.Add(manageEventsSubMenu);
-
-
-            return menuItem;
+            return null;
         }
 
 
@@ -580,44 +558,7 @@ namespace Nop.Plugin.WebApi.MobSocial
         public void ManageSiteMap(SiteMapNode rootNode)
         {
 
-            var menuItem = new SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.Text"),
-                ControllerName = "TeamPage",
-                ActionName = "Index",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-            };
-
-            var manageTeamSubMenu = new SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.SubMenu.ManageTeamPage"),
-                ControllerName = "TeamPage",
-                ActionName = "Index",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-            };
-
-
-
-
-            var manageEventsSubMenu = new SiteMapNode() {
-                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.SubMenu.ManageEventPage"),
-                ControllerName = "ManageEventPage",
-                ActionName = "List",
-                Visible = true,
-                RouteValues = new RouteValueDictionary() { { "area", null } },
-
-            };
-
-            menuItem.ChildNodes.Add(manageTeamSubMenu);
-            menuItem.ChildNodes.Add(manageEventsSubMenu);
-
-
-            var pluginNode = rootNode.ChildNodes.FirstOrDefault(x => x.SystemName == "Third party plugins");
-
-            if (pluginNode != null)
-                pluginNode.ChildNodes.Add(menuItem);
-            else
-                rootNode.ChildNodes.Add(menuItem);
+           
 
         }
     }
