@@ -829,7 +829,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpPost]
         [Route("uploadpicture")]
-        public IHttpActionResult UploadPicture(int videoBattleId, IEnumerable<HttpPostedFileBase> file)
+        public IHttpActionResult UploadPicture([FromBody] int videoBattleId)
         {
 
             //first get battle
@@ -837,37 +837,35 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             if (!CanEdit(videoBattle))
                 return Json(new { Success = false, Message = "Unauthorized" });
 
-            var files = file.ToList();
+            var files = HttpContext.Current.Request.Files;
             var newImages = new List<object>();
-            foreach (var fi in files)
+            for (var index = 0; index < files.Count; index++)
             {
-                Stream stream = null;
-                var fileName = "";
-                var contentType = "";
 
-                if (file == null)
-                    throw new ArgumentException("No file uploaded");
+                //the file
+                var file = files[index];
 
-                stream = fi.InputStream;
-                fileName = Path.GetFileName(fi.FileName);
-                contentType = fi.ContentType;
+                //and it's name
+                var fileName = file.FileName;
 
-                var fileBinary = new byte[stream.Length];
-                stream.Read(fileBinary, 0, fileBinary.Length);
+                //stream to read the bytes
+                var stream = file.InputStream;
+                var pictureBytes = new byte[stream.Length];
+                stream.Read(pictureBytes, 0, pictureBytes.Length);
 
+                //file extension and it's type
                 var fileExtension = Path.GetExtension(fileName);
                 if (!string.IsNullOrEmpty(fileExtension))
                     fileExtension = fileExtension.ToLowerInvariant();
 
+                var contentType = file.ContentType;
 
                 if (string.IsNullOrEmpty(contentType))
                 {
                     contentType = PictureUtility.GetContentType(fileExtension);
                 }
-
-                var picture = _pictureService.InsertPicture(fileBinary, contentType, null);
-
-
+                //save the picture now
+                var picture = _pictureService.InsertPicture(pictureBytes, contentType, null);
                 var videoBattlePicture = new VideoBattlePicture() {
                     EntityId = videoBattleId,
                     DateCreated = DateTime.Now,
@@ -1170,13 +1168,18 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// </summary>
         /// <param name="videoBattleId">The ID of video battle</param>
         /// <param name="participantId">The ID of Challenger or Challengee</param>
-        /// <param name="file">The Video File</param>
         /// <returns>JSon response with success as true or false</returns>
         [HttpPost]
         [Route("uploadvideo")]
-        public IHttpActionResult UploadVideo(int videoBattleId, int participantId, HttpPostedFileBase file)
+        [Authorize]
+        public IHttpActionResult UploadVideo(BattleUploadModel Model)
         {
+            int videoBattleId = Model.BattleId;
+            int participantId = Model.ParticipantId;
             //is there any file to upload
+            var file = Model.File;
+
+            // check if files are on the request.*/
             if (file == null)
             {
                 return Json(new { Success = false, Message = "Missing File" });
@@ -1212,8 +1215,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 //only if, a challenger, has not published the battle can he upload the video. Published battles' videos can't be changed
                 if (videoBattle.VideoBattleStatus == VideoBattleStatus.Pending)
                 {
+
                     //let's save the file to the server first
-                    var contentType = file.ContentType;
+                    var contentType = file.MediaType;
 
                     var fileName = Path.GetFileName(file.FileName);
                     var fileExtension = Path.GetExtension(fileName);
@@ -1227,8 +1231,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
                     var tickString = DateTime.Now.Ticks.ToString();
                     var savePath = ControllerUtil.MobSocialPluginsFolder + "Uploads/" + tickString + fileExtension;
-                    //save the file
-                    file.SaveAs(HostingEnvironment.MapPath(savePath));
+                    File.WriteAllBytes(HostingEnvironment.MapPath(savePath), file.Buffer);
 
                     //wanna generate the thumbnails for videos...ffmpeg is our friend
                     var ffmpeg = new FFMpegConverter();
