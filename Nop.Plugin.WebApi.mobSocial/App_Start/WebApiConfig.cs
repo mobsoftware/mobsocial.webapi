@@ -4,6 +4,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Nop.Core.Infrastructure;
+using Nop.Plugin.WebApi.MobSocial.MediaFormatters;
 
 namespace Nop.Plugin.WebApi.mobSocial
 {
@@ -18,6 +19,9 @@ namespace Nop.Plugin.WebApi.mobSocial
             //remove xml responses
             //TODO: MAKE IT CONFIGURABLE
             configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
+
+            //add multipart formatter for file uploads
+            configuration.Formatters.Add(new MultipartMediaTypeFormatter());
 
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(EngineContext.Current.ContainerManager.Container);
         }
