@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Mob.Core;
@@ -60,48 +58,54 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _customerFollowService = customerFollowService;
         }
 
-      
+
 
         [HttpPost]
         [Authorize]
         [Route("uploadpicture")]
-        public async Task<IHttpActionResult> UploadPicture()
+        public IHttpActionResult UploadPicture()
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
-
-            var root =  "~/App_Data"; // Path.GetTempPath();
-            var provider = new MultipartFormDataStreamProvider(root);
-            // check if files are on the request.
-            if (provider.FileData.Count == 0)
+            var files = HttpContext.Current.Request.Files;
+         
+             // check if files are on the request.*/
+            if (files.Count == 0)
             {
-                return Json(new {Success = false});
+                return Json(new { Success = false });
             }
 
             try
             {
-                // Read the form data.
-                await Request.Content.ReadAsMultipartAsync(provider);
-
                 var newImages = new List<object>();
-                // Show all the key-value pairs.
-                foreach (var fileData in provider.FileData)
+                for (var index = 0; index < files.Count; index++)
                 {
-                    var fileName = fileData.LocalFileName;
-                    var pictureBytes = File.ReadAllBytes(fileName);
+
+                    //the file
+                    var file = files[index];
+
+                    //and it's name
+                    var fileName = file.FileName;
+
+                    //stream to read the bytes
+                    var stream = file.InputStream;
+                    var pictureBytes = new byte[stream.Length];
+                    stream.Read(pictureBytes, 0, pictureBytes.Length);
+
+                    //file extension and it's type
                     var fileExtension = Path.GetExtension(fileName);
                     if (!string.IsNullOrEmpty(fileExtension))
                         fileExtension = fileExtension.ToLowerInvariant();
 
-                    var contentType = fileData.Headers.ContentType.MediaType;
+                    var contentType = file.ContentType;
 
                     if (string.IsNullOrEmpty(contentType))
                     {
                         contentType = PictureUtility.GetContentType(fileExtension);
                     }
-
+                    //save the picture now
                     var picture = _pictureService.InsertPicture(pictureBytes, contentType, null);
 
                     newImages.Add(new {
@@ -110,12 +114,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     });
                 }
 
-
                 return Json(new { Success = true, Images = newImages });
             }
             catch (Exception e)
             {
-                return Json(new { Success = false});
+                return Json(new { Success = false });
             }
         }
 
@@ -124,15 +127,15 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("setpictureas/{uploadType}/{pictureId:int}")]
         public IHttpActionResult SetPictureAs(string uploadType, int pictureId)
         {
-
+            /*BUG: NOT WORKING CORRECTLY*/
             switch (uploadType)
             {
                 case "cover":
                     _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, AdditionalCustomerAttributeNames.CoverImageId, pictureId);
                     break;
                 case "avatar":
-                    _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
-                        SystemCustomerAttributeNames.AvatarPictureId, pictureId);
+                    _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, SystemCustomerAttributeNames.AvatarPictureId, pictureId);
+
                     break;
             }
             return Json(new { Success = true });
@@ -143,8 +146,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
 
             var profile = _customerProfileService.GetByCustomerId(customerProfile.CustomerId);
-            
-            if(profile == null)
+
+            if (profile == null)
             {
                 profile = new CustomerProfile() {
                     CustomerId = customerProfile.CustomerId,
@@ -165,7 +168,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 _customerProfileService.Update(profile);
                 return;
             }
-            
+
 
         }
 
