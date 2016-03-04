@@ -50,6 +50,7 @@
     <Compile Include="Controllers\PaymentApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
     <Compile Include="Controllers\VideoBattleApiController.cs" />
+    <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
     <Compile Include="MediaFormatters\Converters\HttpContentToFormDataConverter.cs" />
