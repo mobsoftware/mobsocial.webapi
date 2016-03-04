@@ -11,6 +11,7 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Domain;
+using Nop.Plugin.WebApi.MobSocial.Extensions;
 using Nop.Plugin.WebApi.MobSocial.Services;
 using Nop.Services.Common;
 using Nop.Services.Media;
@@ -127,16 +128,29 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("setpictureas/{uploadType}/{pictureId:int}")]
         public IHttpActionResult SetPictureAs(string uploadType, int pictureId)
         {
-            /*BUG: NOT WORKING CORRECTLY*/
+            /*Due to caching, generic attributes don't update the data somehow from apicontrollers*/
+            //TODO: Find a workaround to this issue
+            //for now we have created an extension method to bypass cache for retrieve. eventually this works for now
+            string key = "";
             switch (uploadType)
             {
                 case "cover":
-                    _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, AdditionalCustomerAttributeNames.CoverImageId, pictureId);
+                    key = AdditionalCustomerAttributeNames.CoverImageId;
                     break;
                 case "avatar":
-                    _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, SystemCustomerAttributeNames.AvatarPictureId, pictureId);
-
+                    key = SystemCustomerAttributeNames.AvatarPictureId;
                     break;
+            }
+            //get the attribute with our extension method
+            var attribute = _genericAttributeService.GetAttributeByKey(_workContext.CurrentCustomer, key);
+            if (attribute == null)
+            {
+                _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, key, pictureId);
+            }
+            else
+            {
+                attribute.Value = pictureId.ToString();
+                _genericAttributeService.UpdateAttribute(attribute);
             }
             return Json(new { Success = true });
         }
