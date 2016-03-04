@@ -50,6 +50,7 @@
     <Compile Include="Controllers\PaymentApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
     <Compile Include="Controllers\VideoBattleApiController.cs" />
+    <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
     <Compile Include="MediaFormatters\Converters\HttpContentToFormDataConverter.cs" />
     <Compile Include="Core\FeatureToggle.cs" />
@@ -386,11 +387,6 @@
       <Name>Nop.Data</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\Plugins\Nop.Plugin.Payments.PayPalDirect\Nop.Plugin.Payments.PayPalDirect.csproj">
-      <Project>{83235353-0d04-4028-82b2-81116e7361da}</Project>
-      <Name>Nop.Plugin.Payments.PayPalDirect</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\Presentation\Nop.Web\Administration\Nop.Admin.csproj">
       <Project>{152c761a-dd2e-4c1f-af89-dfb2547a3bca}</Project>
       <Name>Nop.Admin</Name>
@@ -426,10 +422,6 @@
     <Reference Include="Autofac">
       <Private>False</Private>
       <HintPath>..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.WebApi, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
