@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Data.Entity;
-
-using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Linq;
-using Mob.Core;
 using Mob.Core.Data;
-using Mob.Core.Domain;
-using Nop.Core;
-using Nop.Core.Data;
-using Nop.Data;
-using Nop.Plugin.WebApi.MobSocial.Domain;
+using Nop.Plugin.WebApi.MobSocial.Migrations;
 
 namespace Nop.Plugin.WebApi.MobSocial.Data
 {
 
     public class MobSocialObjectContext : MobDbContext
     {
-        
-        public MobSocialObjectContext(string nameOrConnectionString) : base(nameOrConnectionString)
+
+        public MobSocialObjectContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
         {
 
         }
@@ -37,12 +32,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             base.OnModelCreating(modelBuilder);
 
         }
-        
+
         public override void Install()
         {
             //It's required to set initializer to null (for SQL Server Compact).
             //otherwise, you'll get something like "The model backing the 'your context name' context has changed since the database was created. Consider using Code First Migrations to update the database"
-          
+
             Database.SetInitializer<MobSocialObjectContext>(null);
 
             //because migrations are enabled, the install method may try to install tables which will eventually be installed by the migrations script
@@ -55,67 +50,14 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             try
             {
                 // uninstall regardless of errors
-                //TODO: Use reflection to delete the entity tables
-
                 // Remove Url Records
                 var dbScript = "DELETE FROM UrlRecord WHERE EntityName = 'Customer' OR EntityName = 'EventPage' OR EntityName = 'ArtistPage' OR EntityName = 'Song' OR EntityName = 'VideoBattle'; ";
                 Database.ExecuteSqlCommand(dbScript);
 
-                // DROP Tables
-                this.DropTable<EventPageAttendance>();
-                this.DropTable<EventPagePicture>();
-                this.DropTable<EventPageHotel>();
-                this.DropTable<EventPage>();
-                this.DropTable<BusinessPageCoupon>();
-                this.DropTable<BusinessPagePicture>();
-                this.DropTable<BusinessPage>();
-                this.DropTable<GroupPageMember>();
-                this.DropTable<CustomerFavoriteSong>();
-                this.DropTable<CustomerTimeline>();
-                //this.DropPluginTable"('CustomerAlbumPictureLike>());
-                this.DropTable<CustomerProfile>();
-                this.DropTable<CustomerAlbumPicture>();
-                this.DropTable<CustomerAlbum>();
-                this.DropTable<CustomerVideoLike>();
-                this.DropTable<CustomerVideo>();
-                this.DropTable<CustomerVideoAlbum>();
-                this.DropTable<GroupPage>();
-                this.DropTable<TeamPage>();
-                this.DropTable<CustomerSkateMove>();
-                this.DropTable<SkateMove>();
-                this.DropTable<CustomerFriend>();
-                this.DropTable<PictureTag>();
-                this.DropTable<Notification>();
-                this.DropTable<CustomerProfileView>();
+                // DROP Tables via migrator. we just pass 0 to tell migrator to reset to original version
+                var migrator = new DbMigrator(new Configuration());
+                migrator.Update("0");
 
-                this.DropTable<WatchedVideo>();
-                this.DropTable<ArtistPagePicture>();
-                this.DropTable<ArtistPageManager>();
-                this.DropTable<ArtistPagePayment>();
-                this.DropTable<SharedSong>();   
-                this.DropTable<SongPicture>();
-                this.DropTable<Song>();
-                this.DropTable<ArtistPage>();
-
-                this.DropTable<CustomerPaymentMethod>();
-                this.DropTable<VoterPass>();
-
-                this.DropTable<SponsorData>();
-                this.DropTable<SponsorPass>();
-                this.DropTable<Sponsor>();
-                this.DropTable<VideoBattleGenre>();
-                this.DropTable<VideoGenre>();
-                this.DropTable<VideoBattleParticipant>();
-                this.DropTable<VideoBattleVote>();
-                this.DropTable<VideoBattleVideo>();
-                this.DropTable<VideoBattlePicture>();
-                this.DropTable<VideoBattlePrize>();
-
-                this.DropTable<VideoBattle>();
-                
-
-                
-                SaveChanges();
             }
             catch (Exception)
             {
@@ -123,11 +65,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             }
 
             base.Uninstall();
-            
+
 
         }
 
-        
+
     }
 
 }

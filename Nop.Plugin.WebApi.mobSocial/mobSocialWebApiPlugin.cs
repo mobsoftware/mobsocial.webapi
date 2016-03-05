@@ -72,7 +72,7 @@ namespace Nop.Plugin.WebApi.MobSocial
             //first check if it's an upgrade to existing plugin, then we won't be doing any insertions
             var mobSocialSettings =_settingService.LoadSetting<mobSocialSettings>();
 
-            if (mobSocialSettings != null)
+            if (mobSocialSettings.Version != 0)
             {
                 //an installation is already there, so let's skip the step
                 base.Install();
