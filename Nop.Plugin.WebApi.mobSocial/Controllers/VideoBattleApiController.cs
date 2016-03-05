@@ -654,6 +654,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("getbattles")]
         public IHttpActionResult GetBattles([FromUri] VideoBattleQueryModel requestModel)
         {
+            if (requestModel == null)
+            {
+                //set default values
+                requestModel = new VideoBattleQueryModel();
+            }
             if (requestModel.Count == 0)
                 requestModel.Count = 15;
 
@@ -908,6 +913,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("inviteparticipants")]
         public IHttpActionResult InviteParticipants(InviteParticipantsModel Model)
         {
+            if (!ModelState.IsValid)
+                return Json(new { Success = false, Message = "Invalid" });
+
             var videoBattleId = Model.VideoBattleId;
             var participantIds = Model.ParticipantIds;
             var emails = Model.Emails;
@@ -1069,6 +1077,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("updateparticipantstatus")]
         public IHttpActionResult UpdateParticipantStatus(UpdateParticipantStatusModel model)
         {
+            if (!ModelState.IsValid)
+                return Json(new { Success = false, Message = "Invalid" });
+
             var videoBattleId = model.BattleId;
             var participantId = model.ParticipantId;
             var videoBattleParticipantStatus = model.VideoBattleParticipantStatus;
@@ -1174,6 +1185,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Authorize]
         public IHttpActionResult UploadVideo(BattleUploadModel Model)
         {
+            if (!ModelState.IsValid)
+                return Json(new { Success = false, Message = "Invalid" });
+
             int videoBattleId = Model.BattleId;
             int participantId = Model.ParticipantId;
             //is there any file to upload
@@ -1495,6 +1509,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("invitevoters")]
         public IHttpActionResult InviteVoters(InviteVotersModel Model)
         {
+            if (!ModelState.IsValid)
+                return Json(new { Success = false, Message = "Invalid" });
+
             var videoBattleId = Model.VideoBattleId;
             var voterIds = Model.VoterIds;
             var emails = Model.Emails;
