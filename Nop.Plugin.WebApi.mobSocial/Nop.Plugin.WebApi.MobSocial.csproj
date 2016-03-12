@@ -49,7 +49,11 @@
     <Compile Include="Controllers\BaseMobApiController.cs" />
     <Compile Include="Controllers\PaymentApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
+    <Compile Include="Controllers\TimelineApiController.cs" />
     <Compile Include="Controllers\VideoBattleApiController.cs" />
+    <Compile Include="Data\TimelinePostMap.cs" />
+    <Compile Include="Domain\TimelinePost.cs" />
+    <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
@@ -116,6 +120,9 @@
     <Compile Include="Models\SponsorsRequestModel.cs" />
     <Compile Include="Models\SponsorTransactionModel.cs" />
     <Compile Include="Models\SponsorTransactionRequestModel.cs" />
+    <Compile Include="Models\TimelinePostDisplayModel.cs" />
+    <Compile Include="Models\TimelinePostModel.cs" />
+    <Compile Include="Models\TimelinePostsRequestModel.cs" />
     <Compile Include="Models\UpdateParticipantStatusModel.cs" />
     <Compile Include="Models\UpdateSponsorModel.cs" />
     <Compile Include="Models\VideoBattlePrizeModel.cs" />
@@ -164,6 +171,7 @@
     <Compile Include="Services\ISongService.cs" />
     <Compile Include="Services\ISponsorPassService.cs" />
     <Compile Include="Services\ISponsorService.cs" />
+    <Compile Include="Services\ITimelineService.cs" />
     <Compile Include="Services\IVideoBattleGenreService.cs" />
     <Compile Include="Services\IVideoBattleParticipantService.cs" />
     <Compile Include="Services\IVideoBattlePrizeService.cs" />
@@ -186,6 +194,7 @@
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\SponsorPassService.cs" />
     <Compile Include="Services\SponsorService.cs" />
+    <Compile Include="Services\TimelineService.cs" />
     <Compile Include="Services\VideBattlePrizeService.cs" />
     <Compile Include="Services\VideoGenreService.cs" />
     <Compile Include="Services\VideoBattleVoteService.cs" />
