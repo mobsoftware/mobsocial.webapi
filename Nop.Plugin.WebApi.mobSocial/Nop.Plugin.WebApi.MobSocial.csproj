@@ -144,7 +144,6 @@
     <Compile Include="Services\CustomerFollowService.cs" />
     <Compile Include="Services\CustomerPaymentMethodService.cs" />
     <Compile Include="Services\CustomerProfileService.cs" />
-    <Compile Include="Services\CustomerTimelineService.cs" />
     <Compile Include="Services\BusinessPageCouponService.cs" />
     <Compile Include="Services\BusinessPageService.cs" />
     <Compile Include="Services\EchoNestMusicService .cs" />
