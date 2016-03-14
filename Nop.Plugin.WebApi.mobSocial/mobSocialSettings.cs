@@ -77,5 +77,7 @@ namespace Nop.Plugin.WebApi.MobSocial
 
         public int BattleVoteReminderEmailThresholdDays { get; set; }
 
+        public int TimelineSmallImageWidth { get; set; }
+
     }
 }

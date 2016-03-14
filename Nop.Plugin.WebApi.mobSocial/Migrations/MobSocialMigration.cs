@@ -35,7 +35,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Migrations
             {
                 return;
             }
-            /*
+            
             var _settingService = EngineContext.Current.Resolve<ISettingService>();
 
             var settings = _settingService.LoadSetting<mobSocialSettings>();
@@ -43,15 +43,17 @@ namespace Nop.Plugin.WebApi.MobSocial.Migrations
             if (settings.Version >= MobSocialConstant.ReleaseVersion)
                 return; // no need for any upgrade
 
-            
-            /*put your update code here
+            if (settings.Version <= 4.01m)
+            {
+                settings.TimelineSmallImageWidth = 300;
+            }
 
 
             //and update the setting
             settings.Version = MobSocialConstant.ReleaseVersion;
             _settingService.SaveSetting(settings);
             _settingService.ClearCache();
-            */
+            
            
         }
 

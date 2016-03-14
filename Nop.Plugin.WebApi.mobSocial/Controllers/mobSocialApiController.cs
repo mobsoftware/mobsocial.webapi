@@ -52,7 +52,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IRepository<UrlRecord> _urlRecordRepository;
         private readonly ICustomerVideoAlbumService _customerVideoAlbumService;
         private readonly CustomerProfileViewService _customerProfileViewService;
-        private readonly CustomerTimelineService _customerTimelineService;
 
         public mobSocialApiController(IPermissionService permissionService,
             IWorkContext workContext, AdminAreaSettings adminAreaSettings, ILocalizationService localizationService,
@@ -60,8 +59,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             ICustomerAlbumPictureService customerAlbumPictureService, mobSocialSettings mobSocialSettings, MediaSettings mediaSettings, CustomerSettings customerSettings, 
             ForumSettings forumSettings, RewardPointsSettings rewardPointsSettings, OrderSettings orderSettings,
              IStoreContext storeContext, IWebHelper webHelper, IUrlRecordService urlRecordService, IRepository<UrlRecord> urlRecordRepository,
-            ICustomerVideoAlbumService customerVideoAlbumService, CustomerProfileViewService customerProfileViewService,
-            CustomerTimelineService customerTimelineService)
+            ICustomerVideoAlbumService customerVideoAlbumService, CustomerProfileViewService customerProfileViewService)
         {
             _permissionService = permissionService;
             _workContext = workContext;
@@ -83,7 +81,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _urlRecordRepository = urlRecordRepository;
             _customerVideoAlbumService = customerVideoAlbumService;
             _customerProfileViewService = customerProfileViewService;
-            _customerTimelineService = customerTimelineService;
         }
 
         
