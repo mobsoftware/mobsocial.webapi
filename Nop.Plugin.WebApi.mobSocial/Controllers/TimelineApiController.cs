@@ -8,7 +8,6 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
-using Nop.Plugin.WebApi.MobSocial.MediaFormatters.Infrastructure;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Services;
 using Nop.Services.Common;
@@ -34,14 +33,15 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IDateTimeHelper _dateTimeHelper;
 
         private readonly MediaSettings _mediaSettings;
-
+        private readonly mobSocialSettings _mobSocialSettings;
         public TimelineApiController(ITimelineService timelineService, 
             IWorkContext workContext, 
             ICustomerFollowService customerFollowService, 
             ICustomerService customerService, 
             IPictureService pictureService, 
             MediaSettings mediaSettings,
-            IDateTimeHelper dateTimeHelper)
+            IDateTimeHelper dateTimeHelper, 
+            mobSocialSettings mobSocialSettings)
         {
             _timelineService = timelineService;
             _workContext = workContext;
@@ -50,6 +50,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _pictureService = pictureService;
             _mediaSettings = mediaSettings;
             _dateTimeHelper = dateTimeHelper;
+            _mobSocialSettings = mobSocialSettings;
         }
 
         [Route("post")]
@@ -239,8 +240,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Authorize]
         [Route("uploadpictures")]
         [HttpPost]
-        public IHttpActionResult UploadPictures(IList<HttpFile> files)
+        public IHttpActionResult UploadPictures()
         {
+            var files = HttpContext.Current.Request.Files;
+            if (files.Count == 0)
+                return Response(new { Success = false, Message = "No file uploaded" });
+
             var newImages = new List<object>();
             for (var index = 0; index < files.Count; index++)
             {
@@ -250,16 +255,17 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
                 //and it's name
                 var fileName = file.FileName;
-
                 //stream to read the bytes
-                var pictureBytes = file.Buffer;
+                var stream = file.InputStream;
+                var pictureBytes = new byte[stream.Length];
+                stream.Read(pictureBytes, 0, pictureBytes.Length);
 
                 //file extension and it's type
                 var fileExtension = Path.GetExtension(fileName);
                 if (!string.IsNullOrEmpty(fileExtension))
                     fileExtension = fileExtension.ToLowerInvariant();
 
-                var contentType = file.MediaType;
+                var contentType = file.ContentType;
 
                 if (string.IsNullOrEmpty(contentType))
                 {
@@ -270,7 +276,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 
                 newImages.Add(new {
                     ImageUrl = _pictureService.GetPictureUrl(picture.Id),
-                    ImageId = picture.Id
+                    SmallImageUrl = _pictureService.GetPictureUrl(picture.Id, _mobSocialSettings.TimelineSmallImageWidth),
+                    ImageId = picture.Id,
+                    MimeType = contentType
                 });
             }
 

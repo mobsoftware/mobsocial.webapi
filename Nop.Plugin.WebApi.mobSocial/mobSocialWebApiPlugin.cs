@@ -116,7 +116,8 @@ namespace Nop.Plugin.WebApi.MobSocial
                 MacroPaymentsPaymentProcessingPercentage = 3.5m,
                 MicroPaymentsPaymentProcessingPercentage = 5,
                 VideoUploadReminderEmailThresholdDays = 5,
-                BattleVoteReminderEmailThresholdDays = 5
+                BattleVoteReminderEmailThresholdDays = 5,
+                TimelineSmallImageWidth = 300
             };
 
             //save distribution percentages as strings

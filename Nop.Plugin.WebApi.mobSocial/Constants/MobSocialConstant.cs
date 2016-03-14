@@ -23,7 +23,7 @@
 
         public static string VideoBattleFeaturedImageUrl = PluginContentPathInternal + "/images/poweredby.jpg";
 
-        public static decimal ReleaseVersion = 4.00m;
+        public static decimal ReleaseVersion = 4.01m;
     }
 }
 
