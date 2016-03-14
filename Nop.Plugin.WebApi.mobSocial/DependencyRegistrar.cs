@@ -74,7 +74,6 @@ namespace Nop.Plugin.WebApi.MobSocial
             builder.RegisterType<CustomerVideoAlbumService>().As<ICustomerVideoAlbumService>().InstancePerRequest();
 
             builder.RegisterType<CustomerProfileViewService>().As<CustomerProfileViewService>().InstancePerRequest();
-            builder.RegisterType<CustomerTimelineService>().As<CustomerTimelineService>().InstancePerRequest();
             builder.RegisterType<CustomerProfileService>().As<CustomerProfileService>().InstancePerRequest();
             builder.RegisterType<EchoNestMusicService>().As<IMusicService>().InstancePerRequest();
             builder.RegisterType<MusicApiCredentials>().As<IOAuthCredentials>().InstancePerRequest();
