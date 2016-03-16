@@ -96,7 +96,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 PostTypeName = post.PostTypeName,
                 IsSponsored = post.IsSponsored,
                 Message = post.Message,
-                AdditionalAttributeValue = post.AdditionalAttributeValue
+                AdditionalAttributeValue = post.AdditionalAttributeValue,
+                CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin()
             };
             if (post.OwnerEntityType == TimelinePostOwnerTypeNames.Customer)
             {
@@ -192,7 +193,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     PostTypeName = post.PostTypeName,
                     IsSponsored = post.IsSponsored,
                     Message = post.Message,
-                    AdditionalAttributeValue = post.AdditionalAttributeValue
+                    AdditionalAttributeValue = post.AdditionalAttributeValue,
+                    CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin()
                 };
                 if (post.OwnerEntityType == TimelinePostOwnerTypeNames.Customer)
                 {

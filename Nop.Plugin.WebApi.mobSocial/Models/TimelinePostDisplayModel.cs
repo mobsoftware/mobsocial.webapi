@@ -36,5 +36,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
         public int TotalLikes { get; set; }
 
         public int TotalComments { get; set; }
+
+        public bool CanDelete { get; set; }
     }
 }
