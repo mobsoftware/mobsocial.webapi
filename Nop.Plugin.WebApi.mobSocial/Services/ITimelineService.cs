@@ -6,7 +6,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 {
     public interface ITimelineService : IBaseEntityService<TimelinePost>
     {
-        IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, int count = 1, int page = 15);
+        IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, int count = 15, int page = 1);
 
 
     }
