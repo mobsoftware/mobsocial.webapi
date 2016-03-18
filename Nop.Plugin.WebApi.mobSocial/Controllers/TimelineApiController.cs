@@ -108,7 +108,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 postModel.OwnerImageUrl =
                     _pictureService.GetPictureUrl(
                         customer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId),
-                        _mediaSettings.AvatarPictureSize, false);
+                        _mediaSettings.AvatarPictureSize, true);
 
                 postModel.OwnerProfileUrl = Url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary()
                     {
@@ -133,42 +133,36 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             List<TimelinePost> timelinePosts = null;
 
             //the number of posts
-            var count = 15;
+            var count = model.Count;
             //if the user is registered, then depending on value of customerId, we fetch posts. 
             //{if the customer id matches the logged in user id, he is seeing his own profile, so we show the posts by her only
             //{if the customer id is zero, then we show posts by her + posts by her friends + posts by people she is following etc.
             //{if the customer id is non-zero, then we show posts by the customer of customerId
             if (isRegistered)
             {
-                if (_workContext.CurrentCustomer.Id == customerId)
+                if (customerId != 0)
                 {
-                    timelinePosts = _timelineService.GetAll(string.Empty, count, page);
+                    //we need to get posts by this customer
+                    timelinePosts = _timelineService.GetByEntityIds("customer", new[] { customerId }, count, page).ToList();
                 }
                 else
                 {
-                    if (customerId != 0)
-                    {
-                        //we need to get posts by this customer
-                        timelinePosts = _timelineService.GetByEntityIds("customer", new[] {customerId}).ToList();
-                    }
-                    else
-                    {
-                        //we need to find he person she is following.
-                        var allFollows = _customerFollowService.GetCustomerFollows<CustomerProfile>(customerId);
+                    customerId = _workContext.CurrentCustomer.Id;
+                    //we need to find he person she is following.
+                    var allFollows = _customerFollowService.GetCustomerFollows<CustomerProfile>(customerId);
 
-                        //get all the customer's ids which she is following
-                        var customerIds =
-                            allFollows.Where(x => x.FollowingEntityName == typeof (CustomerProfile).Name)
-                                .Select(x => x.FollowingEntityId).ToList();
+                    //get all the customer's ids which she is following
+                    var customerIds =
+                        allFollows.Where(x => x.FollowingEntityName == typeof(CustomerProfile).Name)
+                            .Select(x => x.FollowingEntityId).ToList();
 
-                        //and add current customer has well to cover her own posts
-                        customerIds.Add(_workContext.CurrentCustomer.Id);
-                        
+                    //and add current customer has well to cover her own posts
+                    customerIds.Add(_workContext.CurrentCustomer.Id);
 
-                        //get timeline posts
-                        timelinePosts = _timelineService.GetByEntityIds("customer", customerIds.ToArray(), count, page).ToList();
 
-                    }
+                    //get timeline posts
+                    timelinePosts = _timelineService.GetByEntityIds("customer", customerIds.ToArray(), count, page).ToList();
+
                 }
             }
             else
@@ -205,7 +199,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     postModel.OwnerImageUrl =
                         _pictureService.GetPictureUrl(
                             customer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId),
-                            _mediaSettings.AvatarPictureSize, false);
+                            _mediaSettings.AvatarPictureSize, true);
 
                     postModel.OwnerProfileUrl = Url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary()
                     {
