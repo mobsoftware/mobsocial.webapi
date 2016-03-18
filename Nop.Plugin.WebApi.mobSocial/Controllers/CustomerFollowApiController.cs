@@ -30,7 +30,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         public IHttpActionResult Follow(string entityName, int id)
         {
             var response = false;
-            var newStatus = false;
+            var newStatus = 0;
             switch (entityName.ToLower())
             {
                 case FollowableEntityNames.VideoBattle:
@@ -41,7 +41,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     break;
             }
             if (response)
-                newStatus = true;
+                newStatus = 1;
             return Json(new {Success = response, NewStatus = newStatus, NewStatusString = "Following"});
         }
 
@@ -51,7 +51,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         public IHttpActionResult Unfollow(string entityName, int id)
         {
             var response = false;
-            var newStatus = true;
+            var newStatus = 1;
             switch (entityName.ToLower())
             {
                 case FollowableEntityNames.VideoBattle:
@@ -62,7 +62,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     break;
             }
             if (response)
-                newStatus = false;
+                newStatus = 0;
             return Json(new { Success = response, NewStatus = newStatus, NewStatusString = "Not Following" });
         }
 
