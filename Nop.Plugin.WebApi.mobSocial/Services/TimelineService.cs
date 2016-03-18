@@ -26,7 +26,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         }
 
-        public IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, int count = 1, int page = 15)
+        public IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, int count = 15, int page = 1)
         {
             return Repository.Table.Where(x => x.OwnerEntityType == owerEntityType &&
                                                ownerEntityIds.Contains(x.OwnerId))
