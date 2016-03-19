@@ -24,6 +24,7 @@ using NReco.VideoConverter;
 using System.Web.Http;
 using System.Web.Routing;
 using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Helpers;
 
 namespace Nop.Plugin.WebApi.MobSocial.Controllers
 {
@@ -46,7 +47,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IPictureService _pictureService;
         private readonly ISponsorService _sponsorService;
         private readonly IPriceFormatter _priceFormatter;
-        private readonly IOrderService _orderService;
+        private readonly ITimelineAutoPublisher _timelineAutoPublisher;
         private readonly IProductService _productService;
         private readonly ISettingService _settingService;
         private readonly IPaymentProcessingService _paymentProcessingService;
@@ -73,7 +74,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             IPriceFormatter priceFormatter,
             MediaSettings mediaSettings,
             mobSocialSettings mobSocialSettings,
-            IOrderService orderService,
+            ITimelineAutoPublisher timelineAutoPublisher,
             IProductService productService,
             ISettingService settingService,
             IPaymentProcessingService paymentProcessingService,
@@ -91,7 +92,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _watchedVideoService = watchedVideoService;
             _voterPassService = voterPassService;
             _mobSocialSettings = mobSocialSettings;
-            _orderService = orderService;
+            _timelineAutoPublisher = timelineAutoPublisher;
             _productService = productService;
             _settingService = settingService;
             _paymentProcessingService = paymentProcessingService;
@@ -136,7 +137,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 ParticipantPercentagePerVote = videoBattle.ParticipantPercentagePerVote,
                 IsSponsorshipSupported = videoBattle.IsSponsorshipSupported,
                 MinimumSponsorshipAmount = videoBattle.MinimumSponsorshipAmount,
-                SponsoredCashDistributionType = videoBattle.SponsoredCashDistributionType
+                SponsoredCashDistributionType = videoBattle.SponsoredCashDistributionType,
+                AutomaticallyPostEventsToTimeline = videoBattle.AutomaticallyPostEventsToTimeline
             };
 
 
@@ -201,12 +203,16 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             videoBattle.IsSponsorshipSupported = model.IsSponsorshipSupported;
             videoBattle.MinimumSponsorshipAmount = model.MinimumSponsorshipAmount;
             videoBattle.SponsoredCashDistributionType = model.SponsoredCashDistributionType;
-
+            videoBattle.AutomaticallyPostEventsToTimeline = model.AutomaticallyPostEventsToTimeline;
             if (model.Id == 0)
             {
                 videoBattle.VotingStartDate = model.VotingStartDate.ToUniversalTime();
                 videoBattle.VotingEndDate = model.VotingEndDate.ToUniversalTime();
                 _videoBattleService.Insert(videoBattle);
+
+                //post to timeline if required
+                if (model.AutomaticallyPostEventsToTimeline)
+                    _timelineAutoPublisher.Publish(videoBattle, TimelineAutoPostTypeNames.VideoBattle.Publish);
             }
             else
             {
@@ -231,9 +237,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     return Json(new { Success = false, Message = "Unauthorized" });
                 }
             }
-            return Json(new
-            {
-                Success = true, 
+            return Json(new {
+                Success = true,
                 Id = videoBattle.Id,
                 Url = Url.RouteUrl("VideoBattlePage", new RouteValueDictionary() { { "SeName", videoBattle.GetSeName(_workContext.WorkingLanguage.Id, true, false) } })
             });
@@ -459,7 +464,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 VideoBattleType = videoBattle.VideoBattleType,
                 VideoBattleVoteType = videoBattle.VideoBattleVoteType,
                 Id = videoBattleId,
-                RemainingSeconds = GetRemainingSeconds(videoBattle),
+                RemainingSeconds = videoBattle.GetRemainingSeconds(),
                 MaximumParticipantCount = videoBattle.MaximumParticipantCount,
                 IsUserLoggedIn = _workContext.CurrentCustomer.IsRegistered(),
                 LoggedInUserId = _workContext.CurrentCustomer.Id,
@@ -602,7 +607,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             model.ViewMode = viewMode;
             model.SeName = videoBattle.GetSeName(_workContext.WorkingLanguage.Id, true, false);
             model.VideoBattleUrl = _storeContext.CurrentStore.Url + Url.RouteUrl("VideoBattlePage",
-                new RouteValueDictionary() {{"SeName", model.SeName}});
+                new RouteValueDictionary() { { "SeName", model.SeName } });
 
             //the featured image will be used to display the image on social networks. depending on the status of battle, we either show a default image or 
             //the image of the leader as the featured image 
@@ -764,7 +769,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                         ChallengerName = challenger.GetFullName(),
                         ChallengerUrl = Url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary() { { "SeName", challenger.GetSeName(_workContext.WorkingLanguage.Id, true, false) } }),
                         VideoBattleUrl = Url.RouteUrl("VideoBattlePage", new RouteValueDictionary() { { "SeName", videoBattle.GetSeName(_workContext.WorkingLanguage.Id, true, false) } }),
-                        RemainingSeconds = GetRemainingSeconds(videoBattle),
+                        RemainingSeconds = videoBattle.GetRemainingSeconds(),
                         VideoBattleFeaturedImageUrl = thumbnailUrl,
                         ChallengerProfileImageUrl = _pictureService.GetPictureUrl(challenger.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId), _mediaSettings.AvatarPictureSize, false),
                         IsSponsorshipSupported = videoBattle.IsSponsorshipSupported,
@@ -929,7 +934,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     foreach (var pi in participantIds)
                     {
                         //exclude self
-                        if(pi == _workContext.CurrentCustomer.Id)
+                        if (pi == _workContext.CurrentCustomer.Id)
                             continue;
                         var status = _videoBattleParticipantService.GetParticipationStatus(videoBattleId, pi);
                         //only people who have not been challenged
@@ -1637,29 +1642,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     || videoBattle.VideoBattleType == VideoBattleType.Open
                     || _workContext.CurrentCustomer.IsAdmin()); //administrator
         }
-
-        /// <summary>
-        /// Returns remaining seconds of a battle for opening the battle (if it's pending) or completing the battle (if it's locked)
-        /// </summary>
-        /// <returns></returns>
-        int GetRemainingSeconds(VideoBattle videoBattle)
-        {
-            var now = DateTime.UtcNow;
-            var endDate = DateTime.UtcNow;
-
-            if (videoBattle.VideoBattleStatus == VideoBattleStatus.Pending && videoBattle.VotingStartDate > now)
-            {
-                endDate = videoBattle.VotingStartDate;
-            }
-            else if (videoBattle.VideoBattleStatus == VideoBattleStatus.Open)
-            {
-                endDate = videoBattle.VotingEndDate;
-            }
-            var diffDate = endDate.Subtract(now);
-            var maxSeconds = Convert.ToInt32(diffDate.TotalSeconds);
-            return maxSeconds;
-        }
-
         #endregion
     }
 }
