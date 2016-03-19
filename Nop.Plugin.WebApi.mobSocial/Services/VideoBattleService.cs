@@ -4,8 +4,7 @@ using System.Linq;
 using Mob.Core.Data;
 using Mob.Core.Services;
 using Nop.Core;
-using Nop.Core.Data;
-using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Constants;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Services.Configuration;
@@ -27,9 +26,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         private readonly IStoreContext _storeContext;
         private readonly ICustomerFollowService _customerFollowService;
         private readonly ICustomerService _customerService;
-        private IUrlRecordService _urlRecordService;
-        private readonly IPictureService _pictureService;
         private readonly IMobSocialMessageService _mobSocialMessageService;
+        private readonly ITimelineAutoPublisher _timelineAutoPublisher;
 
         public VideoBattleService(ISettingService settingService, IWebHelper webHelper,
             ILogger logger,
@@ -42,16 +40,18 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             IWorkContext workContext,
             IPictureService pictureService,
             ICustomerFollowService customerFollowService,
-            IMobSocialMessageService mobSocialMessageService, ICustomerService customerService, IStoreContext stoerContext)
+            IMobSocialMessageService mobSocialMessageService, 
+            ICustomerService customerService, 
+            IStoreContext stoerContext, 
+            ITimelineAutoPublisher timelineAutoPublisher)
             : base(videoBattleRepository, videoBattlePictureRepository, pictureService, workContext, urlRecordService)
         {
-            _urlRecordService = urlRecordService;
             _workContext = workContext;
-            _pictureService = pictureService;
             _customerFollowService = customerFollowService;
             _mobSocialMessageService = mobSocialMessageService;
             _customerService = customerService;
             _storeContext = stoerContext;
+            _timelineAutoPublisher = timelineAutoPublisher;
             _videoBattleRepository = videoBattleRepository;
             _videoBattleParticipantRepository = videoBattleParticpantRepository;
             _videoBattleGenreRepository = videoBattleGenreRepository;
@@ -226,6 +226,19 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
                 _videoBattleRepository.Update(battle);
 
+                //do we need to post to timeline?
+                if (battle.AutomaticallyPostEventsToTimeline)
+                {
+                    switch (battle.VideoBattleStatus)
+                    {
+                        case VideoBattleStatus.Open:
+                            _timelineAutoPublisher.Publish(battle, TimelineAutoPostTypeNames.VideoBattle.BattleStart);
+                            break;
+                        case VideoBattleStatus.Complete:
+                            _timelineAutoPublisher.Publish(battle, TimelineAutoPostTypeNames.VideoBattle.BattleComplete);
+                            break;
+                    }
+                }
                 //depending on battle status, let's send notifications
                 if (battle.VideoBattleStatus == VideoBattleStatus.Open || battle.VideoBattleStatus == VideoBattleStatus.Complete)
                 {

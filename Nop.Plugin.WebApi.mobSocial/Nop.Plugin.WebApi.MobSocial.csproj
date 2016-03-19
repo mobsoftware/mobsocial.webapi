@@ -40,6 +40,7 @@
     <Compile Include="App_Start\OwinStartup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\MobSocialConstant.cs" />
+    <Compile Include="Constants\TimelineAutoPostTypeNames.cs" />
     <Compile Include="Controllers\ControllerUtil.cs" />
     <Compile Include="Controllers\CustomerFollowApiController.cs" />
     <Compile Include="Controllers\CustomerProfileApiController.cs">
@@ -56,6 +57,7 @@
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
+    <Compile Include="Helpers\VideoBattleHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
     <Compile Include="MediaFormatters\Converters\HttpContentToFormDataConverter.cs" />
     <Compile Include="Core\FeatureToggle.cs" />
@@ -144,7 +146,6 @@
     <Compile Include="Services\CustomerFollowService.cs" />
     <Compile Include="Services\CustomerPaymentMethodService.cs" />
     <Compile Include="Services\CustomerProfileService.cs" />
-    <Compile Include="Services\CustomerTimelineService.cs" />
     <Compile Include="Services\BusinessPageCouponService.cs" />
     <Compile Include="Services\BusinessPageService.cs" />
     <Compile Include="Services\EchoNestMusicService .cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Services\ISongService.cs" />
     <Compile Include="Services\ISponsorPassService.cs" />
     <Compile Include="Services\ISponsorService.cs" />
+    <Compile Include="Services\ITimelineAutoPublisher.cs" />
     <Compile Include="Services\ITimelineService.cs" />
     <Compile Include="Services\IVideoBattleGenreService.cs" />
     <Compile Include="Services\IVideoBattleParticipantService.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\SponsorPassService.cs" />
     <Compile Include="Services\SponsorService.cs" />
+    <Compile Include="Services\TimelineAutoPublisher.cs" />
     <Compile Include="Services\TimelineService.cs" />
     <Compile Include="Services\VideBattlePrizeService.cs" />
     <Compile Include="Services\VideoGenreService.cs" />
@@ -459,7 +462,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\Websites\Testing\nopCommerce_3.70_Source\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="NReco.VideoConverter, Version=1.0.8.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">

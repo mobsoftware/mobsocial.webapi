@@ -50,5 +50,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
         public decimal MinimumSponsorshipAmount { get; set; }
 
         public SponsoredCashDistributionType SponsoredCashDistributionType { get; set; }
+
+        public bool AutomaticallyPostEventsToTimeline { get; set; }
     }
 }
