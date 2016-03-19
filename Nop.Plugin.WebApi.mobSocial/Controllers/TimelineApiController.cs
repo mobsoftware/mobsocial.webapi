@@ -77,7 +77,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 IsSponsored = model.IsSponsored,
                 OwnerEntityType = model.OwnerEntityType,
                 LinkedToEntityName = model.LinkedToEntityName,
-                LinkedToEntityId = model.LinkedToEntityId
+                LinkedToEntityId = model.LinkedToEntityId,
+                PublishDate = model.PublishDate
             };
 
             
@@ -97,7 +98,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 IsSponsored = post.IsSponsored,
                 Message = post.Message,
                 AdditionalAttributeValue = post.AdditionalAttributeValue,
-                CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin()
+                CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin(),
+                PublishDateUtc = post.PublishDate,
+                PublishDate = _dateTimeHelper.ConvertToUserTime(post.PublishDate, DateTimeKind.Utc)
             };
             if (post.OwnerEntityType == TimelinePostOwnerTypeNames.Customer)
             {
@@ -143,7 +146,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 if (customerId != 0)
                 {
                     //we need to get posts by this customer
-                    timelinePosts = _timelineService.GetByEntityIds("customer", new[] { customerId }, count, page).ToList();
+                    timelinePosts = _timelineService.GetByEntityIds("customer", new[] { customerId }, true, count, page).ToList();
                 }
                 else
                 {
@@ -161,7 +164,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
 
                     //get timeline posts
-                    timelinePosts = _timelineService.GetByEntityIds("customer", customerIds.ToArray(), count, page).ToList();
+                    timelinePosts = _timelineService.GetByEntityIds("customer", customerIds.ToArray(), true, count, page).ToList();
 
                 }
             }

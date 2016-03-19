@@ -1,4 +1,5 @@
-﻿using Nop.Web.Framework.Mvc;
+﻿using System;
+using Nop.Web.Framework.Mvc;
 
 namespace Nop.Plugin.WebApi.MobSocial.Models
 {
@@ -22,6 +23,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
 
         public bool IsHidden { get; set; }
 
-
+        public DateTime PublishDate { get; set; }
     }
 }
