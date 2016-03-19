@@ -38,5 +38,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
         public int TotalComments { get; set; }
 
         public bool CanDelete { get; set; }
+
+        public DateTime PublishDateUtc { get; set; }
+
+        public DateTime PublishDate { get; set; }
     }
 }

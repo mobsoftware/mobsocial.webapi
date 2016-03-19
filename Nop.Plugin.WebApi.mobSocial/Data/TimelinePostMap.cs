@@ -15,7 +15,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             Property(x => x.LinkedToEntityId);
             Property(x => x.LinkedToEntityName);
             Property(x => x.IsHidden);
-
+            Property(x => x.PublishDate);
         }
     }
 }

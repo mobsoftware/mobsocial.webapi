@@ -29,6 +29,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             Property(x => x.IsSponsorshipSupported);
             Property(x => x.SponsoredCashDistributionType);
             Property(x => x.MinimumSponsorshipAmount);
+            Property(x => x.AutomaticallyPostEventsToTimeline);
         }
     }
 }

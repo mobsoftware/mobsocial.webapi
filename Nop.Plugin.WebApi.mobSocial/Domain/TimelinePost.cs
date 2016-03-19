@@ -1,4 +1,5 @@
-﻿using Mob.Core.Domain;
+﻿using System;
+using Mob.Core.Domain;
 
 namespace Nop.Plugin.WebApi.MobSocial.Domain
 {
@@ -21,5 +22,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
         public string LinkedToEntityName { get; set; }
 
         public bool IsHidden { get; set; }
+
+        public DateTime PublishDate { get; set; }
     }
 }

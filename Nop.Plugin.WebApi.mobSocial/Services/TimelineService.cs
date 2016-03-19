@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Mob.Core.Data;
@@ -26,11 +27,13 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         }
 
-        public IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, int count = 15, int page = 1)
+        public IList<TimelinePost> GetByEntityIds(string owerEntityType, int[] ownerEntityIds, bool onlyPublishable = true, int count = 15, int page = 1)
         {
-            return Repository.Table.Where(x => x.OwnerEntityType == owerEntityType &&
-                                               ownerEntityIds.Contains(x.OwnerId))
-                .OrderByDescending(x => x.DateCreated)
+            var query = Repository.Table.Where(x => x.OwnerEntityType == owerEntityType &&
+                                                    ownerEntityIds.Contains(x.OwnerId));
+            if (onlyPublishable)
+                query = query.Where(x => x.PublishDate <= DateTime.UtcNow);
+            return query.OrderByDescending(x => x.DateCreated)
                 .Skip(count*(page - 1))
                 .Take(count).ToList();
         }
