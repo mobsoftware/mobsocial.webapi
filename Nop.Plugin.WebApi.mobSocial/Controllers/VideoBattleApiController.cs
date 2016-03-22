@@ -647,7 +647,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             //following or not
             model.IsFollowing =
                 _customerFollowService.GetCustomerFollow<VideoBattle>(_workContext.CurrentCustomer.Id, videoBattleId) !=
-                null;
+                null ? 1 : 0;
             //and howmany are following
             model.TotalFollowerCount = _customerFollowService.GetFollowerCount<VideoBattle>(videoBattleId);
 

@@ -90,7 +90,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
 
         public SponsorPublicModel CurrentSponsor { get; set; }
 
-        public bool IsFollowing { get; set; }
+        public int IsFollowing { get; set; }
 
         public int TotalFollowerCount { get; set; }
 
