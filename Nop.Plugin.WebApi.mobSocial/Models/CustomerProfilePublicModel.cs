@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Web.Framework.Mvc;
+using Nop.Web.Models.Profile;
 
 namespace Nop.Plugin.WebApi.MobSocial.Models
 {
@@ -38,5 +39,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
 
         public int FollowerCount { get; set; }
 
+        public ProfileIndexModel ProfileIndexModel { get; set; }
     }
 }
