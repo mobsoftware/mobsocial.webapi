@@ -110,6 +110,7 @@
     <Compile Include="Models\CustomerPaymentRequestModel.cs" />
     <Compile Include="Models\CustomerPaymentWithAddressModel.cs" />
     <Compile Include="Models\CustomerProfilePublicModel.cs" />
+    <Compile Include="Models\EntitySetImageModel.cs" />
     <Compile Include="Models\FriendPublicModel.cs" />
     <Compile Include="Models\FriendSearchModel.cs" />
     <Compile Include="Models\InviteVotersModel.cs" />

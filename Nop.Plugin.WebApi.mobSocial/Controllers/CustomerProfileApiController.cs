@@ -125,9 +125,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("setpictureas/{uploadType}/{pictureId:int}")]
-        public IHttpActionResult SetPictureAs(string uploadType, int pictureId)
+        [Route("setpictureas")]
+        public IHttpActionResult SetPictureAs(EntitySetImageModel model)
         {
+            var uploadType = model.UploadType;
+            var pictureId = model.PictureId;
             /*Due to caching, generic attributes don't update the data somehow from apicontrollers*/
             //TODO: Find a workaround to this issue
             //for now we have created an extension method to bypass cache for retrieve. eventually this works for now
