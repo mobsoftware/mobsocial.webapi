@@ -606,7 +606,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             model.IsEditable = CanEdit(videoBattle);
             model.ViewMode = viewMode;
             model.SeName = videoBattle.GetSeName(_workContext.WorkingLanguage.Id, true, false);
-            model.VideoBattleUrl = _storeContext.CurrentStore.Url + Url.RouteUrl("VideoBattlePage",
+            model.VideoBattleUrl = Url.RouteUrl("VideoBattlePage",
                 new RouteValueDictionary() { { "SeName", model.SeName } });
 
             //the featured image will be used to display the image on social networks. depending on the status of battle, we either show a default image or 
@@ -839,57 +839,49 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpPost]
         [Route("uploadpicture")]
-        public IHttpActionResult UploadPicture([FromBody] int videoBattleId)
+        public IHttpActionResult UploadPicture(BattleUploadModel model)
         {
-
+            var videoBattleId = model.BattleId;
             //first get battle
             var videoBattle = _videoBattleService.GetById(videoBattleId);
             if (!CanEdit(videoBattle))
                 return Json(new { Success = false, Message = "Unauthorized" });
 
-            var files = HttpContext.Current.Request.Files;
             var newImages = new List<object>();
-            for (var index = 0; index < files.Count; index++)
+            //the file
+            var file = model.File;
+
+            //and it's name
+            var fileName = file.FileName;
+
+            var pictureBytes = file.Buffer;
+
+            //file extension and it's type
+            var fileExtension = Path.GetExtension(fileName);
+            if (!string.IsNullOrEmpty(fileExtension))
+                fileExtension = fileExtension.ToLowerInvariant();
+
+            var contentType = file.MediaType;
+
+            if (string.IsNullOrEmpty(contentType))
             {
-
-                //the file
-                var file = files[index];
-
-                //and it's name
-                var fileName = file.FileName;
-
-                //stream to read the bytes
-                var stream = file.InputStream;
-                var pictureBytes = new byte[stream.Length];
-                stream.Read(pictureBytes, 0, pictureBytes.Length);
-
-                //file extension and it's type
-                var fileExtension = Path.GetExtension(fileName);
-                if (!string.IsNullOrEmpty(fileExtension))
-                    fileExtension = fileExtension.ToLowerInvariant();
-
-                var contentType = file.ContentType;
-
-                if (string.IsNullOrEmpty(contentType))
-                {
-                    contentType = PictureUtility.GetContentType(fileExtension);
-                }
-                //save the picture now
-                var picture = _pictureService.InsertPicture(pictureBytes, contentType, null);
-                var videoBattlePicture = new VideoBattlePicture() {
-                    EntityId = videoBattleId,
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
-                    DisplayOrder = 1,
-                    PictureId = picture.Id
-                };
-
-                _videoBattleService.InsertPicture(videoBattlePicture);
-                newImages.Add(new {
-                    ImageUrl = _pictureService.GetPictureUrl(videoBattlePicture.PictureId),
-                    ImageId = videoBattlePicture.PictureId
-                });
+                contentType = PictureUtility.GetContentType(fileExtension);
             }
+            //save the picture now
+            var picture = _pictureService.InsertPicture(pictureBytes, contentType, null);
+            var videoBattlePicture = new VideoBattlePicture() {
+                EntityId = videoBattleId,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now,
+                DisplayOrder = 1,
+                PictureId = picture.Id
+            };
+
+            _videoBattleService.InsertPicture(videoBattlePicture);
+            newImages.Add(new {
+                ImageUrl = _pictureService.GetPictureUrl(videoBattlePicture.PictureId),
+                ImageId = videoBattlePicture.PictureId
+            });
 
             return Json(new { Success = true, Images = newImages });
         }
@@ -897,8 +889,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [HttpPost]
         [Authorize]
         [Route("setpictureascover")]
-        public IHttpActionResult SetPictureAsCover(int videoBattleId, int pictureId)
+        public IHttpActionResult SetPictureAsCover(EntitySetImageModel model)
         {
+            var videoBattleId = model.EntityId;
+            var pictureId = model.PictureId;
+
             //first get battle & check if it's editable
             var videoBattle = _videoBattleService.GetById(videoBattleId);
             if (!CanEdit(videoBattle))
