@@ -41,6 +41,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\MobSocialConstant.cs" />
     <Compile Include="Constants\TimelineAutoPostTypeNames.cs" />
+    <Compile Include="Controllers\ArtistPageApiController.cs" />
     <Compile Include="Controllers\ControllerUtil.cs" />
     <Compile Include="Controllers\CustomerFollowApiController.cs" />
     <Compile Include="Controllers\CustomerProfileApiController.cs">
