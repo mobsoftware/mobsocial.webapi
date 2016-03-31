@@ -169,7 +169,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
             var friends = _friendService.GetCustomerFriends(customerId);
 
-            var model = new List<CustomerFriendsModel>();
+            var model = new List<CustomerFriendModel>();
 
             foreach (var friend in friends)
             {
@@ -186,7 +186,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                         100,
                         true);
 
-                model.Add(new CustomerFriendsModel() {
+                model.Add(new CustomerFriendModel() {
                     CustomerDisplayName = friendCustomer.GetFullName().ToTitleCase(),
                     ProfileUrl =  Url.RouteUrl("CustomerProfileUrl",
                             new RouteValueDictionary()
