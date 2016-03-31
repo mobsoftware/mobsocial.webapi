@@ -32,6 +32,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IWorkContext _workContext;
         private readonly ICustomerService _customerService;
         private readonly ICustomerFollowService _customerFollowService;
+        private readonly ICustomerLikeService _customerLikeService;
+        private readonly ICustomerCommentService _customerCommentService;
         private readonly IPictureService _pictureService;
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IVideoBattleService _videoBattleService;
@@ -46,7 +48,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             MediaSettings mediaSettings,
             IDateTimeHelper dateTimeHelper,
             mobSocialSettings mobSocialSettings,
-            IVideoBattleService videoBattleService)
+            IVideoBattleService videoBattleService, 
+            ICustomerLikeService customerLikeService, 
+            ICustomerCommentService customerCommentService)
         {
             _timelineService = timelineService;
             _workContext = workContext;
@@ -57,6 +61,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _dateTimeHelper = dateTimeHelper;
             _mobSocialSettings = mobSocialSettings;
             _videoBattleService = videoBattleService;
+            _customerLikeService = customerLikeService;
+            _customerCommentService = customerCommentService;
         }
 
         [Route("post")]
@@ -279,6 +285,15 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         private TimelinePostDisplayModel PrepareTimelinePostDisplayModel(TimelinePost post)
         {
+            //total likes for this post
+            var totalLikes = _customerLikeService.GetLikeCount<TimelinePost>(post.Id);
+            //the like status for current customer
+            var likeStatus =
+                _customerLikeService.GetCustomerLike<TimelinePost>(_workContext.CurrentCustomer.Id, post.Id) == null
+                    ? 0
+                    : 1;
+
+            var totalComments = _customerCommentService.GetCommentsCount(post.Id, typeof (TimelinePost).Name);
             var postModel = new TimelinePostDisplayModel() {
                 Id = post.Id,
                 DateCreatedUtc = post.DateCreated,
@@ -291,7 +306,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 IsSponsored = post.IsSponsored,
                 Message = post.Message,
                 AdditionalAttributeValue = post.AdditionalAttributeValue,
-                CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin()
+                CanDelete = post.OwnerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin(),
+                TotalLikes = totalLikes,
+                LikeStatus = likeStatus,
+                TotalComments = totalComments
             };
             if (post.OwnerEntityType == TimelinePostOwnerTypeNames.Customer)
             {

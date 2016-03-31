@@ -42,7 +42,9 @@
     <Compile Include="Constants\MobSocialConstant.cs" />
     <Compile Include="Constants\TimelineAutoPostTypeNames.cs" />
     <Compile Include="Controllers\ArtistPageApiController.cs" />
+    <Compile Include="Controllers\CommentApiController.cs" />
     <Compile Include="Controllers\ControllerUtil.cs" />
+    <Compile Include="Controllers\CustomerLikeApiController.cs" />
     <Compile Include="Controllers\CustomerFollowApiController.cs" />
     <Compile Include="Controllers\CustomerProfileApiController.cs">
       <SubType>Code</SubType>
@@ -53,7 +55,11 @@
     <Compile Include="Controllers\SponsorApiController.cs" />
     <Compile Include="Controllers\TimelineApiController.cs" />
     <Compile Include="Controllers\VideoBattleApiController.cs" />
+    <Compile Include="Data\CustomerCommentMap.cs" />
+    <Compile Include="Data\CustomerLikeMap.cs" />
     <Compile Include="Data\TimelinePostMap.cs" />
+    <Compile Include="Domain\CustomerComment.cs" />
+    <Compile Include="Domain\CustomerLike.cs" />
     <Compile Include="Domain\TimelinePost.cs" />
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
@@ -106,6 +112,10 @@
     <Compile Include="MediaFormatters\MultipartMediaTypeFormatter.cs" />
     <Compile Include="mobSocialWebApiPlugin.cs" />
     <Compile Include="Models\BattleUploadModel.cs" />
+    <Compile Include="Models\CustomerCommentModel.cs" />
+    <Compile Include="Models\CustomerCommentPublicModel.cs" />
+    <Compile Include="Models\CustomerCommentRequestModel.cs" />
+    <Compile Include="Models\CustomerFriendModel.cs" />
     <Compile Include="Models\CustomerPaymentModel.cs" />
     <Compile Include="Models\CustomerPaymentPublicModel.cs" />
     <Compile Include="Models\CustomerPaymentRequestModel.cs" />
@@ -144,7 +154,9 @@
     <Compile Include="Services\ArtistPagePaymentService.cs" />
     <Compile Include="Services\ArtistPageService.cs" />
     <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\CustomerCommentService.cs" />
     <Compile Include="Services\CustomerFavoriteSongService.cs" />
+    <Compile Include="Services\CustomerLikeService.cs" />
     <Compile Include="Services\CustomerFollowService.cs" />
     <Compile Include="Services\CustomerPaymentMethodService.cs" />
     <Compile Include="Services\CustomerProfileService.cs" />
@@ -161,6 +173,8 @@
     <Compile Include="Services\IBusinessPageCouponService.cs" />
     <Compile Include="Services\IBusinessPageService.cs" />
     <Compile Include="Services\ICustomerFavoriteSongService.cs" />
+    <Compile Include="Services\ICustomerCommentService.cs" />
+    <Compile Include="Services\ICustomerLikeService.cs" />
     <Compile Include="Services\ICustomerFollowService.cs" />
     <Compile Include="Services\ICustomerPaymentMethodService.cs" />
     <Compile Include="Services\IFriendService.cs" />
@@ -346,8 +360,6 @@
     <Compile Include="Domain\GroupPage.cs" />
     <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Models\FriendRequestModel.cs" />
-    <Compile Include="Models\CustomerFriendsModel.cs" />
-    <Compile Include="Models\CustomerFriendModel.cs" />
     <Compile Include="Models\SocialNetworkNavigationModel.cs" />
     <Compile Include="Models\ProfilePictureModel.cs" />
     <Compile Include="Models\CustomerFriendBlock\CustomerFriendBlockModel.cs" />
