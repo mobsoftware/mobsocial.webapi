@@ -28,11 +28,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IPictureService _pictureService;
         private readonly MediaSettings _mediaSettings;
 
-        public CommentApiController(ICustomerCommentService customerCommentService, 
-            IWorkContext workContext, 
-            IDateTimeHelper dateTimeHelper, 
-            ICustomerService customerService, 
-            ICustomerLikeService customerLikeService, 
+        public CommentApiController(ICustomerCommentService customerCommentService,
+            IWorkContext workContext,
+            IDateTimeHelper dateTimeHelper,
+            ICustomerService customerService,
+            ICustomerLikeService customerLikeService,
             IPictureService pictureService, MediaSettings mediaSettings)
         {
             _customerCommentService = customerCommentService;
@@ -50,11 +50,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         public IHttpActionResult Post(CustomerCommentModel model)
         {
             if (!ModelState.IsValid)
-                return Response(new {Success = false});
+                return Response(new { Success = false });
 
             //save the comment
-            var comment = new CustomerComment()
-            {
+            var comment = new CustomerComment() {
                 AdditionalData = model.AdditionalData,
                 CommentText = model.CommentText,
                 EntityName = model.EntityName,
@@ -64,8 +63,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 CustomerId = _workContext.CurrentCustomer.Id
             };
             _customerCommentService.Insert(comment);
-            var cModel = PrepareCommentPublicModel(comment, new[] {_workContext.CurrentCustomer});
-            return Response(new {Success = true});
+            var cModel = PrepareCommentPublicModel(comment, new[] { _workContext.CurrentCustomer });
+            return Response(new { Success = true, Comment = cModel });
         }
 
         [Route("get")]
@@ -94,7 +93,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             }
 
             //send the response
-            return Response(new {Success = true, Comments = commentModels});
+            return Response(new { Success = true, Comments = commentModels });
         }
 
         [Route("delete/{commentId:int}")]
@@ -104,16 +103,16 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             //only administrator or comment owner can delete the comment, so first let's retrieve the comment
             var comment = _customerCommentService.GetById(commentId);
-            if(comment == null)
-                return Response(new {Success = false, Message = "Comment doesn't exist"});
+            if (comment == null)
+                return Response(new { Success = false, Message = "Comment doesn't exist" });
             //so who is ringing the bell?
-            if(comment.CustomerId != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
+            if (comment.CustomerId != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
                 return Response(new { Success = false, Message = "Unauthorized" });
 
             //come in and delete the comment
             _customerCommentService.Delete(comment);
 
-            return Response(new {Success = true});
+            return Response(new { Success = true });
         }
 
 
@@ -125,6 +124,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var customer = customers.FirstOrDefault(x => x.Id == comment.CustomerId);
             if (customer == null)
                 return null;
+            var likeStatus = _customerLikeService.GetCustomerLike<CustomerComment>(_workContext.CurrentCustomer.Id, comment.Id) == null ? 0 : 1;
             //and create it's response model
             var cModel = new CustomerCommentPublicModel() {
                 EntityName = comment.EntityName,
@@ -136,7 +136,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 DateCreated = _dateTimeHelper.ConvertToUserTime(comment.DateCreated, DateTimeKind.Utc),
                 CanDelete = comment.CustomerId == _workContext.CurrentCustomer.Id || _workContext.CurrentCustomer.IsAdmin(),
                 IsSpam = false, //TODO: change it when spam system has been implemented
-                LikeCount = _customerLikeService.GetLikeCount<CustomerComment>(comment.EntityId),
+                LikeCount = _customerLikeService.GetLikeCount<CustomerComment>(comment.Id),
                 CustomerName = customer.GetFullName(),
                 CustomerProfileUrl = Url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary()
                     {
@@ -144,7 +144,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     }),
                 CustomerProfileImageUrl = _pictureService.GetPictureUrl(
                     customer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId),
-                    _mediaSettings.AvatarPictureSize, true)
+                    _mediaSettings.AvatarPictureSize, true),
+                LikeStatus = likeStatus
             };
             return cModel;
         }

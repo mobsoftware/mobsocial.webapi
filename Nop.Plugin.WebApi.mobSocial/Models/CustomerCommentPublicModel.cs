@@ -19,6 +19,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
 
         public int LikeCount { get; set; }
 
+        public int LikeStatus { get; set; }
+
         public DateTime DateCreatedUtc { get; set; }
 
         public DateTime DateCreated { get; set; }

@@ -37,6 +37,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 case LikableEntityNames.TimelinePost:
                     response = Like<TimelinePost>(id);
                     break;
+                case LikableEntityNames.CustomerComment:
+                    response = Like<CustomerComment>(id);
+                    break;
             }
             if (response)
                 newStatus = 1;
@@ -60,6 +63,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     break;
                 case LikableEntityNames.TimelinePost:
                     response = Unlike<TimelinePost>(id);
+                    break;
+                case LikableEntityNames.CustomerComment:
+                    response = Unlike<CustomerComment>(id);
                     break;
             }
             if (response)
@@ -91,6 +97,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             public const string VideoBattle = "videobattle";
             public const string Customer = "customer";
             public const string TimelinePost = "timelinepost";
+            public const string CustomerComment = "customercomment";
         }
 
         #endregion
