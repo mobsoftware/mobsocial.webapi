@@ -149,7 +149,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             else
             {
                 //should we show the data to non logged in user?
-                return null;
+                //return null;
+                timelinePosts = _timelineService.GetByEntityIds("customer", new[] { customerId }, true, count, page).ToList();
             }
 
             var responseModel = new List<TimelinePostDisplayModel>();
