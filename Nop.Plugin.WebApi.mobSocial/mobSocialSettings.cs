@@ -61,6 +61,8 @@ namespace Nop.Plugin.WebApi.MobSocial
         public decimal Version { get; set; }
 
         //TODO: move these setings to a separate payment processing plugin
+        public decimal MicroMacroPaymentSwitchingAmount { get; set; }
+
         public decimal MicroPaymentsFixedPaymentProcessingFee { get; set; }
 
         public decimal MicroPaymentsPaymentProcessingPercentage{ get; set; }

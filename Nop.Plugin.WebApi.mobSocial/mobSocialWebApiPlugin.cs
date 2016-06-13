@@ -210,16 +210,6 @@ namespace Nop.Plugin.WebApi.MobSocial
             return true;
         }
 
-        public Nop.Web.Framework.Menu.SiteMapNode BuildMenuItem()
-        {
-
-
-            return null;
-        }
-
-
-
-
         #region Helper Methods
         private void AddScheduledTasks()
         {
@@ -558,9 +548,30 @@ namespace Nop.Plugin.WebApi.MobSocial
 
         public void ManageSiteMap(SiteMapNode rootNode)
         {
+            var menuItem = new SiteMapNode() {
+                Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.Text"),
+                ControllerName = "Configuration",
+                ActionName = "Configure",
+                Visible = true,
+                RouteValues = new RouteValueDictionary() { { "area", null } },
+            };
 
-           
+            var configureSubMenu = new SiteMapNode() {
+                Title = "mobSocial Settings",
+                ControllerName = "Configuration",
+                ActionName = "Configure",
+                Visible = true,
+                RouteValues = new RouteValueDictionary() { { "area", null } },
+            };
 
+            menuItem.ChildNodes.Add(configureSubMenu);
+
+            var pluginNode = rootNode.ChildNodes.FirstOrDefault(x => x.SystemName == "Third party plugins");
+
+            if (pluginNode != null)
+                pluginNode.ChildNodes.Add(menuItem);
+            else
+                rootNode.ChildNodes.Add(menuItem);
         }
     }
 }
