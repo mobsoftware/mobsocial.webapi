@@ -1,16 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mob.Core.Data;
 using Mob.Core.Services;
-using Nop.Core;
-using Nop.Core.Data;
-using Nop.Core.Domain.Media;
 using Nop.Plugin.WebApi.MobSocial.Domain;
-using Nop.Services.Configuration;
-using Nop.Services.Events;
-using Nop.Services.Logging;
-using Nop.Services.Seo;
 
 namespace Nop.Plugin.WebApi.MobSocial.Services
 {
@@ -19,13 +11,15 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
     /// </summary>
     public class TeamPageService : BaseEntityService<TeamPage>, ITeamPageService
     {
-    
-        public TeamPageService(ISettingService settingService, IWebHelper webHelper,
-            ILogger logger, IEventPublisher eventPublisher,
-            IMobRepository<TeamPage> teamPageRepository,
-            IUrlRecordService urlRecordService,
-            IWorkContext workContext) : base(teamPageRepository)
+
+        private readonly IMobRepository<GroupPage> _groupPageRepository;
+        private readonly IMobRepository<GroupPageMember> _groupPageMembeRepository;
+
+        public TeamPageService(IMobRepository<TeamPage> teamPageRepository,
+            IMobRepository<GroupPage> groupPageRepository, IMobRepository<GroupPageMember> groupPageMembeRepository) : base(teamPageRepository)
         {
+            _groupPageRepository = groupPageRepository;
+            _groupPageMembeRepository = groupPageMembeRepository;
         }
 
 
@@ -38,9 +32,35 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
                 .Take(Count)
                 .ToList();
         }
+
+        public TeamPage GetTeamPageByGroup(int groupId)
+        {
+            //first let's query the team id of the group
+            var group = _groupPageRepository.Table.FirstOrDefault(x => x.Id == groupId);
+            //query the team page
+            return @group == null ? null : GetById(@group.TeamId);
+
+        }
+
+        public void SafeDelete(TeamPage team)
+        {
+            var groupPageIds = team.GroupPages.Select(x => x.Id);
+            //get group member associations
+            var groupMembers = _groupPageMembeRepository.Table.Where(x => groupPageIds.Contains(x.GroupPageId)).ToList();
+
+            //delete all group members
+            _groupPageMembeRepository.Delete(groupMembers);
+
+            //delete all groups
+            _groupPageRepository.Delete(team.GroupPages);
+
+            //delete the team
+            Delete(team);
+
+        }
     }
 
 }
 
-    
+
 

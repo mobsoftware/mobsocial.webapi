@@ -10,7 +10,7 @@ using Nop.Plugin.WebApi.MobSocial.Domain;
 
 namespace Nop.Plugin.WebApi.MobSocial.Services
 {
-    public class CustomerProfileViewService : BaseEntityService<CustomerProfileView>
+    public class CustomerProfileViewService : BaseEntityService<CustomerProfileView>, ICustomerProfileViewService
     {
         private readonly mobSocialSettings _mobSocialSettings;
         private readonly IWorkContext _workContext;

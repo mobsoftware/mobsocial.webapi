@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Nop.Web.Framework.Mvc;
 
 namespace Nop.Plugin.WebApi.MobSocial.Models.TeamPage
 {
-    public class TeamPageGroupModel
+    public class TeamPageGroupModel : BaseNopEntityModel
     {
+        public int TeamId { get; set; }
 
-        public TeamPageGroupModel()
-        {
-            Members = new List<TeamPageGroupMemberModel>();
-        }
+        public virtual string Name { get; set; }
 
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
-        public List<TeamPageGroupMemberModel> Members { get; set; }
+        public virtual string PayPalDonateUrl { get; set; }
+
+        public virtual int DisplayOrder { get; set; }
 
     }
 }

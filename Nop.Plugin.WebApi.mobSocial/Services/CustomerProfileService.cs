@@ -9,7 +9,7 @@ using Nop.Plugin.WebApi.MobSocial.Domain;
 
 namespace Nop.Plugin.WebApi.MobSocial.Services
 {
-    public class CustomerProfileService : BaseEntityService<CustomerProfile>
+    public class CustomerProfileService : BaseEntityService<CustomerProfile>, ICustomerProfileService
     {
         private readonly IMobRepository<CustomerFriend> _customerFriendRepository;
 

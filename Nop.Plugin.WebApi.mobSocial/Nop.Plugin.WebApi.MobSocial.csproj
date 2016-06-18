@@ -54,6 +54,7 @@
     <Compile Include="Controllers\BaseMobApiController.cs" />
     <Compile Include="Controllers\PaymentApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
+    <Compile Include="Controllers\TeamPageApiController.cs" />
     <Compile Include="Controllers\TimelineApiController.cs" />
     <Compile Include="Controllers\VideoBattleApiController.cs" />
     <Compile Include="Data\CustomerCommentMap.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Domain\CustomerLike.cs" />
     <Compile Include="Domain\TimelinePost.cs" />
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
+    <Compile Include="Extensions\CustomerExtensions.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="Helpers\VideoBattleHelpers.cs" />
@@ -135,6 +137,8 @@
     <Compile Include="Models\SponsorsRequestModel.cs" />
     <Compile Include="Models\SponsorTransactionModel.cs" />
     <Compile Include="Models\SponsorTransactionRequestModel.cs" />
+    <Compile Include="Models\TeamPage\TeamPageGroupPublicModel.cs" />
+    <Compile Include="Models\TeamPage\TeamPagePublicModel.cs" />
     <Compile Include="Models\TimelinePostDisplayModel.cs" />
     <Compile Include="Models\TimelinePostModel.cs" />
     <Compile Include="Models\TimelinePostsRequestModel.cs" />
@@ -179,6 +183,8 @@
     <Compile Include="Services\ICustomerLikeService.cs" />
     <Compile Include="Services\ICustomerFollowService.cs" />
     <Compile Include="Services\ICustomerPaymentMethodService.cs" />
+    <Compile Include="Services\ICustomerProfileService.cs" />
+    <Compile Include="Services\ICustomerProfileViewService.cs" />
     <Compile Include="Services\IFriendService.cs" />
     <Compile Include="Services\IMobSecurityService.cs" />
     <Compile Include="Services\IMobSocialMessageService.cs" />
@@ -190,6 +196,8 @@
     <Compile Include="Services\ISongService.cs" />
     <Compile Include="Services\ISponsorPassService.cs" />
     <Compile Include="Services\ISponsorService.cs" />
+    <Compile Include="Services\ITeamPageGroupMemberService.cs" />
+    <Compile Include="Services\ITeamPageGroupService.cs" />
     <Compile Include="Services\ITimelineAutoPublisher.cs" />
     <Compile Include="Services\ITimelineService.cs" />
     <Compile Include="Services\IVideoBattleGenreService.cs" />
@@ -214,6 +222,8 @@
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\SponsorPassService.cs" />
     <Compile Include="Services\SponsorService.cs" />
+    <Compile Include="Services\TeamPageGroupMemberService.cs" />
+    <Compile Include="Services\TeamPageGroupService.cs" />
     <Compile Include="Services\TimelineAutoPublisher.cs" />
     <Compile Include="Services\TimelineService.cs" />
     <Compile Include="Services\VideBattlePrizeService.cs" />
