@@ -1,4 +1,5 @@
 ﻿using System.Web.Http.Routing;
+using System.Web.Routing;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
@@ -30,7 +31,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions
                 FriendCount = customerProfileService.GetFriendCount(customer.Id),
                 CustomerName = customer.GetFullName(),
                 SeName = customerSeName,
-                ProfileUrl = url.Route("CustomerProfileUrl", new {SeName = customerSeName}),
+                ProfileUrl = url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary()
+                {
+                    {"SeName" , customerSeName}
+                }),
                 ProfileImageUrl =
                     pictureService.GetPictureUrl(
                         customer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId),
