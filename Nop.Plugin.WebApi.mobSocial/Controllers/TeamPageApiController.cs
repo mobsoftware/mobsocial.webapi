@@ -128,6 +128,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
             var model = Mapper.Map<TeamPageModel>(teamPage);
 
+            model.Groups = GetTeamPageGroupPublicModels(id);
+            //is the page editable
+            model.IsEditable = _workContext.CurrentCustomer.IsAdmin() ||
+                               _workContext.CurrentCustomer.Id == teamPage.CreatedBy;
+
             return Response(new
             {
                 Success = true,
@@ -185,11 +190,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("group/post")]
         public IHttpActionResult PostGroup(TeamPageGroupModel model)
         {
-            if(!ModelState.IsValid || model == null || model.TeamId == 0)
+            if(!ModelState.IsValid || model == null || model.TeamPageId == 0)
                 return Response(new { Success = false, Message = "Invalid data" });
 
             //check if the team page exists? and if it does, is the person creating the group has the authority
-            var teamPage = _teamPageService.GetById(model.TeamId);
+            var teamPage = _teamPageService.GetById(model.TeamPageId);
             if (teamPage == null)
             {
                 return Response(new {
@@ -209,7 +214,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             //ok, so we are good to save the group
             var group = new GroupPage()
             {
-                TeamId = model.TeamId,
+                TeamId = model.TeamPageId,
                 Name = model.Name,
                 Description = model.Description,
                 PayPalDonateUrl = model.PayPalDonateUrl,
@@ -220,7 +225,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
             _teamPageGroupService.Insert(group);
             return Response(new {
-                Success = true
+                Success = true,
+                Id = group.Id
             });
         }
         [HttpPut]
@@ -228,11 +234,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [Route("group/put")]
         public IHttpActionResult PutGroup(TeamPageGroupModel model)
         {
-            if (!ModelState.IsValid || model == null || model.TeamId == 0 || model.Id == 0)
+            if (!ModelState.IsValid || model == null || model.TeamPageId == 0 || model.Id == 0)
                 return Response(new { Success = false, Message = "Invalid data" });
 
             //check if the team page exists? and if it does, is the person creating the group has the authority
-            var teamPage = _teamPageService.GetById(model.TeamId);
+            var teamPage = _teamPageService.GetById(model.TeamPageId);
             if (teamPage == null)
             {
                 return Response(new {
@@ -263,14 +269,31 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             //and map it
             Mapper.Map(model, groupPage);
 
-            //update the group page now
+            //if the current group is default group, the other one should be set as non-default
+            if (model.IsDefault)
+            {
+                //first get all groups of this team
+                var groupPages = _teamPageGroupService.GetGroupPagesByTeamId(model.TeamPageId);
+                foreach (var gp in groupPages)
+                {
+                    if (gp.Id != groupPage.Id)
+                    {
+                        //set default false and update the group
+                        gp.IsDefault = false;
+                        _teamPageGroupService.Update(gp);
+                    }
+                }
+            }
+
+            //update the current group page now
             _teamPageGroupService.Update(groupPage);
             return Response(new {
-                Success = true
+                Success = true,
+                Id = groupPage.Id
             });
         }
 
-        [Route("delete/{groupId:int}")]
+        [Route("group/delete/{groupId:int}")]
         [HttpDelete]
         [Authorize]
         public IHttpActionResult DeleteGroup(int groupId)
@@ -310,6 +333,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     _teamPageGroupService.SafeDelete(group);
                 }
             }
+            //safe delete the group. replacement for the code written below
+            _teamPageGroupService.SafeDelete(group);
+
+            //the code below was commented to avoid any confusion regarding deletion
+            //todo: decide whether we should keep the code below
+            /*
             else
             {
                 //since it's not a default group, we'll need to move all members to default group
@@ -332,7 +361,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     //delete the group now
                     _teamPageGroupService.Delete(group);
                 }
-            }
+            }*/
             return Response(new {Success = true});
 
         }
@@ -350,6 +379,134 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     Message = "Team page not found"
                 });
             }
+
+            var listTeamPageGroups = GetTeamPageGroupPublicModels(teamId);
+
+            //send the response
+            return Json(new
+            {
+                Success = true,
+                TeamGroups = listTeamPageGroups
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("group/members/post")]
+        public IHttpActionResult PostGroupMembers(TeamPageGroupMemberModel model)
+        {
+            //we'll have to check each group and then each member in question to see if they both exist and that a 
+            //group member entry already exist for the combination
+            //lets first query all the members
+            var members = _customerService.GetCustomersByIds(model.CustomerId);
+            if(members.Count == 0)
+                return Json(new
+                {
+                    Success = false,
+                    Message = "Members don't exist"
+                });
+
+            //does this team exist
+            var team = _teamPageService.GetById(model.TeamId);
+            if (team == null ||
+                (team.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin()))
+            {
+                return Json(new {
+                    Success = false,
+                    Message = "Unauthorized"
+                });
+            }
+
+            
+            //if user hasn't passed any group id, it's better to add default group for processing
+            if (model.GroupId.Length == 0)
+            {
+                var defaultGroup = team.GroupPages.FirstOrDefault(x => x.IsDefault);
+                if (defaultGroup == null)
+                {
+                    defaultGroup = team.GroupPages.FirstOrDefault();
+                    if (defaultGroup == null)
+                    {
+                        return Json(new {
+                            Success = false,
+                            Message = "No groups found in the team page"
+                        });
+                    }
+                }
+                model.GroupId = new[] {defaultGroup.Id};
+            }
+            
+            foreach (var groupId in model.GroupId)
+            {
+                //check if the group exist
+                var group = team.GroupPages.FirstOrDefault(x => x.Id == groupId);
+                if (group == null)
+                {
+                    continue; //skip as group doesn't exist
+                }
+
+                //let's find existing group members
+                var groupMembers = group.Members;
+
+                //if group validation succeed, we loop through the members and add those members which don't exist
+                foreach (var member in members)
+                {
+                    if (groupMembers.All(x => x.CustomerId != member.Id))
+                    {
+                        //let's add this combination
+                        _teamPageGroupMemberService.Insert(new GroupPageMember()
+                        {
+                            CustomerId = member.Id,
+                            GroupPageId = group.Id,
+                            DateCreated = DateTime.UtcNow,
+                            DateUpdated = DateTime.UtcNow,
+                            DisplayOrder = 0
+                        });
+                    }
+                }
+            }
+            return Json(new
+            {
+                Success = true
+            });
+        }
+
+        [Route("group/members/delete/{groupId}/{memberId}")]
+        [HttpDelete]
+        [Authorize]
+        public IHttpActionResult DeleteGroupMember(int groupId, int memberId)
+        {
+            //first check if the group exist?
+            var group = _teamPageGroupService.GetById(groupId);
+            if (group == null)
+            {
+                return Json(new {
+                    Success = false,
+                    Message = "Group not found"
+                });
+            }
+
+            //check if the user adding is authorized to do that
+            if (group.Team.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
+            {
+                return Json(new {
+                    Success = false,
+                    Message = "Unauthorized"
+                });
+            }
+            //delete the page member
+            _teamPageGroupMemberService.DeleteGroupPageMember(groupId, memberId);
+
+            return Json(new
+            {
+                Success = true
+            });
+
+        }
+        #region helpers
+
+        private List<TeamPageGroupPublicModel> GetTeamPageGroupPublicModels(int teamId)
+        {
             //retrieve all group pages by team
             var groupPages = _teamPageGroupService.GetGroupPagesByTeamId(teamId);
 
@@ -364,13 +521,14 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             {
                 var groupMembers = allMembers.Where(x => x.GroupPageId == groupPage.Id).OrderBy(x => x.DisplayOrder);
                 //setup the individual group model
-                var groupModel = new TeamPageGroupPublicModel()
-                {
+                var groupModel = new TeamPageGroupPublicModel() {
                     CreatedOnUtc = groupPage.DateCreated,
-                    CreatedOn =  _dateTimeHelper.ConvertToUserTime(groupPage.DateCreated, DateTimeKind.Utc),
+                    CreatedOn = _dateTimeHelper.ConvertToUserTime(groupPage.DateCreated, DateTimeKind.Utc),
                     UpdatedOnUtc = groupPage.DateUpdated,
                     UpdatedOn = _dateTimeHelper.ConvertToUserTime(groupPage.DateUpdated, DateTimeKind.Utc),
                     Id = groupPage.Id,
+                    DisplayOrder = groupPage.DisplayOrder,
+                    IsDefault =  groupPage.IsDefault,
                     PaypalDonateUrl = groupPage.PayPalDonateUrl,
                     TeamPageId = groupPage.TeamId,
                     Name = groupPage.Name,
@@ -389,14 +547,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 //add this group model to the output list
                 listTeamPageGroups.Add(groupModel);
             }
-
-            //send the response
-            return Json(new
-            {
-                Success = true,
-                TeamGroups = listTeamPageGroups
-            });
+            return listTeamPageGroups;
         }
+        #endregion
 
     }
 }

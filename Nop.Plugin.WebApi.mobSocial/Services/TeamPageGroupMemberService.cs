@@ -32,5 +32,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         {
             return Repository.Table.Where(x => x.GroupPageId == groupId).OrderBy(x => x.DisplayOrder).ToList();
         }
+
+        public void DeleteGroupPageMember(int groupId, int memberId)
+        {
+            var groupMember = Repository.Table.FirstOrDefault(x => x.GroupPageId == groupId && x.CustomerId == memberId);
+            if (groupMember != null)
+                Delete(groupMember);
+        }
     }
 }

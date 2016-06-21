@@ -9,5 +9,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         IList<GroupPageMember> GetGroupPageMembersForTeam(int teamId);
 
         IList<GroupPageMember> GetGroupPageMembers(int groupId);
+
+        void DeleteGroupPageMember(int groupId, int memberId);
     }
 }

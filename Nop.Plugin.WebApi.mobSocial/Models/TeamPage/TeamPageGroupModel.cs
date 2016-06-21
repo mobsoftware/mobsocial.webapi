@@ -4,7 +4,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models.TeamPage
 {
     public class TeamPageGroupModel : BaseNopEntityModel
     {
-        public int TeamId { get; set; }
+        public int TeamPageId { get; set; }
 
         public virtual string Name { get; set; }
 
@@ -13,6 +13,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Models.TeamPage
         public virtual string PayPalDonateUrl { get; set; }
 
         public virtual int DisplayOrder { get; set; }
+
+        public virtual bool IsDefault { get; set; }
 
     }
 }

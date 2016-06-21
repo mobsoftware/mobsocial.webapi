@@ -27,7 +27,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         public void SafeDelete(GroupPage groupPage)
         {
-            _memberRepository.Delete(groupPage.Members);
+            while(groupPage.Members.Any())
+                _memberRepository.Delete(groupPage.Members.First());
 
             Delete(groupPage);
         }

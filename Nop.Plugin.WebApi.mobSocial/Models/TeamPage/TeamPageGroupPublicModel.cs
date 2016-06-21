@@ -14,6 +14,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Models.TeamPage
 
         public string Description { get; set; }
 
+        public int DisplayOrder { get; set; }
+
+        public bool IsDefault { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime CreatedOnUtc { get; set; }
