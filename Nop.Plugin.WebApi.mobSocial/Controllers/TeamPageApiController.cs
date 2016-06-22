@@ -169,11 +169,37 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             model.IsEditable = _workContext.CurrentCustomer.IsAdmin() ||
                                _workContext.CurrentCustomer.Id == teamPage.CreatedBy;
 
-            model.TeamPictureUrl = _pictureService.GetPictureUrl(model.TeamPictureId);
+            model.TeamPictureUrl = _pictureService.GetPictureUrl(model.TeamPictureId, 0, false);
             return Response(new
             {
                 Success = true,
                 TeamPage = model
+            });
+        }
+
+        [HttpGet]
+        [Route("get/my")]
+        [Authorize]
+        public IHttpActionResult Get()
+        {
+            var teamPages = _teamPageService.GetTeamPagesByOwner(_workContext.CurrentCustomer.Id);
+
+            Mapper.CreateMap<TeamPage, TeamPageModel>();
+
+            var model = new List<TeamPageModel>();
+            foreach (var page in teamPages)
+            {
+                var pModel = Mapper.Map<TeamPageModel>(page);
+                pModel.PageUrl = Url.RouteUrl("TeamPage", new RouteValueDictionary()
+                {
+                    { "teamId", page.Id }
+                });
+                model.Add(pModel);
+            }
+
+            return Response(new {
+                Success = true,
+                TeamPages = model
             });
         }
 

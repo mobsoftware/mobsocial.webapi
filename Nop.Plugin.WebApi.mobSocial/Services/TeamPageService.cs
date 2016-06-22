@@ -49,14 +49,22 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             var groupMembers = _groupPageMembeRepository.Table.Where(x => groupPageIds.Contains(x.GroupPageId)).ToList();
 
             //delete all group members
-            _groupPageMembeRepository.Delete(groupMembers);
 
-            //delete all groups
-            _groupPageRepository.Delete(team.GroupPages);
+            while (groupMembers.Any())
+                _groupPageMembeRepository.Delete(groupMembers.First());
+
+            while (team.GroupPages.Any())
+                //delete all groups
+                _groupPageRepository.Delete(team.GroupPages.First());
 
             //delete the team
             Delete(team);
 
+        }
+
+        public IList<TeamPage> GetTeamPagesByOwner(int ownerId)
+        {
+            return Repository.Table.Where(x => x.CreatedBy == ownerId).ToList();
         }
     }
 
