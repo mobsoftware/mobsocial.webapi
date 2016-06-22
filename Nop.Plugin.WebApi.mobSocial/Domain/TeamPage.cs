@@ -27,7 +27,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
 
         public virtual string Description { get; set; }
 
-        public virtual string TeamPictureUrl { get; set; }
+        public virtual int TeamPictureId { get; set; }
 
         public virtual string Name { get; set; }
 

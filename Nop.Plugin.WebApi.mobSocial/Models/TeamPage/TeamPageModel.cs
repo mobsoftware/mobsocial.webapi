@@ -18,6 +18,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Models.TeamPage
 
         public virtual string Description { get; set; }
 
+        public virtual int TeamPictureId { get; set; }
+
         public virtual string TeamPictureUrl { get; set; }
 
         [Required]

@@ -14,7 +14,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Data
             HasMany(m => m.GroupPages);
             Property(m => m.Name);
             Property(m => m.Description);
-            Property(m => m.TeamPictureUrl);
+            Property(m => m.TeamPictureId);
             Property(m => m.CreatedOn).HasColumnType("datetime2");
             Property(m => m.CreatedBy);
             Property(m => m.UpdatedOn).HasColumnType("datetime2");

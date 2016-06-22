@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 using AutoMapper;
+using Mob.Core;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
@@ -31,6 +34,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IPictureService _pictureService;
         private readonly MediaSettings _mediaSettings;
+        private readonly mobSocialSettings _mobSocialSettings;
 
         public TeamPageApiController(IWorkContext workContext, 
             ITeamPageService teamPageService, 
@@ -41,7 +45,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             IDateTimeHelper dateTimeHelper, 
             ICustomerProfileService customerProfileService, 
             IPictureService pictureService, 
-            MediaSettings mediaSettings)
+            MediaSettings mediaSettings, 
+            mobSocialSettings mobSocialSettings)
         {
             _workContext = workContext;
             _teamPageService = teamPageService;
@@ -52,6 +57,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _customerProfileService = customerProfileService;
             _pictureService = pictureService;
             _mediaSettings = mediaSettings;
+            _mobSocialSettings = mobSocialSettings;
             _customerProfileViewService = customerProfileViewService;
         }
 
@@ -112,6 +118,36 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Response(new { Success = true });
         }
 
+        [HttpPut]
+        [Authorize]
+        [Route("cover/put/{id:int}/{pictureId:int}")]
+        public IHttpActionResult UpdateTeamPicture(int id, int pictureId)
+        {
+            //first retrieve the team page
+            var teamPage = _teamPageService.GetById(id);
+            //is the current user authorized to perform this operation
+            if (teamPage == null ||
+                (teamPage.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin()))
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = "Unauthorized"
+                });
+            }
+
+            teamPage.TeamPictureId = pictureId;
+
+            //save now
+            _teamPageService.Update(teamPage);
+
+            return Json(new
+            {
+                Success = true
+            });
+
+        }
+
         [HttpGet]
         [Route("get/{id:int}")]
         public IHttpActionResult Get(int id)
@@ -133,6 +169,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             model.IsEditable = _workContext.CurrentCustomer.IsAdmin() ||
                                _workContext.CurrentCustomer.Id == teamPage.CreatedBy;
 
+            model.TeamPictureUrl = _pictureService.GetPictureUrl(model.TeamPictureId);
             return Response(new
             {
                 Success = true,
@@ -503,6 +540,50 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             });
 
         }
+
+        [Authorize]
+        [Route("cover/post")]
+        [HttpPost]
+        public IHttpActionResult UploadCover()
+        {
+            var files = HttpContext.Current.Request.Files;
+            if (files.Count == 0)
+                return Response(new { Success = false, Message = "No file uploaded" });
+
+            //the file
+            var file = files[0];
+
+            //and it's name
+            var fileName = file.FileName;
+            //stream to read the bytes
+            var stream = file.InputStream;
+            var pictureBytes = new byte[stream.Length];
+            stream.Read(pictureBytes, 0, pictureBytes.Length);
+
+            //file extension and it's type
+            var fileExtension = Path.GetExtension(fileName);
+            if (!string.IsNullOrEmpty(fileExtension))
+                fileExtension = fileExtension.ToLowerInvariant();
+
+            var contentType = file.ContentType;
+
+            if (string.IsNullOrEmpty(contentType))
+            {
+                contentType = PictureUtility.GetContentType(fileExtension);
+            }
+            //save the picture now
+            var picture = _pictureService.InsertPicture(pictureBytes, contentType, null);
+            var image = new
+            {
+                ImageUrl = _pictureService.GetPictureUrl(picture.Id),
+                SmallImageUrl = _pictureService.GetPictureUrl(picture.Id, _mobSocialSettings.TimelineSmallImageWidth),
+                ImageId = picture.Id,
+                MimeType = contentType
+            };
+
+            return Json(new { Success = true, Image = image });
+        }
+
         #region helpers
 
         private List<TeamPageGroupPublicModel> GetTeamPageGroupPublicModels(int teamId)
