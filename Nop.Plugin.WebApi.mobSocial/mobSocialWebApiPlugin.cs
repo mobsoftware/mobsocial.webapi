@@ -75,7 +75,8 @@ namespace Nop.Plugin.WebApi.MobSocial
             if (mobSocialSettings.Version != 0)
             {
                 //an installation is already there, so let's skip the step
-                base.Install();
+                if (!MobSocialConstant.SuiteInstallation) //if it's a suite installation, better not call the base method
+                    base.Install();
                 return;
             }
             //settings
@@ -148,8 +149,8 @@ namespace Nop.Plugin.WebApi.MobSocial
 
 
             _context.Install();
-
-            base.Install();
+            if (!MobSocialConstant.SuiteInstallation)
+                base.Install();//for suite installation, we don't have plugin descriptor, so avoid this call
 
         }
 
@@ -180,7 +181,8 @@ namespace Nop.Plugin.WebApi.MobSocial
 
             _context.Uninstall();
 
-            base.Uninstall();
+            if (!MobSocialConstant.SuiteInstallation)
+                base.Uninstall();
         }
 
         #endregion

@@ -3,6 +3,7 @@ using AutoMapper;
 using Nop.Admin.Controllers;
 using Nop.Core;
 using Nop.Core.Domain.Security;
+using Nop.Plugin.WebApi.MobSocial.Constants;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Services.Configuration;
 using Nop.Services.Security;
@@ -83,7 +84,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             }
 
 
-            return View("~/Plugins/WebApi.mobSocial/Views/Configuration/Configuration.cshtml", model);
+            return View("~/Plugins" + (MobSocialConstant.SuiteInstallation ? "/MobSocial.Suite" : "/WebApi.mobSocial") + "/Views/Configuration/Configuration.cshtml", model);
         }
 
         [HttpPost]

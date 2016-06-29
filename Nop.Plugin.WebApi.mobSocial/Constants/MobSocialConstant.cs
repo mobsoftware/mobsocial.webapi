@@ -1,16 +1,21 @@
-﻿namespace Nop.Plugin.WebApi.MobSocial.Constants
+﻿using System;
+using System.Configuration;
+
+namespace Nop.Plugin.WebApi.MobSocial.Constants
 {
     public class MobSocialConstant
     {
+        public static bool SuiteInstallation = true;
 
-        public static string ViewsPath = "~/Plugins/Widgets.mobSocial/Views";
+        public static string PluginPath = "~/Plugins" + (SuiteInstallation ? "/MobSocial.Suite" : "/Widgets.mobSocial");
 
-        public static string PluginPath = "~/Plugins/Widgets.mobSocial";
+        public static string ViewsPath = PluginPath + "/Views";
+
         public static string PluginContentPath = PluginPath + "/Content";
         public static string PluginContentPathInternal = PluginContentPath + "/mobSocial";
         public static string ThirdPartyLibraryPath = PluginContentPath + "/Libraries";
 
-        public static string ThemePath = "~/Plugins/Widgets.mobSocial/Themes/MobSocialDefault";
+        public static string ThemePath = PluginPath + "/Themes/MobSocialDefault";
         public static string ThemeContentPath = ThemePath + "/Content";
 
         public static string EncryptionKeyName = "encryptionkey";

@@ -22,6 +22,7 @@ using Nop.Core.Configuration;
 using Nop.Core.Plugins;
 using Nop.Plugin.WebApi.mobSocial;
 using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Constants;
 using Nop.Plugin.WebApi.MobSocial.Controllers;
 
 namespace Nop.Plugin.WebApi.MobSocial
@@ -47,10 +48,13 @@ namespace Nop.Plugin.WebApi.MobSocial
 
             var isInstalled = false;
 
+            var pluginName = "WebApi.mobSocial";
+            if (MobSocialConstant.SuiteInstallation)
+                pluginName = "mobSocial.Suite";
             foreach (var pluginFinderType in pluginFinderTypes)
             {
                 var pluginFinder = Activator.CreateInstance(pluginFinderType) as IPluginFinder;
-                var pluginDescriptor = pluginFinder.GetPluginDescriptorBySystemName("WebApi.mobSocial");
+                var pluginDescriptor = pluginFinder.GetPluginDescriptorBySystemName(pluginName);
 
                 if (pluginDescriptor != null && pluginDescriptor.Installed)
                 {
