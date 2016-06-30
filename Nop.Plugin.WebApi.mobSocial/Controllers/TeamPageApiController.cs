@@ -155,10 +155,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var teamPage = _teamPageService.GetById(id);
             if (teamPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Team page not found"
-                });
+                return NotFound();
             }
             Mapper.CreateMap<TeamPage, TeamPageModel>();
 
@@ -227,10 +224,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var teamPage = _teamPageService.GetById(id);
             if (teamPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Team page not found"
-                });
+                return NotFound();
             }
             //check if the page exists or not & the person deleting actually owns the resource
             if (teamPage.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
@@ -260,10 +254,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var teamPage = _teamPageService.GetById(model.TeamPageId);
             if (teamPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Team page not found"
-                });
+                return NotFound();
             }
             //check if the page exists or not & the person deleting actually owns the resource
             if (teamPage.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
@@ -304,10 +295,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var teamPage = _teamPageService.GetById(model.TeamPageId);
             if (teamPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Team page not found"
-                });
+                return NotFound();
             }
             //check if the page exists or not & the person deleting actually owns the resource
             if (teamPage.CreatedBy != _workContext.CurrentCustomer.Id && !_workContext.CurrentCustomer.IsAdmin())
@@ -321,10 +309,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var groupPage = _teamPageGroupService.GetById(model.Id);
             if (groupPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Group page not found"
-                });
+                return NotFound();
             }
             //create the model to entity mapping
             Mapper.CreateMap<TeamPageGroupModel, GroupPage>();
@@ -374,10 +359,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var group = team.GroupPages.FirstOrDefault(x => x.Id == groupId);
             if (group == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Group page not found"
-                });
+                return NotFound();
             }
             //if there are more than one group and it's the default group that's being deleted
             if (group.IsDefault)
@@ -437,10 +419,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var teamPage = _teamPageService.GetById(teamId);
             if (teamPage == null)
             {
-                return Response(new {
-                    Success = false,
-                    Message = "Team page not found"
-                });
+                return NotFound();
             }
 
             var listTeamPageGroups = GetTeamPageGroupPublicModels(teamId);
@@ -543,10 +522,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var group = _teamPageGroupService.GetById(groupId);
             if (group == null)
             {
-                return Json(new {
-                    Success = false,
-                    Message = "Group not found"
-                });
+                return NotFound();
             }
 
             //check if the user adding is authorized to do that
