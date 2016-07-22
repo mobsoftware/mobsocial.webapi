@@ -43,11 +43,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Migrations
             if (settings.Version >= MobSocialConstant.ReleaseVersion)
                 return; // no need for any upgrade
 
-            if (settings.Version <= 4.01m)
-            {
-                settings.TimelineSmallImageWidth = 300;
-            }
-
+            //we'll put update code here when required
 
             //and update the setting
             settings.Version = MobSocialConstant.ReleaseVersion;
