@@ -270,16 +270,16 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             var picture = _customerAlbumPictureService.GetCustomerAlbumPictureById(customerAlbumPictureId);
 
-            var picturePath = _webHelper.MapPath("~/" + picture.Url);
+            var picturePath = CommonHelper.MapPath("~/" + picture.Url);
             var pictureFileName = Path.GetFileName(picturePath);
 
-            var thumbPath = _webHelper.MapPath("~/" + picture.ThumbnailUrl);
+            var thumbPath = CommonHelper.MapPath("~/" + picture.ThumbnailUrl);
             var thumbFileName = Path.GetFileName(thumbPath);
 
             string deletedAlbumFolder = string.Format("~/Content/Images/Albums/{0}/{1}/Deleted",
                                                       picture.Album.CustomerId, picture.CustomerAlbumId);
 
-            deletedAlbumFolder = _webHelper.MapPath(deletedAlbumFolder);
+            deletedAlbumFolder = CommonHelper.MapPath(deletedAlbumFolder);
 
             var deletedDirectory = new DirectoryInfo(deletedAlbumFolder);
             deletedDirectory.Create(); // If the directory already exists, nothing will happen here.

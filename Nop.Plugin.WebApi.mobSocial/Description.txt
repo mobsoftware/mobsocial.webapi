@@ -2,7 +2,7 @@
 FriendlyName: mobSocial WebApi
 SystemName: WebApi.mobSocial
 Version: 1.0
-SupportedVersions: 3.70
+SupportedVersions: 3.80
 Author: Mob Software Team
 DisplayOrder: -1
 FileName: Nop.Plugin.WebApi.MobSocial.dll

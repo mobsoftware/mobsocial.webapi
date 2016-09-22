@@ -331,7 +331,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             decimal totalGross = 0, totalFee = 0, totalNet = 0;
             if (artistPage != null && CanDelete(artistPage))
             {
-                var customerOrderItems = _orderService.GetAllOrderItems(null, null, null, null, null, PaymentStatus.Paid, null, true);
+                var customerOrderItems =
+                    _orderService.SearchOrders(psIds: new List<int>() {(int) PaymentStatus.Paid})
+                        .SelectMany(x => x.OrderItems);
                 var artistPageSongProductIds = artistPage.Songs.Select(x => x.AssociatedProductId);
                 //let's get the purchased items
                 var purchasedItems = customerOrderItems.Where(x => artistPageSongProductIds.Contains(x.Product.Id));

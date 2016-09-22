@@ -82,7 +82,6 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
                 PaymentMethodSystemName = paymentPluginSystemName,
                 CreditCardType = PaymentMethod.CardIssuerType,
                 CreditCardNumber = cardNumber,
-                IsRecurringPayment = false,
                 StoreId = _storeContext.CurrentStore.Id
             };
 

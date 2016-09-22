@@ -279,7 +279,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers.Admin
                 if (continueEditing)
                 {
                     //selected tab
-                    SaveSelectedTabIndex();
+                    SaveSelectedTabName();
 
                     return RedirectToAction("Edit", new { id = item.Id });
                 }

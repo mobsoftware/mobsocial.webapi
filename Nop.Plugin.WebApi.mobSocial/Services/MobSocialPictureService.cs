@@ -16,10 +16,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         public MobSocialPictureService(IRepository<Picture> pictureRepository,
             IRepository<ProductPicture> productPictureRepository, ISettingService settingService, IWebHelper webHelper,
-            ILogger logger, IDbContext dbContext, IEventPublisher eventPublisher, MediaSettings mediaSettings) :
+            ILogger logger, IDbContext dbContext, IEventPublisher eventPublisher, MediaSettings mediaSettings, IDataProvider dataProvider) :
                 base(
                 pictureRepository, productPictureRepository, settingService, webHelper, logger, dbContext,
-                eventPublisher, mediaSettings)
+                eventPublisher, mediaSettings,dataProvider)
         {
             _nopMediaSettings = mediaSettings;
         }
