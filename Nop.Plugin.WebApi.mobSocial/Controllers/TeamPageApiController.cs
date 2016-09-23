@@ -59,6 +59,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _mediaSettings = mediaSettings;
             _mobSocialSettings = mobSocialSettings;
             _customerProfileViewService = customerProfileViewService;
+
+            Mapper.Initialize(cfg => cfg.CreateMap<TeamPageModel, ConfigurationModel>());
+            Mapper.Initialize(cfg => cfg.CreateMap<TeamPageModel, TeamPage>());
+            Mapper.Initialize(cfg => cfg.CreateMap<TeamPageGroupModel, GroupPage>());
         }
 
         [HttpPost]
@@ -68,9 +72,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             if(!ModelState.IsValid || model == null)
                 return Response(new { Success = false, Message = "Invalid data" });
-
-
-            Mapper.CreateMap<TeamPageModel, TeamPage>();
 
             var teamPage = Mapper.Map<TeamPage>(model);
             teamPage.CreatedBy = _workContext.CurrentCustomer.Id;
@@ -107,7 +108,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 });
             }
 
-            Mapper.CreateMap<TeamPageModel, TeamPage>();
             Mapper.Map(model, teamPage);
           
             //update the updation date
@@ -157,8 +157,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             {
                 return NotFound();
             }
-            Mapper.CreateMap<TeamPage, TeamPageModel>();
-
             var model = Mapper.Map<TeamPageModel>(teamPage);
 
             model.Groups = GetTeamPageGroupPublicModels(id);
@@ -180,8 +178,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         public IHttpActionResult Get()
         {
             var teamPages = _teamPageService.GetTeamPagesByOwner(_workContext.CurrentCustomer.Id);
-
-            Mapper.CreateMap<TeamPage, TeamPageModel>();
 
             var model = new List<TeamPageModel>();
             foreach (var page in teamPages)
@@ -205,8 +201,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         public IHttpActionResult Get(string seName)
         {
             var teamPage = _teamPageService.GetBySeName(seName);
-
-            Mapper.CreateMap<TeamPage, TeamPageModel>();
 
             var model = Mapper.Map<TeamPageModel>(teamPage);
 
@@ -311,8 +305,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             {
                 return NotFound();
             }
-            //create the model to entity mapping
-            Mapper.CreateMap<TeamPageGroupModel, GroupPage>();
 
             //and map it
             Mapper.Map(model, groupPage);

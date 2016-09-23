@@ -28,6 +28,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _settingService = settingService;
             _storeService = storeService;
             _workContext = workContext;
+
+            Mapper.Initialize(cfg => cfg.CreateMap<ConfigurationModel, mobSocialSettings>());
         }
 
         [AdminAuthorize]
@@ -38,7 +40,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var settings = _settingService.LoadSetting<mobSocialSettings>(storeScope);
             var model = new ConfigurationModel();
 
-            Mapper.CreateMap<mobSocialSettings, ConfigurationModel>();
+            Mapper.Initialize(cfg => cfg.CreateMap<mobSocialSettings, ConfigurationModel>());
             Mapper.Map(settings, model);
 
             model.ActiveStoreScopeConfiguration = storeScope;
@@ -101,7 +103,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
             var settings = _settingService.LoadSetting<mobSocialSettings>(storeScope);
 
-            Mapper.CreateMap<ConfigurationModel, mobSocialSettings>();
             //store the settings
             Mapper.Map(model, settings);
 
