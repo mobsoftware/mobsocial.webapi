@@ -1,451 +1,461 @@
-﻿@model Nop.Plugin.WebApi.MobSocial.Models.ConfigurationModel
+﻿@using Nop.Web.Framework;
+@model Nop.Plugin.WebApi.MobSocial.Models.ConfigurationModel
 @{
     Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
 }
 @using (Html.BeginForm())
 {
-    <div class="section-header">
-        <div class="title">
-            <img src="@Url.Content("~/Administration/Content/images/ico-content.png")" alt="" />
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
             Configure mobSocial
-        </div>
-        <div class="options">
-            <input type="submit" name="save" class="k-button" value="Save">
-        </div>
+            <small><i class="fa fa-arrow-circle-left"></i><a href="/Admin/Product/List">back to product list</a></small>
+        </h1>
     </div>
     <p>
         @Model.MessageText
     </p>
-    <script type="text/javascript">
-        $(document)
-            .ready(function () {
-                $("#mobsocial-settings-edit")
-                    .kendoTabStrip({
-                        animation: {
-                            open: {
-                                effects: "fadeIn"
-                            }
-                        },
-                        select: tabstrip_on_tab_select
-                    });
-            });
-
-    </script>
-
-    <div id="mobsocial-settings-edit">
-        <ul>
-            <li class='k-state-active'>
-                Timeline Settings
-            </li>
-            <li>
-                User Settings
-            </li>
-            <li>
-                Battle Settings
-            </li>
-            <li>
-                Album Settings
-            </li>
-            <li>
-                Event Settings
-            </li>
-            <li>
-                Artist Settings
-            </li>
-            <li>
-                Business Settings
-            </li>
-            <li>
-                Payment Settings
-            </li>
-            <li>
-                Third Party Application Settings
-            </li>
+    <div id="product-edit" class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-tab-name="tab-timeline" data-toggle="tab" href="#tab-timeline">Timeline Settings</a></li>
+            <li><a data-tab-name="tab-user" data-toggle="tab" href="#tab-user">User Settings</a></li>
+            <li><a data-tab-name="tab-battle" data-toggle="tab" href="#tab-battle">Battle Settings</a></li>
+            <li><a data-tab-name="tab-album" data-toggle="tab" href="#tab-album">Album Settings</a></li>
+            <li><a data-tab-name="tab-event" data-toggle="tab" href="#tab-event">Event Settings</a></li>
+            <li><a data-tab-name="tab-artist" data-toggle="tab" href="#tab-artist">Artist Settings</a></li>
+            <li><a data-tab-name="tab-business" data-toggle="tab" href="#tab-business">Business Settings</a></li>
+            <li><a data-tab-name="tab-payment" data-toggle="tab" href="#tab-payment">Payment Settings</a></li>
+            <li><a data-tab-name="tab-thirdparty" data-toggle="tab" href="#tab-thirdparty">Third Party Application Settings</a></li>
         </ul>
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.TimelineSmallImageWidth_OverrideForStore, model => model.TimelineSmallImageWidth, Model.ActiveStoreScopeConfiguration)
-                        <label>Timeline Post Small Image Width</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.TimelineSmallImageWidth)
-                        @Html.ValidationMessageFor(model => model.TimelineSmallImageWidth)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Timeline Settings-->
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-timeline">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.TimelineSmallImageWidth_OverrideForStore, model => model.TimelineSmallImageWidth, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.TimelineSmallImageWidth)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.TimelineSmallImageWidth)
+                                    @Html.ValidationMessageFor(model => model.TimelineSmallImageWidth)
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab-user">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.ProfilePictureSize_OverrideForStore, model => model.ProfilePictureSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.ProfilePictureSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.ProfilePictureSize)
+                                    @Html.ValidationMessageFor(model => model.ProfilePictureSize)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.ShowProfileImagesInSearchAutoComplete_OverrideForStore, model => model.ShowProfileImagesInSearchAutoComplete, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.ShowProfileImagesInSearchAutoComplete)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.ShowProfileImagesInSearchAutoComplete)
+                                    @Html.ValidationMessageFor(model => model.ShowProfileImagesInSearchAutoComplete)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchAutoCompleteEnabled_OverrideForStore, model => model.PeopleSearchAutoCompleteEnabled, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.PeopleSearchAutoCompleteEnabled)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.PeopleSearchAutoCompleteEnabled)
+                                    @Html.ValidationMessageFor(model => model.PeopleSearchAutoCompleteEnabled)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchTermMinimumLength_OverrideForStore, model => model.PeopleSearchTermMinimumLength, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.PeopleSearchTermMinimumLength)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.PeopleSearchTermMinimumLength)
+                                    @Html.ValidationMessageFor(model => model.PeopleSearchTermMinimumLength)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchAutoCompleteNumberOfResults_OverrideForStore, model => model.PeopleSearchAutoCompleteNumberOfResults, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.PeopleSearchAutoCompleteNumberOfResults)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.PeopleSearchAutoCompleteNumberOfResults)
+                                    @Html.ValidationMessageFor(model => model.PeopleSearchAutoCompleteNumberOfResults)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds_OverrideForStore, model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds)
+                                    @Html.ValidationMessageFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.ProfilePictureSize_OverrideForStore, model => model.ProfilePictureSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Profile Picture Size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.ProfilePictureSize)
-                        @Html.ValidationMessageFor(model => model.ProfilePictureSize)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.ShowProfileImagesInSearchAutoComplete_OverrideForStore, model => model.ShowProfileImagesInSearchAutoComplete, Model.ActiveStoreScopeConfiguration)
-                        <label>Show Profile Images In Search Autocomplete</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.ShowProfileImagesInSearchAutoComplete)
-                        @Html.ValidationMessageFor(model => model.ShowProfileImagesInSearchAutoComplete)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchAutoCompleteEnabled_OverrideForStore, model => model.PeopleSearchAutoCompleteEnabled, Model.ActiveStoreScopeConfiguration)
-                        <label>People search autocomplete enabled</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.PeopleSearchAutoCompleteEnabled)
-                        @Html.ValidationMessageFor(model => model.PeopleSearchAutoCompleteEnabled)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchTermMinimumLength_OverrideForStore, model => model.PeopleSearchTermMinimumLength, Model.ActiveStoreScopeConfiguration)
-                        <label>People search term minimum length</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.PeopleSearchTermMinimumLength)
-                        @Html.ValidationMessageFor(model => model.PeopleSearchTermMinimumLength)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.PeopleSearchAutoCompleteNumberOfResults_OverrideForStore, model => model.PeopleSearchAutoCompleteNumberOfResults, Model.ActiveStoreScopeConfiguration)
-                        <label>People search autocomplete number of results</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.PeopleSearchAutoCompleteNumberOfResults)
-                        @Html.ValidationMessageFor(model => model.PeopleSearchAutoCompleteNumberOfResults)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds_OverrideForStore, model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds, Model.ActiveStoreScopeConfiguration)
-                        <label>Profile View Update Frequency (in seconds)</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds)
-                        @Html.ValidationMessageFor(model => model.CustomerProfileUpdateViewCountAfterNumberOfSeconds)
-                    </td>
-                </tr>
-            </table>
-        </div><!--User settings-->
+            </div>
+            <div class="tab-pane" id="tab-battle">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.ShowVideoThumbnailsForBattles_OverrideForStore, model => model.ShowVideoThumbnailsForBattles, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.ShowVideoThumbnailsForBattles)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.ShowVideoThumbnailsForBattles)
+                                    @Html.ValidationMessageFor(model => model.ShowVideoThumbnailsForBattles)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.DefaultVotingChargeForPaidVoting_OverrideForStore, model => model.DefaultVotingChargeForPaidVoting, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.DefaultVotingChargeForPaidVoting)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.DefaultVotingChargeForPaidVoting)
+                                    @Html.ValidationMessageFor(model => model.DefaultVotingChargeForPaidVoting)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.VideoUploadReminderEmailThresholdDays_OverrideForStore, model => model.VideoUploadReminderEmailThresholdDays, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.VideoUploadReminderEmailThresholdDays)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.VideoUploadReminderEmailThresholdDays)
+                                    @Html.ValidationMessageFor(model => model.VideoUploadReminderEmailThresholdDays)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.BattleVoteReminderEmailThresholdDays_OverrideForStore, model => model.BattleVoteReminderEmailThresholdDays, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.BattleVoteReminderEmailThresholdDays)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.BattleVoteReminderEmailThresholdDays)
+                                    @Html.ValidationMessageFor(model => model.BattleVoteReminderEmailThresholdDays)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.SiteOwnerSponsorshipPercentage_OverrideForStore, model => model.SiteOwnerSponsorshipPercentage, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.SiteOwnerSponsorshipPercentage)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.SiteOwnerSponsorshipPercentage)
+                                    @Html.ValidationMessageFor(model => model.SiteOwnerSponsorshipPercentage)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.BattleHostSponsorshipPercentage_OverrideForStore, model => model.BattleHostSponsorshipPercentage, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.BattleHostSponsorshipPercentage)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.BattleHostSponsorshipPercentage)
+                                    @Html.ValidationMessageFor(model => model.BattleHostSponsorshipPercentage)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.ShowVideoThumbnailsForBattles_OverrideForStore, model => model.ShowVideoThumbnailsForBattles, Model.ActiveStoreScopeConfiguration)
-                        <label>Show video thumbnails for battles</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.ShowVideoThumbnailsForBattles)
-                        @Html.ValidationMessageFor(model => model.ShowVideoThumbnailsForBattles)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.DefaultVotingChargeForPaidVoting_OverrideForStore, model => model.DefaultVotingChargeForPaidVoting, Model.ActiveStoreScopeConfiguration)
-                        <label>Default voting charge for paid voting</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.DefaultVotingChargeForPaidVoting)
-                        @Html.ValidationMessageFor(model => model.DefaultVotingChargeForPaidVoting)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.VideoUploadReminderEmailThresholdDays_OverrideForStore, model => model.VideoUploadReminderEmailThresholdDays, Model.ActiveStoreScopeConfiguration)
-                        <label>Number of days after which reminder for video uploads should be sent</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.VideoUploadReminderEmailThresholdDays)
-                        @Html.ValidationMessageFor(model => model.VideoUploadReminderEmailThresholdDays)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.BattleVoteReminderEmailThresholdDays_OverrideForStore, model => model.BattleVoteReminderEmailThresholdDays, Model.ActiveStoreScopeConfiguration)
-                        <label>Number of days after which reminder for voting should be sent</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.BattleVoteReminderEmailThresholdDays)
-                        @Html.ValidationMessageFor(model => model.BattleVoteReminderEmailThresholdDays)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.SiteOwnerSponsorshipPercentage_OverrideForStore, model => model.SiteOwnerSponsorshipPercentage, Model.ActiveStoreScopeConfiguration)
-                        <label>Sponsorship percentage for this website</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.SiteOwnerSponsorshipPercentage)
-                        @Html.ValidationMessageFor(model => model.SiteOwnerSponsorshipPercentage)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.BattleHostSponsorshipPercentage_OverrideForStore, model => model.BattleHostSponsorshipPercentage, Model.ActiveStoreScopeConfiguration)
-                        <label>Sponsorship percentage for battle host</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.BattleHostSponsorshipPercentage)
-                        @Html.ValidationMessageFor(model => model.BattleHostSponsorshipPercentage)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Battle Settings-->
+            </div>
+            <div class="tab-pane" id="tab-album">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.CustomerAlbumPictureThumbnailWidth_OverrideForStore, model => model.CustomerAlbumPictureThumbnailWidth, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.CustomerAlbumPictureThumbnailWidth)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.CustomerAlbumPictureThumbnailWidth)
+                                    @Html.ValidationMessageFor(model => model.CustomerAlbumPictureThumbnailWidth)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MaximumMainAlbumPictures_OverrideForStore, model => model.MaximumMainAlbumPictures, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MaximumMainAlbumPictures)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MaximumMainAlbumPictures)
+                                    @Html.ValidationMessageFor(model => model.MaximumMainAlbumPictures)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MaximumMainAlbumVideos_OverrideForStore, model => model.MaximumMainAlbumVideos, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MaximumMainAlbumVideos)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MaximumMainAlbumVideos)
+                                    @Html.ValidationMessageFor(model => model.MaximumMainAlbumVideos)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.CustomerAlbumPictureThumbnailWidth_OverrideForStore, model => model.CustomerAlbumPictureThumbnailWidth, Model.ActiveStoreScopeConfiguration)
-                        <label>Album Picture Thumbnail Width</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.CustomerAlbumPictureThumbnailWidth)
-                        @Html.ValidationMessageFor(model => model.CustomerAlbumPictureThumbnailWidth)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MaximumMainAlbumPictures_OverrideForStore, model => model.MaximumMainAlbumPictures, Model.ActiveStoreScopeConfiguration)
-                        <label>Maximum main album pictures</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MaximumMainAlbumPictures)
-                        @Html.ValidationMessageFor(model => model.MaximumMainAlbumPictures)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MaximumMainAlbumVideos_OverrideForStore, model => model.MaximumMainAlbumVideos, Model.ActiveStoreScopeConfiguration)
-                        <label>Maximum main album videos</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MaximumMainAlbumVideos)
-                        @Html.ValidationMessageFor(model => model.MaximumMainAlbumVideos)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Album Settings-->
+            </div>
+            <div class="tab-pane" id="tab-event">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.EventPageSearchTermMinimumLength_OverrideForStore, model => model.EventPageSearchTermMinimumLength, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.EventPageSearchTermMinimumLength)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.EventPageSearchTermMinimumLength)
+                                    @Html.ValidationMessageFor(model => model.EventPageSearchTermMinimumLength)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.EventPageSearchAutoCompleteNumberOfResults_OverrideForStore, model => model.EventPageSearchAutoCompleteNumberOfResults, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.EventPageSearchAutoCompleteNumberOfResults)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.EventPageSearchAutoCompleteNumberOfResults)
+                                    @Html.ValidationMessageFor(model => model.EventPageSearchAutoCompleteNumberOfResults)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.EventPageAttendanceThumbnailSize_OverrideForStore, model => model.EventPageAttendanceThumbnailSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.EventPageAttendanceThumbnailSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.EventPageAttendanceThumbnailSize)
+                                    @Html.ValidationMessageFor(model => model.EventPageAttendanceThumbnailSize)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.EventPageSearchTermMinimumLength_OverrideForStore, model => model.EventPageSearchTermMinimumLength, Model.ActiveStoreScopeConfiguration)
-                        <label>Event page search minimum length</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.EventPageSearchTermMinimumLength)
-                        @Html.ValidationMessageFor(model => model.EventPageSearchTermMinimumLength)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.EventPageSearchAutoCompleteNumberOfResults_OverrideForStore, model => model.EventPageSearchAutoCompleteNumberOfResults, Model.ActiveStoreScopeConfiguration)
-                        <label>Event page search autocomplete</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.EventPageSearchAutoCompleteNumberOfResults)
-                        @Html.ValidationMessageFor(model => model.EventPageSearchAutoCompleteNumberOfResults)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.EventPageAttendanceThumbnailSize_OverrideForStore, model => model.EventPageAttendanceThumbnailSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Event page attendance thumbnail size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.EventPageAttendanceThumbnailSize)
-                        @Html.ValidationMessageFor(model => model.EventPageAttendanceThumbnailSize)
-                    </td>
-                </tr>
+            </div>
+            <div class="tab-pane" id="tab-artist">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.ArtistPageMainImageSize_OverrideForStore, model => model.ArtistPageMainImageSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.ArtistPageMainImageSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.ArtistPageMainImageSize)
+                                    @Html.ValidationMessageFor(model => model.ArtistPageMainImageSize)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.ArtistPageThumbnailSize_OverrideForStore, model => model.ArtistPageThumbnailSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.ArtistPageThumbnailSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.ArtistPageThumbnailSize)
+                                    @Html.ValidationMessageFor(model => model.ArtistPageThumbnailSize)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.SongFileSampleMaximumUploadSize_OverrideForStore, model => model.SongFileSampleMaximumUploadSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.SongFileSampleMaximumUploadSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.SongFileSampleMaximumUploadSize)
+                                    @Html.ValidationMessageFor(model => model.SongFileSampleMaximumUploadSize)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.SongFileMaximumUploadSize_OverrideForStore, model => model.SongFileMaximumUploadSize, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.SongFileMaximumUploadSize)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.SongFileMaximumUploadSize)
+                                    @Html.ValidationMessageFor(model => model.SongFileMaximumUploadSize)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-            </table>
-        </div><!--Event Settings-->
+            </div>
+            <div class="tab-pane" id="tab-business">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.BusinessPageSearchUrl_OverrideForStore, model => model.BusinessPageSearchUrl, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.BusinessPageSearchUrl)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.BusinessPageSearchUrl)
+                                    @Html.ValidationMessageFor(model => model.BusinessPageSearchUrl)
+                                </div>
+                            </div>
+                        </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.ArtistPageMainImageSize_OverrideForStore, model => model.ArtistPageMainImageSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Artist page main image size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.ArtistPageMainImageSize)
-                        @Html.ValidationMessageFor(model => model.ArtistPageMainImageSize)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.ArtistPageThumbnailSize_OverrideForStore, model => model.ArtistPageThumbnailSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Artist page thumbnail size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.ArtistPageThumbnailSize)
-                        @Html.ValidationMessageFor(model => model.ArtistPageThumbnailSize)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.SongFileSampleMaximumUploadSize_OverrideForStore, model => model.SongFileSampleMaximumUploadSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Song file sample maximum upload size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.SongFileSampleMaximumUploadSize)
-                        @Html.ValidationMessageFor(model => model.SongFileSampleMaximumUploadSize)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.SongFileMaximumUploadSize_OverrideForStore, model => model.SongFileMaximumUploadSize, Model.ActiveStoreScopeConfiguration)
-                        <label>Song file maximum upload size</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.SongFileMaximumUploadSize)
-                        @Html.ValidationMessageFor(model => model.SongFileMaximumUploadSize)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Artist Settings-->
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.BusinessPageSearchUrl_OverrideForStore, model => model.BusinessPageSearchUrl, Model.ActiveStoreScopeConfiguration)
-                        <label>Business page search url</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.BusinessPageSearchUrl)
-                        @Html.ValidationMessageFor(model => model.BusinessPageSearchUrl)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Business Settings-->
+            </div>
+            <div class="tab-pane" id="tab-payment">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.PurchasedSongFeePercentage_OverrideForStore, model => model.PurchasedSongFeePercentage, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.PurchasedSongFeePercentage)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.PurchasedSongFeePercentage)
+                                    @Html.ValidationMessageFor(model => model.PurchasedSongFeePercentage)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MicroMacroPaymentSwitchingAmount_OverrideForStore, model => model.MicroMacroPaymentSwitchingAmount, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MicroMacroPaymentSwitchingAmount)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MicroMacroPaymentSwitchingAmount)
+                                    @Html.ValidationMessageFor(model => model.MicroMacroPaymentSwitchingAmount)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MicroPaymentsFixedPaymentProcessingFee_OverrideForStore, model => model.MicroPaymentsFixedPaymentProcessingFee, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MicroPaymentsFixedPaymentProcessingFee)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MicroPaymentsFixedPaymentProcessingFee)
+                                    @Html.ValidationMessageFor(model => model.MicroPaymentsFixedPaymentProcessingFee)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MicroPaymentsPaymentProcessingPercentage_OverrideForStore, model => model.MicroPaymentsPaymentProcessingPercentage, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MicroPaymentsPaymentProcessingPercentage)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MicroPaymentsPaymentProcessingPercentage)
+                                    @Html.ValidationMessageFor(model => model.MicroPaymentsPaymentProcessingPercentage)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MacroPaymentsFixedPaymentProcessingFee_OverrideForStore, model => model.MacroPaymentsFixedPaymentProcessingFee, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MacroPaymentsFixedPaymentProcessingFee)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MacroPaymentsFixedPaymentProcessingFee)
+                                    @Html.ValidationMessageFor(model => model.MacroPaymentsFixedPaymentProcessingFee)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.MacroPaymentsPaymentProcessingPercentage_OverrideForStore, model => model.MacroPaymentsPaymentProcessingPercentage, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.MacroPaymentsPaymentProcessingPercentage)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.MacroPaymentsPaymentProcessingPercentage)
+                                    @Html.ValidationMessageFor(model => model.MacroPaymentsPaymentProcessingPercentage)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.PurchasedSongFeePercentage_OverrideForStore, model => model.PurchasedSongFeePercentage, Model.ActiveStoreScopeConfiguration)
-                        <label>Purchased song fee percentage</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.PurchasedSongFeePercentage)
-                        @Html.ValidationMessageFor(model => model.PurchasedSongFeePercentage)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MicroMacroPaymentSwitchingAmount_OverrideForStore, model => model.MicroMacroPaymentSwitchingAmount, Model.ActiveStoreScopeConfiguration)
-                        <label>Micro payments fixed processing fee</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MicroMacroPaymentSwitchingAmount)
-                        @Html.ValidationMessageFor(model => model.MicroMacroPaymentSwitchingAmount)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MicroPaymentsFixedPaymentProcessingFee_OverrideForStore, model => model.MicroPaymentsFixedPaymentProcessingFee, Model.ActiveStoreScopeConfiguration)
-                        <label>Micro payments fixed processing fee</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MicroPaymentsFixedPaymentProcessingFee)
-                        @Html.ValidationMessageFor(model => model.MicroPaymentsFixedPaymentProcessingFee)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MicroPaymentsPaymentProcessingPercentage_OverrideForStore, model => model.MicroPaymentsPaymentProcessingPercentage, Model.ActiveStoreScopeConfiguration)
-                        <label>Micro payments variable processing fee percentage</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MicroPaymentsPaymentProcessingPercentage)
-                        @Html.ValidationMessageFor(model => model.MicroPaymentsPaymentProcessingPercentage)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MacroPaymentsFixedPaymentProcessingFee_OverrideForStore, model => model.MacroPaymentsFixedPaymentProcessingFee, Model.ActiveStoreScopeConfiguration)
-                        <label>Macro payments fixed processing fee</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MacroPaymentsFixedPaymentProcessingFee)
-                        @Html.ValidationMessageFor(model => model.MacroPaymentsFixedPaymentProcessingFee)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.MacroPaymentsPaymentProcessingPercentage_OverrideForStore, model => model.MacroPaymentsPaymentProcessingPercentage, Model.ActiveStoreScopeConfiguration)
-                        <label>Macro payments variable processing fee percentage</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.MacroPaymentsPaymentProcessingPercentage)
-                        @Html.ValidationMessageFor(model => model.MacroPaymentsPaymentProcessingPercentage)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Payment Settings-->
+            </div>
+            <div class="tab-pane" id="tab-thirdparty">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.EnableFacebookInvite_OverrideForStore, model => model.EnableFacebookInvite, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.EnableFacebookInvite)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.EnableFacebookInvite)
+                                    @Html.ValidationMessageFor(model => model.EnableFacebookInvite)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.FacebookWebsiteAppId_OverrideForStore, model => model.FacebookWebsiteAppId, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.FacebookWebsiteAppId)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.FacebookWebsiteAppId)
+                                    @Html.ValidationMessageFor(model => model.FacebookWebsiteAppId)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.EchonestAPIKey_OverrideForStore, model => model.EchonestAPIKey, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.EchonestAPIKey)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.EchonestAPIKey)
+                                    @Html.ValidationMessageFor(model => model.EchonestAPIKey)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    @Html.OverrideStoreCheckboxFor(model => model.SevenDigitalPartnerId_OverrideForStore, model => model.SevenDigitalPartnerId, Model.ActiveStoreScopeConfiguration)
+                                    @Html.NopLabelFor(model => model.SevenDigitalPartnerId)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.NopEditorFor(model => model.SevenDigitalPartnerId)
+                                    @Html.ValidationMessageFor(model => model.SevenDigitalPartnerId)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
 
-        <div>
-            <table class="adminContent">
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.EnableFacebookInvite_OverrideForStore, model => model.EnableFacebookInvite, Model.ActiveStoreScopeConfiguration)
-                        <label>Enable Facebook Invite</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.EnableFacebookInvite)
-                        @Html.ValidationMessageFor(model => model.EnableFacebookInvite)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.FacebookWebsiteAppId_OverrideForStore, model => model.FacebookWebsiteAppId, Model.ActiveStoreScopeConfiguration)
-                        <label>Facebook App Id</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.FacebookWebsiteAppId)
-                        @Html.ValidationMessageFor(model => model.FacebookWebsiteAppId)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.EchonestAPIKey_OverrideForStore, model => model.EchonestAPIKey, Model.ActiveStoreScopeConfiguration)
-                        <label>EchoNest Api Key</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.EchonestAPIKey)
-                        @Html.ValidationMessageFor(model => model.EchonestAPIKey)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminTitle">
-                        @Html.OverrideStoreCheckboxFor(model => model.SevenDigitalPartnerId_OverrideForStore, model => model.SevenDigitalPartnerId, Model.ActiveStoreScopeConfiguration)
-                        <label>7Digital Partner Id</label>
-                    </td>
-                    <td class="adminData">
-                        @Html.EditorFor(model => model.SevenDigitalPartnerId)
-                        @Html.ValidationMessageFor(model => model.SevenDigitalPartnerId)
-                    </td>
-                </tr>
-            </table>
-        </div><!--Third Party Application Settings-->
+            </div>
+        </div>
     </div>
 }
