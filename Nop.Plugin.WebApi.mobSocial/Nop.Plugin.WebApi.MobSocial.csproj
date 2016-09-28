@@ -53,6 +53,7 @@
     <Compile Include="Controllers\FriendsApiController.cs" />
     <Compile Include="Controllers\BaseMobApiController.cs" />
     <Compile Include="Controllers\PaymentApiController.cs" />
+    <Compile Include="Controllers\SkillApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
     <Compile Include="Controllers\TeamPageApiController.cs" />
     <Compile Include="Controllers\TimelineApiController.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Models\InviteParticipantsModel.cs" />
     <Compile Include="Models\MobSocialProcessPaymentResultModel.cs" />
     <Compile Include="Models\PurchasePassModel.cs" />
+    <Compile Include="Models\SkillModel.cs" />
     <Compile Include="Models\SponsorDataModel.cs" />
     <Compile Include="Models\SponsorModel.cs" />
     <Compile Include="Models\SponsorPublicModel.cs" />
@@ -195,6 +197,7 @@
     <Compile Include="Services\IOAuthService.cs" />
     <Compile Include="Services\IPaymentProcessingService.cs" />
     <Compile Include="Services\ISharedSongService.cs" />
+    <Compile Include="Services\ISkillService.cs" />
     <Compile Include="Services\ISongService.cs" />
     <Compile Include="Services\ISponsorPassService.cs" />
     <Compile Include="Services\ISponsorService.cs" />
@@ -221,6 +224,7 @@
     <Compile Include="Services\PaymentProcessingService.cs" />
     <Compile Include="Services\SharedSongService.cs" />
     <Compile Include="Services\SitemapGenerator.cs" />
+    <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\SponsorPassService.cs" />
     <Compile Include="Services\SponsorService.cs" />
