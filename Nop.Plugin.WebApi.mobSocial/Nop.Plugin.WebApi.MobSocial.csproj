@@ -59,9 +59,11 @@
     <Compile Include="Controllers\VideoBattleApiController.cs" />
     <Compile Include="Data\CustomerCommentMap.cs" />
     <Compile Include="Data\CustomerLikeMap.cs" />
+    <Compile Include="Data\SkillMap.cs" />
     <Compile Include="Data\TimelinePostMap.cs" />
     <Compile Include="Domain\CustomerComment.cs" />
     <Compile Include="Domain\CustomerLike.cs" />
+    <Compile Include="Domain\Skill.cs" />
     <Compile Include="Domain\TimelinePost.cs" />
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
     <Compile Include="Extensions\CustomerExtensions.cs" />
