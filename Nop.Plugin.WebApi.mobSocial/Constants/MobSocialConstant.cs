@@ -5,7 +5,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Constants
 {
     public class MobSocialConstant
     {
-        public static bool SuiteInstallation = true;
+        public static bool SuiteInstallation = Convert.ToBoolean(ConfigurationManager.AppSettings["suiteInstall"] ?? "false");
 
         public static string PluginPath = "~/Plugins" + (SuiteInstallation ? "/MobSocial.Suite" : "/Widgets.mobSocial");
 
