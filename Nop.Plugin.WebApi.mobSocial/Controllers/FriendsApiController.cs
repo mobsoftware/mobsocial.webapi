@@ -7,6 +7,7 @@ using System.Web.Routing;
 using Mob.Core;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
@@ -43,7 +44,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
      
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("addfriend/{friendId:int}")]
         public IHttpActionResult AddFriend(int friendId)
@@ -81,7 +82,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("confirmfriend/{friendId:int}")]
         public IHttpActionResult ConfirmFriend(int friendId)
@@ -105,7 +106,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Json(new { Success = true, NewStatus = FriendStatus.Friends });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("declinefriend/{friendId:int}")]
         public IHttpActionResult DeclineFriend(int friendId)
@@ -129,7 +130,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
       
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("getfriendrequests")]
         public IHttpActionResult GetFriendRequests()
         {
@@ -158,7 +159,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Json(new { Success = true, People = model });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpGet]
         [Route("getcustomerfriends")]
         public IHttpActionResult GetCustomerFriends(int customerId , int howMany = 0, bool random = false)

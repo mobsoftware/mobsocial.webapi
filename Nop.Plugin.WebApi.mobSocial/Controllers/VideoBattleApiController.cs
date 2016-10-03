@@ -24,6 +24,7 @@ using NReco.VideoConverter;
 using System.Web.Http;
 using System.Web.Routing;
 using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Helpers;
 
 namespace Nop.Plugin.WebApi.MobSocial.Controllers
@@ -107,7 +108,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         #region Battles
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("edit/{videoBattleId:int}")]
         [HttpGet]
         public IHttpActionResult Edit(int videoBattleId = 0)
@@ -167,7 +168,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("savebattle")]
         public IHttpActionResult SaveVideoBattle(VideoBattleModel model)
         {
@@ -244,7 +245,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("saveprize")]
         public IHttpActionResult SavePrize(VideoBattlePrizeModel model)
@@ -304,7 +305,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("deleteprize/{videoBattleId:int}/{prizeId:int}")]
         public IHttpActionResult DeletePrize(int videoBattleId, int prizeId)
         {
@@ -328,7 +329,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("deletevideobattle/{videoBattleId:int}")]
         public IHttpActionResult DeleteVideoBattle(int videoBattleId)
         {
@@ -887,7 +888,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("setpictureascover")]
         public IHttpActionResult SetPictureAsCover(EntitySetImageModel model)
         {
@@ -909,7 +910,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         #region Participants
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("inviteparticipants")]
         public IHttpActionResult InviteParticipants(InviteParticipantsModel Model)
         {
@@ -990,7 +991,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("joinbattle/{videoBattleId:int}")]
         public IHttpActionResult JoinBattle(int videoBattleId)
         {
@@ -1072,7 +1073,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("updateparticipantstatus")]
         public IHttpActionResult UpdateParticipantStatus(UpdateParticipantStatusModel model)
@@ -1182,7 +1183,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// <returns>JSon response with success as true or false</returns>
         [HttpPost]
         [Route("uploadvideo")]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult UploadVideo(BattleUploadModel Model)
         {
             if (!ModelState.IsValid)
@@ -1342,7 +1343,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// <param name="videoBattleVideoId">The ID of Video Battle video</param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("markvideowatched")]
         public IHttpActionResult MarkVideoWatched(int videoBattleId, int participantId, int videoBattleVideoId)
         {
@@ -1378,7 +1379,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         #region Video Battles Votes
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("votebattle")]
         public IHttpActionResult VoteBattle(int videoBattleId, int participantId, int voteValue, int voterPassOrderId = 0)
@@ -1505,7 +1506,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("invitevoters")]
         public IHttpActionResult InviteVoters(InviteVotersModel Model)
         {

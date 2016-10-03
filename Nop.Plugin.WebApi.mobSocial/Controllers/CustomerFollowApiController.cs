@@ -25,7 +25,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("follow/{entityName}/{id:int}")]
         public IHttpActionResult Follow(string entityName, int id)
         {
@@ -46,7 +46,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("unfollow/{entityName}/{id:int}")]
         public IHttpActionResult Unfollow(string entityName, int id)
         {

@@ -456,7 +456,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// </summary>
         [HttpPost]
         [Route("updateartistdata")]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult UpdateArtistData(FormCollection Parameters)
         {
             var IdStr = Parameters["id"];
@@ -506,7 +506,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("myartistpages")]
         public IHttpActionResult MyArtistPages(string Search = "", int Count = 15, int Page = 1)
         {
@@ -552,7 +552,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// Gets all pages managed by logged in user
         /// </summary>
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("getpagesasmanager")]
         public IHttpActionResult GetPagesAsManager()
         {
@@ -589,7 +589,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         /// <summary>
         /// Loads the artist editor page
         /// </summary>
-        [Authorize]
+        [ApiAuthorize]
         [Route("getentity/{artistPageId:int}")]
         public IHttpActionResult Editor(int artistPageId = 0)
         {

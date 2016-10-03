@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Nop.Core;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Services;
 
@@ -20,7 +21,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("like/{entityName}/{id:int}")]
         public IHttpActionResult Like(string entityName, int id)
         {
@@ -47,7 +48,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("unlike/{entityName}/{id:int}")]
         public IHttpActionResult Unlike(string entityName, int id)
         {

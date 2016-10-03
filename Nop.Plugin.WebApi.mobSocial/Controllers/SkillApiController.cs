@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Services;
@@ -54,7 +55,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("get/{id:int}")]
         public IHttpActionResult GetSkill(int id)
         {
@@ -73,7 +74,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("post")]
         public IHttpActionResult Post(SkillModel model)
         {
@@ -116,7 +117,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("delete")]
         public IHttpActionResult Delete(int skillId)
         {

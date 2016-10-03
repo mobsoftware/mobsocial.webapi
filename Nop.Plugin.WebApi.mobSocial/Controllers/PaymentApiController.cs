@@ -6,6 +6,7 @@ using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Orders;
 using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Plugin.WebApi.MobSocial.Helpers;
@@ -85,7 +86,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("getavailablepaymentmethods")]
         public IHttpActionResult GetAvailablePaymentMethods([FromUri] CustomerPaymentModel Model)
         {
@@ -162,7 +163,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Json(new { Success = true, AvailablePaymentMethods = model});
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("purchasepass")]
         public IHttpActionResult PurchasePass(PurchasePassModel Model)

@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
 using Nop.Plugin.WebApi.MobSocial.Models;
@@ -46,7 +47,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("post")]
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Post(CustomerCommentModel model)
         {
             if (!ModelState.IsValid)
@@ -69,7 +70,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("get")]
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Get([FromUri] CustomerCommentRequestModel model)
         {
             if (!ModelState.IsValid)
@@ -98,7 +99,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("delete/{commentId:int}")]
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Delete(int commentId)
         {
             //only administrator or comment owner can delete the comment, so first let's retrieve the comment

@@ -11,6 +11,7 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Plugin.WebApi.mobSocial.Services;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
@@ -88,7 +89,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         #region Methods
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("savesponsor")]
         public IHttpActionResult SaveSponsor(SponsorModel Model)
         {
@@ -180,7 +181,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("updatesponsor")]
         public IHttpActionResult UpdateSponsor(UpdateSponsorModel Model)
         {
@@ -304,7 +305,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("getsponsors")]
         public IHttpActionResult GetSponsors([FromUri] SponsorsRequestModel Model)
         {
@@ -376,7 +377,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("getsponsortransactions")]
         public IHttpActionResult GetSponsorTransactions([FromUri] SponsorTransactionRequestModel Model)
         {
@@ -411,7 +412,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         
       
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult ProductPrizesFormPopup(int BattleId, BattleType BattleType)
         {
             //check if current user is already a sponsor, he should then be doing everything from sponsor dashboard only
@@ -440,7 +441,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("savesponsorproductprizes")]
         public IHttpActionResult SaveSponsorProductPrizes(IList<VideoBattlePrizeModel> models)
         {
@@ -495,7 +496,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadpicture")]
         public IHttpActionResult UploadPicture(int BattleId, BattleType BattleType, IEnumerable<HttpPostedFileBase> file)
         {

@@ -10,6 +10,7 @@ using Mob.Core;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
 using Nop.Plugin.WebApi.MobSocial.Models;
@@ -66,7 +67,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("post")]
         public IHttpActionResult Post(TeamPageModel model)
         {
@@ -91,7 +92,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [ApiAuthorize]
         [Route("put")]
         public IHttpActionResult Put(TeamPageModel model)
         {
@@ -119,7 +120,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [ApiAuthorize]
         [Route("cover/put/{id:int}/{pictureId:int}")]
         public IHttpActionResult UpdateTeamPicture(int id, int pictureId)
         {
@@ -174,7 +175,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpGet]
         [Route("get/my")]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Get()
         {
             var teamPages = _teamPageService.GetTeamPagesByOwner(_workContext.CurrentCustomer.Id);
@@ -212,7 +213,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpDelete]
         [Route("delete/{id:int}")]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Delete(int id)
         {
             var teamPage = _teamPageService.GetById(id);
@@ -237,7 +238,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("group/post")]
         public IHttpActionResult PostGroup(TeamPageGroupModel model)
         {
@@ -278,7 +279,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             });
         }
         [HttpPut]
-        [Authorize]
+        [ApiAuthorize]
         [Route("group/put")]
         public IHttpActionResult PutGroup(TeamPageGroupModel model)
         {
@@ -335,7 +336,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("group/delete/{groupId:int}")]
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult DeleteGroup(int groupId)
         {
             //first retrieve the group and make sure that the right person is deleting the group
@@ -424,7 +425,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpPost]
         [Route("group/members/post")]
         public IHttpActionResult PostGroupMembers(TeamPageGroupMemberModel model)
@@ -507,7 +508,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("group/members/delete/{groupId}/{memberId}")]
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult DeleteGroupMember(int groupId, int memberId)
         {
             //first check if the group exist?
@@ -535,7 +536,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("cover/post")]
         [HttpPost]
         public IHttpActionResult UploadCover()

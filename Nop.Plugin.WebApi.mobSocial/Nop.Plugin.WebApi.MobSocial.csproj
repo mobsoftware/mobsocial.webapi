@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="App_Start\OwinStartup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Constants\MobSocialConstant.cs" />
     <Compile Include="Constants\TimelineAutoPostTypeNames.cs" />
     <Compile Include="Controllers\ArtistPageApiController.cs" />

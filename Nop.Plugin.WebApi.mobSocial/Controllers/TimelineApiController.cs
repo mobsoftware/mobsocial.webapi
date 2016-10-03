@@ -19,6 +19,7 @@ using System.Web;
 using System.Web.Hosting;
 using Mob.Core;
 using Newtonsoft.Json;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Constants;
 using Nop.Plugin.WebApi.MobSocial.Helpers;
 using NReco.VideoConverter;
@@ -67,7 +68,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [Route("post")]
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Post(TimelinePostModel model)
         {
             if (!ModelState.IsValid)
@@ -164,7 +165,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Response(responseModel);
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("delete/{timelinePostId:int}")]
         [HttpDelete]
         public IHttpActionResult Delete(int timelinePostId)
@@ -185,7 +186,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Response(new { Success = false, Message = "Unauthorized" });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadpictures")]
         [HttpPost]
         public IHttpActionResult UploadPictures()
@@ -233,7 +234,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Json(new { Success = true, Images = newImages });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadvideo")]
         [HttpPost]
         public IHttpActionResult UploadVideo()
