@@ -26,6 +26,7 @@ using Nop.Services.Catalog;
 using Nop.Services.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Core.Domain.Tax;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
 using Nop.Plugin.WebApi.MobSocial.Services;
 

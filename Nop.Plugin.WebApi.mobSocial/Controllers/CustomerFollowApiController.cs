@@ -4,6 +4,7 @@ using Mob.Core;
 using Mob.Core.Domain;
 using Nop.Core;
 using Nop.Core.Infrastructure;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Services;
 using Nop.Web.Controllers;

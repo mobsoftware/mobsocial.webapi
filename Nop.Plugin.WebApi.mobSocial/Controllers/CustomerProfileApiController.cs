@@ -9,6 +9,7 @@ using Mob.Core;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Extensions;
@@ -62,7 +63,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadpicture")]
         public IHttpActionResult UploadPicture()
         {
@@ -124,7 +125,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("setpictureas")]
         public IHttpActionResult SetPictureAs(EntitySetImageModel model)
         {
