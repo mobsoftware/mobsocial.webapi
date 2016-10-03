@@ -50,7 +50,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 return skillModel;
             });
 
-            return Response(new { Skills = model });
+            return Response(new { Success = true, Skills = model });
         }
 
         [HttpGet]
@@ -79,6 +79,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             //if it's admin, we can safely change the customer id otherwise we'll save skill as logged in user 
             var isAdmin = _workContext.CurrentCustomer.IsAdmin();
+            if (model.CustomerId == 0)
+                model.CustomerId = _workContext.CurrentCustomer.Id;
 
             var skill = _skillService.GetById(model.Id) ?? new Skill();
             if (isAdmin)
