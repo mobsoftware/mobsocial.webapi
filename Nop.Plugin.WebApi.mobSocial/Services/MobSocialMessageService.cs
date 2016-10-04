@@ -926,8 +926,36 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
         }
 
+        public int SendSomeoneInvitedYouToJoin(Customer inviter, string inviteeName, string inviteeEmail, int languageId, int storeId)
+        {
+            var store = _storeService.GetStoreById(storeId) ?? _storeContext.CurrentStore;
+
+            languageId = EnsureLanguageIsActive(languageId, store.Id);
 
 
+            var messageTemplate = GetLocalizedActiveMessageTemplate("MobSocial.InvitationToJoinNotification", store.Id);
+            if (messageTemplate == null)
+                return 0;
+
+
+            var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
+            //tokens
+            var tokens = new List<Token>
+            {
+                new Token("Invitee.Name",inviteeName, true)
+            };
+
+            _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
+
+            //event notification
+            _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
+
+
+            var toEmail = inviteeEmail;
+            var toName = inviteeName;
+
+            return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
+        }
     }
 }
 

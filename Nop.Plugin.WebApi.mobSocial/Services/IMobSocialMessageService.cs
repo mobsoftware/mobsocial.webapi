@@ -51,6 +51,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         int SendXDaysToBattleEndNotificationToFollower(Customer receiver, VideoBattle videoBattle, int languageId, int storeId);
 
+        int SendSomeoneInvitedYouToJoin(Customer inviter, string inviteeName, string inviteeEmail, int languageId, int storeId);
+
     }
 
 }
