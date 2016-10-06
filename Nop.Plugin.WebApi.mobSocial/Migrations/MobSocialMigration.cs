@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mob.Core.Data;
 using Mob.Core.Migrations;
+using Nop.Core;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Infrastructure;
 using Nop.Core.Plugins;
@@ -43,7 +44,23 @@ namespace Nop.Plugin.WebApi.MobSocial.Migrations
             if (settings.Version >= MobSocialConstant.ReleaseVersion)
                 return; // no need for any upgrade
 
-            //we'll put update code here when required
+            if (settings.Version < 1.1m)
+            {
+                var storeContext = EngineContext.Current.Resolve<IStoreContext>();
+                var emailAccountSettings = EngineContext.Current.Resolve<EmailAccountSettings>();
+                var messageTemplateService = EngineContext.Current.Resolve<IMessageTemplateService>();
+                var someInvitedToJoinNotification = new MessageTemplate() {
+                    Name = "MobSocial.InvitationToJoinNotification",
+                    Subject = "%Customer.FirstName% has invited you to join " + storeContext.CurrentStore.Name,
+                    Body = "Hi, " + "%Customer.FirstName% has invited you to join " + storeContext.CurrentStore.Name + " <a href='%Invitation.Url%'>Click here</a> to join.",
+                    EmailAccountId = emailAccountSettings.DefaultEmailAccountId,
+                    IsActive = true,
+                    LimitedToStores = false
+                };
+
+                messageTemplateService.InsertMessageTemplate(someInvitedToJoinNotification);
+            }
+           
 
             //and update the setting
             settings.Version = MobSocialConstant.ReleaseVersion;

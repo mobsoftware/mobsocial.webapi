@@ -28,7 +28,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Constants
 
         public static string VideoBattleFeaturedImageUrl = PluginContentPathInternal + "/images/poweredby.jpg";
 
-        public static decimal ReleaseVersion = 1.0m;
+        public static decimal ReleaseVersion = 1.1m;
     }
 }
 

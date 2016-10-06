@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
+using Nop.Plugin.WebApi.MobSocial.Helpers;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Services;
 using Nop.Services.Customers;
@@ -51,6 +52,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var invitations = _invitationService.GetInvitationsByInviter(currentUser.Id);
             var toInviteList = requestModel.EmailAddress.Except(invitations.Select(x => x.InviteeEmailAddress));
             //invite them all
+            var invitationUrl = InvitationHelpers.GetInvitationUrl();
             foreach (var email in toInviteList)
             {
                 var invite = new Invitation() {
@@ -61,7 +63,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     InviteStatus = InviteStatus.Sent
                 };
                 _invitationService.Insert(invite);
-                _mobSocialMessageService.SendSomeoneInvitedYouToJoin(currentUser, email, email,
+                _mobSocialMessageService.SendSomeoneInvitedYouToJoin(currentUser, email, email, invitationUrl,
                     _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id);
             }
 

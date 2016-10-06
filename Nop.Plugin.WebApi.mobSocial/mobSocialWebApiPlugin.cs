@@ -33,6 +33,7 @@ namespace Nop.Plugin.WebApi.MobSocial
         private readonly HttpRuntimeSection _config;
         private readonly IStoreContext _storeContext;
         private readonly IVideoBattleService _videoBattleService;
+        private readonly EmailAccountSettings _emailAccountSettings;
 
         public MobSocialWebApiPlugin(MobSocialObjectContext context, mobSocialSettings mobSocialSettings,
             ISettingService settingService, IMessageTemplateService messageTemplateService,
@@ -40,7 +41,7 @@ namespace Nop.Plugin.WebApi.MobSocial
             IMobSocialService mobSocialService,
             ILocalizationService localizationService,
             IStoreContext storeContext,
-            IVideoBattleService videoBattleService)
+            IVideoBattleService videoBattleService, EmailAccountSettings emailAccountSettings)
         {
             _context = context;
             _mobSocialSettings = mobSocialSettings;
@@ -50,6 +51,7 @@ namespace Nop.Plugin.WebApi.MobSocial
             _mobSocialService = mobSocialService;
             _localizationService = localizationService;
             _videoBattleService = videoBattleService;
+            _emailAccountSettings = emailAccountSettings;
             _storeContext = storeContext;
             _config = new HttpRuntimeSection(); //TODO Move to dependency registrar and perform injection
 
@@ -441,13 +443,14 @@ namespace Nop.Plugin.WebApi.MobSocial
 
         private void InsertMessageTemplates()
         {
+           
             // Require user to login in order to view who and confirm the requests. Curiousity will drive traffic back to the site. - Bruce Leggett
             var friendRequestNotification = new MessageTemplate() {
                 Name = "MobSocial.FriendRequestNotification",
                 Subject = "You have a new friend request at %Store.Name%",
                 Body = "You have a new friend request!<br/><br/>" +
                        "<a href=\"%Store.URL%\">Log in</a> to view and confirm your friend request.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
 
@@ -461,7 +464,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Subject = "You have pending friend requests at %Store.Name%",
                 Body = "You have friends waiting for you to confirm their requests!<br/><br/>" +
                        "<a href=\"%Store.URL%\">Log in</a> to view and confirm your friend requests.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
 
@@ -474,7 +477,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Subject = "You have been invited to an event on %Store.Name%",
                 Body = "You have just been invited to an event!<br/><br/>" +
                        "<a href=\"%Store.URL%\">Log in</a> to view the event invitation.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
 
@@ -488,7 +491,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Body = "Hi %Customer.FirstName%,<br/><br/> What do you think about the products you've ordered? What do you think about the products you've ordered? Click on the products below to write a review and let us and others know what you think?<br/><br/>" +
                        "%ProductUrls% <br/><br/>" +
                        "Thanks!<br/> %Store.Name% Team",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
 
@@ -501,7 +504,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.SomeoneSentYouASongNotification",
                 Subject = "%Friend.FirstName% sent you a song!",
                 Body = "<a href=\"%Store.URL%\">Log in</a> to %Friend.FirstName%'s song to you.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -513,7 +516,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.SomeoneChallengedYouForBattleNotification",
                 Subject = "%Challenger.FirstName% challenged you for a video battle!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit battle page</a> to accept the challege.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -524,7 +527,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleCompleteNotificationToParticipants",
                 Subject = "%VideoBattle.Title% is complete!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to see the winner.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -534,7 +537,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleCompleteNotificationToVoters",
                 Subject = "%VideoBattle.Title% is complete!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to see the winner.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -544,7 +547,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.SomeoneInvitedYouToVoteNotification",
                 Subject = "You have been invited to judge %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to judge the participants.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -554,7 +557,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VoteReminderNotification",
                 Subject = "You have been invited to judge %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to judge the participants.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -565,7 +568,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleSignupNotification",
                 Subject = "%Challenger.Name% has signed up for %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to approve the participants.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -576,7 +579,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleJoinNotification",
                 Subject = "%Challenger.Name% is also participating in %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to view the participants.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -587,7 +590,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleSignupAcceptedNotification",
                 Subject = "You have been approved to participate in %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to view the battle.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -599,7 +602,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.SponsorAppliedNotification",
                 Subject = "%Sponsor.Name% wants to sponsor %Battle.Title%!",
                 Body = "Visit <a href=\"%SponsorDashboard.Url%\">Sponsor Dashboard</a> to accept the sponsorship.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -610,7 +613,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.SponsorshipStatusChangeNotification",
                 Subject = "Sponsorship for %Battle.Title% has been %Sponsorship.Status%",
                 Body = "Visit <a href=\"%SponsorDashboard.Url%\">Sponsor Dashboard</a> to view the details.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -622,7 +625,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.xDaysToBattleStartNotification",
                 Subject = "%Battle.Title% starts %Battle.StartDaysString%",
                 Body = "Visit <a href=\"%VideoBattle.Url%\">Battle Page</a> to upload your video",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -633,7 +636,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.xDaysToBattleEndNotification",
                 Subject = "%Battle.Title% ends %Battle.EndDaysString%",
                 Body = "Visit <a href=\"%VideoBattle.Url%\">Battle Page</a> to cast your vote",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -645,7 +648,7 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleDisqualifiedNotification",
                 Subject = "You have been disqualified from participating in %VideoBattle.Title%!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to view the reason.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
@@ -656,12 +659,23 @@ namespace Nop.Plugin.WebApi.MobSocial
                 Name = "MobSocial.VideoBattleOpenNotification",
                 Subject = "The battle '%VideoBattle.Title%' is open now!",
                 Body = "<a href=\"%VideoBattle.Url%\">Visit Battle Page</a> to see the battle.",
-                EmailAccountId = 1,
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
                 IsActive = true,
                 LimitedToStores = false
             };
 
             _messageTemplateService.InsertMessageTemplate(videoBattleOpenNotification);
+
+            var someInvitedToJoinNotification = new MessageTemplate() {
+                Name = "MobSocial.InvitationToJoinNotification",
+                Subject = "%Customer.FirstName% has invited you to join " + _storeContext.CurrentStore.Name,
+                Body = "Hi, " + "%Customer.FirstName% has invited you to join " + _storeContext.CurrentStore.Name + " <a href='%Invitation.Url%'>Click here</a> to join.",
+                EmailAccountId = _emailAccountSettings.DefaultEmailAccountId,
+                IsActive = true,
+                LimitedToStores = false
+            };
+
+            _messageTemplateService.InsertMessageTemplate(someInvitedToJoinNotification);
 
         }
 

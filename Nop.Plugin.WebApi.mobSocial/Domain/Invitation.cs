@@ -10,6 +10,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
 
         public string InviteeEmailAddress { get; set; }
 
+        public int InviteeUserId { get; set; }
+
         public string InviteeName { get; set; }
 
         public InviteStatus InviteStatus { get; set; }

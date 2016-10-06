@@ -926,7 +926,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
         }
 
-        public int SendSomeoneInvitedYouToJoin(Customer inviter, string inviteeName, string inviteeEmail, int languageId, int storeId)
+        public int SendSomeoneInvitedYouToJoin(Customer inviter, string inviteeName, string inviteeEmail, string invitationUrl, int languageId, int storeId)
         {
             var store = _storeService.GetStoreById(storeId) ?? _storeContext.CurrentStore;
 
@@ -942,11 +942,12 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             //tokens
             var tokens = new List<Token>
             {
-                new Token("Invitee.Name",inviteeName, true)
+                new Token("Invitee.Name",inviteeName, true),
+                new Token("Invitation.Url", invitationUrl)
             };
 
             _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
-
+            _messageTokenProvider.AddCustomerTokens(tokens, inviter);
             //event notification
             _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
 
