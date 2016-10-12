@@ -384,7 +384,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
 
 
         #region Helper Methods
-        private MessageTemplate GetLocalizedActiveMessageTemplate(string messageTemplateName, int storeId)
+        protected MessageTemplate GetLocalizedActiveMessageTemplate(string messageTemplateName, int storeId)
         {
             var messageTemplate = _messageTemplateService.GetMessageTemplateByName(messageTemplateName, storeId);
 
@@ -395,7 +395,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             return messageTemplate;
         }
 
-        private int EnsureLanguageIsActive(int languageId, int storeId)
+        protected int EnsureLanguageIsActive(int languageId, int storeId)
         {
             //load language by specified ID
             var language = _languageService.GetLanguageById(languageId);
@@ -416,7 +416,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             return language.Id;
         }
 
-        private int SendNotification(MessageTemplate messageTemplate,
+        protected int SendNotification(MessageTemplate messageTemplate,
                                      EmailAccount emailAccount, int languageId, IEnumerable<Token> tokens,
                                      string toEmailAddress, string toName)
         {
@@ -447,7 +447,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
             return email.Id;
         }
 
-        private EmailAccount GetEmailAccountOfMessageTemplate(MessageTemplate messageTemplate, int languageId)
+        protected EmailAccount GetEmailAccountOfMessageTemplate(MessageTemplate messageTemplate, int languageId)
         {
             var emailAccounId = messageTemplate.GetLocalized(mt => mt.EmailAccountId, languageId);
             var emailAccount = _emailAccountService.GetEmailAccountById(emailAccounId);
