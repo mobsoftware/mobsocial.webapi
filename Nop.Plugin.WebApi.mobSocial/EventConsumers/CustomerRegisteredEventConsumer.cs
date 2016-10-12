@@ -47,7 +47,7 @@ namespace Nop.Plugin.WebApi.MobSocial.EventConsumers
 
             //in case this customer has registered with a different email than the one on which invitation was sent, it's better to check
             //for ref attribute to see if there is the userid of the inviter
-            if (string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["ref"]))
+            if (string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["ref"]) || invitations.Any())
                 return;
 
             var refId = HttpContext.Current.Request.QueryString["ref"];

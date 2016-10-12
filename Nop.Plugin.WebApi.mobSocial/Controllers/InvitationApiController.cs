@@ -47,15 +47,18 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     BadRequest();
 
             var currentUser = _workContext.CurrentCustomer;
-            //send invitation to people who haven't been invited by this user
-            //to improve performance, let's query all the invitations ever sent by user 
-            var invitations = _invitationService.GetInvitationsByInviter(currentUser.Id);
-            var toInviteList = requestModel.EmailAddress.Except(invitations.Select(x => x.InviteeEmailAddress));
+           
+
+            var toInviteList = requestModel.EmailAddress;
             //invite them all
             var invitationUrl = InvitationHelpers.GetInvitationUrl();
             foreach (var email in toInviteList)
             {
+                //we shouldn't invite people who have already joined
+                if (_customerService.GetCustomerByEmail(email) != null)
+                    continue;
                 var invite = new Invitation() {
+                    InviterUserId = currentUser.Id,
                     InviteeEmailAddress = email,
                     AcceptedOn = null,
                     DateCreated = DateTime.UtcNow,
