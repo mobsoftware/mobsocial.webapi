@@ -55,6 +55,24 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
+        [Route("system/get")]
+        public IHttpActionResult GetSystemSkills(int page = 1, int count = 15)
+        {
+            int total;
+            var skills = _skillService.GetSystemSkills(out total, string.Empty, page, count);
+            var model = skills.Select(x =>
+            {
+                var skillModel = new SkillModel() {
+                    SkillName = x.SkillName,
+                    Id = x.Id
+                };
+                return skillModel;
+            });
+
+            return Response(new { Success = true, Skills = model, Total = total });
+        }
+
+        [HttpGet]
         [ApiAuthorize]
         [Route("get/{id:int}")]
         public IHttpActionResult GetSkill(int id)
@@ -80,18 +98,22 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             //if it's admin, we can safely change the customer id otherwise we'll save skill as logged in user 
             var isAdmin = _workContext.CurrentCustomer.IsAdmin();
-            if (model.CustomerId == 0)
+            if (model.CustomerId == 0 && !isAdmin)
                 model.CustomerId = _workContext.CurrentCustomer.Id;
 
             var skill = _skillService.GetById(model.Id) ?? new Skill();
             if (isAdmin)
             {
-                //check if the customer exists
-                var skillCustomer = _customerService.GetCustomerById(model.CustomerId);
-                if (skillCustomer == null)
+                if (model.CustomerId != 0) //if it's not a system skill
                 {
-                    return Response(new { Success = false, Message = "Customer doesn't exist" });
+                    //check if the customer exists
+                    var skillCustomer = _customerService.GetCustomerById(model.CustomerId);
+                    if (skillCustomer == null)
+                    {
+                        return Response(new { Success = false, Message = "Customer doesn't exist" });
+                    }
                 }
+                
 
                 skill.CustomerId = model.CustomerId;
             }

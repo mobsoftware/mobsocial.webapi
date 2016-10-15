@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Domain.Security;
 using Nop.Plugin.WebApi.MobSocial.Constants;
 using Nop.Plugin.WebApi.MobSocial.Models;
+using Nop.Plugin.WebApi.MobSocial.Services;
 using Nop.Services.Configuration;
 using Nop.Services.Security;
 using Nop.Services.Stores;
@@ -19,15 +20,17 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IPermissionService _permissionService;
         private readonly IStoreService _storeService;
         private readonly IWorkContext _workContext;
+        private readonly ISkillService _skillService;
 
         public ConfigurationController(IPermissionService permissionService,
             ISettingService settingService,
-            IStoreService storeService, IWorkContext workContext)
+            IStoreService storeService, IWorkContext workContext, ISkillService skillService)
         {
             _permissionService = permissionService;
             _settingService = settingService;
             _storeService = storeService;
             _workContext = workContext;
+            _skillService = skillService;
 
             Mapper.Initialize(cfg => cfg.CreateMap<ConfigurationModel, mobSocialSettings>());
         }
@@ -262,6 +265,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _settingService.ClearCache();
 
             return Configure(true);
+        }
+
+        [AdminAuthorize]
+        public ActionResult ConfigureSkills(int page = 1, int count = 15)
+        {
+            return View("~/Plugins" + (MobSocialConstant.SuiteInstallation ? "/MobSocial.Suite" : "/WebApi.mobSocial") + "/Views/Configuration/SkillConfiguration.cshtml");
         }
     }
 }

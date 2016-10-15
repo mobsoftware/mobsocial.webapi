@@ -43,6 +43,7 @@
     <Compile Include="Constants\MobSocialConstant.cs" />
     <Compile Include="Constants\TimelineAutoPostTypeNames.cs" />
     <Compile Include="Controllers\ArtistPageApiController.cs" />
+    <Compile Include="Controllers\AutoCompleteApiController.cs" />
     <Compile Include="Controllers\CommentApiController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\ControllerUtil.cs" />
@@ -430,6 +431,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Configuration\Configuration.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Configuration\SkillConfiguration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

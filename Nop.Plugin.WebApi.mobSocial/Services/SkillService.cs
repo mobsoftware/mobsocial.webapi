@@ -23,7 +23,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             return
                 Repository.Table.Where(x => x.SkillName.Contains(Term))
                     .OrderBy(x => x.DisplayOrder)
-                    .Skip((Page - 1)*Count)
+                    .Skip((Page - 1) * Count)
                     .Take(Count)
                     .ToList();
         }
@@ -31,6 +31,17 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         public IList<Skill> GetUserSkills(int userId)
         {
             return Repository.Table.Where(x => x.CustomerId == userId).ToList();
+        }
+
+        public IList<Skill> GetSystemSkills(out int total, string search = "", int page = 1, int count = 15)
+        {
+            var q = Repository.Table.Where(x => x.CustomerId == 0 && (search == "" || x.SkillName.StartsWith(search)));
+            total = q.Count(); //total records
+            return
+                q.OrderBy(x => x.SkillName)
+                    .Skip(count*(page - 1))
+                    .Take(count)
+                    .ToList();
         }
     }
 }

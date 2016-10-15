@@ -1,0 +1,105 @@
+﻿@using Nop.Web.Framework;
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            Default Skills
+        </h1>
+    </div>
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="skills-grid" data-role="grid" class="k-grid k-widget"></div>
+
+                        <script>
+                            $(document).ready(function () {
+                                $("#skills-grid").kendoGrid({
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: {
+                                                url: "/api/skills/system/get",
+                                                type: "GET",
+                                                dataType: "json"
+                                            },
+                                            update: {
+                                                url: "/api/skills/post",
+                                                type: "POST",
+                                                dataType: "json"
+                                            },
+                                            create: {
+                                                url: "/api/skills/post",
+                                                type: "POST",
+                                                dataType: "json"
+                                            },
+                                            destroy: {
+                                                url: "/api/skills/delete",
+                                                type: "POST",
+                                                dataType: "json"
+                                            },
+                                            parameterMap: function (options, type) {
+                                                return options;
+                                            }
+                                        },
+                                        pageSize: 20,
+                                        schema: {
+                                            model: {
+                                                id: "Id",
+                                                fields: {
+                                                    SkillName: { editable: true, validation: { required: true } },
+                                                }
+                                            },
+                                            data: "Skills",
+                                            total: "Total"
+                                        },
+                                        error: function (e) {
+                                            display_kendoui_grid_error(e);
+                                            // Cancel the changes
+                                            this.cancelChanges();
+                                        },
+                                        serverPaging: true,
+                                        serverFiltering: true,
+                                        serverSorting: true
+                                    },
+                                    pageable: {
+                                        refresh: true,
+                                        numeric: true,
+                                        previousNext: true,
+                                        info: true
+                                    },
+                                    editable: {
+                                        confirmation: "Are you sure you want to delete this item?",
+                                        mode: "inline"
+                                    },
+                                    scrollable: false,
+                                    toolbar: ["create"],
+                                    columns: [
+                                    {
+                                        field: "SkillName",
+                                        title: "Skill"
+                                    }, {
+                                        command: ["edit", "destroy"], title: "&nbsp;", width: "250px"
+                                    }
+                                    ]
+                                });
+                            });
+                        </script>
+
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+
+                            });
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

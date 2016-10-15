@@ -718,10 +718,10 @@ namespace Nop.Plugin.WebApi.MobSocial
         {
             var menuItem = new SiteMapNode() {
                 Title = _localizationService.GetResource("Plugins.Widgets.MobSocial.AdminMenu.Text"),
-                ControllerName = "Configuration",
-                ActionName = "Configure",
                 Visible = true,
                 RouteValues = new RouteValueDictionary() { { "area", null } },
+                SystemName = "mobSocialRootMenu",
+                Url = ""
             };
 
             var configureSubMenu = new SiteMapNode() {
@@ -733,6 +733,16 @@ namespace Nop.Plugin.WebApi.MobSocial
             };
 
             menuItem.ChildNodes.Add(configureSubMenu);
+
+            var skillSubMenu = new SiteMapNode() {
+                Title = "Skills",
+                ControllerName = "Configuration",
+                ActionName = "ConfigureSkills",
+                Visible = true,
+                RouteValues = new RouteValueDictionary() { { "area", null } },
+            };
+
+            menuItem.ChildNodes.Add(skillSubMenu);
 
             var pluginNode = rootNode.ChildNodes.FirstOrDefault(x => x.SystemName == "Third party plugins");
 
