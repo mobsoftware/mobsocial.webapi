@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mob.Core.Data;
 using Mob.Core.Services;
@@ -42,6 +43,33 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
                     .Skip(count*(page - 1))
                     .Take(count)
                     .ToList();
+        }
+
+        public IList<Skill> SearchSkills(string searchText, int page = 1, int count = 15)
+        {
+            searchText = searchText.ToLower();
+            return
+               Repository.Table
+                   .Where(x => x.SkillName.ToLower().StartsWith(searchText))
+                   .OrderBy(x => x.DisplayOrder)
+                   .AsEnumerable()
+                   .Distinct(new SkillComparer())
+                   .Skip((page - 1) * count)
+                   .Take(count)
+                   .ToList();
+        }
+    }
+
+    public class SkillComparer : IEqualityComparer<Skill>
+    {
+        public bool Equals(Skill x, Skill y)
+        {
+            return x.SkillName == y.SkillName;
+        }
+
+        public int GetHashCode(Skill obj)
+        {
+            return obj.SkillName.GetHashCode();
         }
     }
 }

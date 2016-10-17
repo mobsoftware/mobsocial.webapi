@@ -10,5 +10,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         IList<Skill> GetUserSkills(int userId);
 
         IList<Skill> GetSystemSkills(out int total, string search = "", int page = 1, int count = 15);
+
+        IList<Skill> SearchSkills(string searchText, int page = 1, int count = 15);
     }
 }
