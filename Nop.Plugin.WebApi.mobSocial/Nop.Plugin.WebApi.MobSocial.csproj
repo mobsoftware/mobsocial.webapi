@@ -490,7 +490,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="AutoMapper">
-      <HintPath>..\..\..\..\..\..\Websites\Testing\nopCommerce_3.80_Source\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
