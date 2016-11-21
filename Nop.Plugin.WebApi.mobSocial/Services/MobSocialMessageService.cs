@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Mob.Core;
+using Mob.Core.Services;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -25,7 +26,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
     /// <summary>
     /// Product service
     /// </summary>
-    public class MobSocialMessageService : IMobSocialMessageService
+    public class MobSocialMessageService : BaseMessageService, IMobSocialMessageService
     {
 
 
@@ -66,7 +67,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
                                            ILocalizationService localizationService,
                                            MessageTemplatesSettings messageTemplateSettings,
                                            CatalogSettings catalogSettings,
-                                           IProductAttributeParser productAttributeParser, IWorkContext workContext)
+                                           IProductAttributeParser productAttributeParser, IWorkContext workContext) : base(languageService, emailAccountService, messageTemplateService, tokenizer, queuedEmailService, emailAccountSettings)
         {
             _messageTemplateService = messageTemplateService;
             _storeService = storeService;
@@ -384,85 +385,6 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
 
 
         #region Helper Methods
-        protected MessageTemplate GetLocalizedActiveMessageTemplate(string messageTemplateName, int storeId)
-        {
-            var messageTemplate = _messageTemplateService.GetMessageTemplateByName(messageTemplateName, storeId);
-
-            //no template found or not active
-            if (messageTemplate == null || !messageTemplate.IsActive)
-                return null;
-
-            return messageTemplate;
-        }
-
-        protected int EnsureLanguageIsActive(int languageId, int storeId)
-        {
-            //load language by specified ID
-            var language = _languageService.GetLanguageById(languageId);
-
-            if (language == null || !language.Published)
-            {
-                //load any language from the specified store
-                language = _languageService.GetAllLanguages(storeId: storeId).FirstOrDefault();
-            }
-            if (language == null || !language.Published)
-            {
-                //load any language
-                language = _languageService.GetAllLanguages().FirstOrDefault();
-            }
-
-            if (language == null)
-                throw new Exception("No active language could be loaded");
-            return language.Id;
-        }
-
-        protected int SendNotification(MessageTemplate messageTemplate,
-                                     EmailAccount emailAccount, int languageId, IEnumerable<Token> tokens,
-                                     string toEmailAddress, string toName)
-        {
-            //retrieve localized message template data
-            var bcc = messageTemplate.GetLocalized((mt) => mt.BccEmailAddresses, languageId);
-            var subject = messageTemplate.GetLocalized((mt) => mt.Subject, languageId);
-            var body = messageTemplate.GetLocalized((mt) => mt.Body, languageId);
-
-            //Replace subject and body tokens 
-            var subjectReplaced = _tokenizer.Replace(subject, tokens, false);
-            var bodyReplaced = _tokenizer.Replace(body, tokens, false);
-
-            var email = new QueuedEmail() {
-                Priority = QueuedEmailPriority.High,
-                From = emailAccount.Email,
-                FromName = emailAccount.DisplayName,
-                To = toEmailAddress,
-                ToName = toName,
-                CC = string.Empty,
-                Bcc = bcc,
-                Subject = subjectReplaced,
-                Body = bodyReplaced,
-                CreatedOnUtc = DateTime.UtcNow,
-                EmailAccountId = emailAccount.Id
-            };
-
-            _queuedEmailService.InsertQueuedEmail(email);
-            return email.Id;
-        }
-
-        protected EmailAccount GetEmailAccountOfMessageTemplate(MessageTemplate messageTemplate, int languageId)
-        {
-            var emailAccounId = messageTemplate.GetLocalized(mt => mt.EmailAccountId, languageId);
-            var emailAccount = _emailAccountService.GetEmailAccountById(emailAccounId);
-            if (emailAccount == null)
-                emailAccount = _emailAccountService.GetEmailAccountById(_emailAccountSettings.DefaultEmailAccountId);
-            if (emailAccount == null)
-                emailAccount = _emailAccountService.GetAllEmailAccounts().FirstOrDefault();
-            return emailAccount;
-
-        }
-
-
-
-
-
         /// <summary>
         /// Convert a collection to a HTML table
         /// </summary>
@@ -925,38 +847,7 @@ namespace Nop.Plugin.WebApi.mobSocial.Services
 
             return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
         }
-
-        public int SendSomeoneInvitedYouToJoin(Customer inviter, string inviteeName, string inviteeEmail, string invitationUrl, int languageId, int storeId)
-        {
-            var store = _storeService.GetStoreById(storeId) ?? _storeContext.CurrentStore;
-
-            languageId = EnsureLanguageIsActive(languageId, store.Id);
-
-
-            var messageTemplate = GetLocalizedActiveMessageTemplate("MobSocial.InvitationToJoinNotification", store.Id);
-            if (messageTemplate == null)
-                return 0;
-
-
-            var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
-            //tokens
-            var tokens = new List<Token>
-            {
-                new Token("Invitee.Name",inviteeName, true),
-                new Token("Invitation.Url", invitationUrl)
-            };
-
-            _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
-            _messageTokenProvider.AddCustomerTokens(tokens, inviter);
-            //event notification
-            _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
-
-
-            var toEmail = inviteeEmail;
-            var toName = inviteeName;
-
-            return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
-        }
+        
     }
 }
 
