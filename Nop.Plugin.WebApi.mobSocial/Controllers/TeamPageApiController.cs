@@ -158,7 +158,17 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             {
                 return NotFound();
             }
-            var model = Mapper.Map<TeamPageModel>(teamPage);
+            var model = new TeamPageModel()
+            {
+                CreatedBy = teamPage.CreatedBy,
+                CreatedOn = teamPage.CreatedOn,
+                Description = teamPage.Description,
+                Id = teamPage.Id,
+                Name = teamPage.Name,
+                TeamPictureId = teamPage.TeamPictureId,
+                UpdatedBy = teamPage.UpdatedBy,
+                UpdatedOn = teamPage.UpdatedOn
+            };
 
             model.Groups = GetTeamPageGroupPublicModels(id);
             //is the page editable
