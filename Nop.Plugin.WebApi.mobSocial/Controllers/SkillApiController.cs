@@ -98,7 +98,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             //if it's admin, we can safely change the customer id otherwise we'll save skill as logged in user 
             var isAdmin = _workContext.CurrentCustomer.IsAdmin();
-            if (model.CustomerId == 0 && !isAdmin)
+            if (!isAdmin)
                 model.CustomerId = _workContext.CurrentCustomer.Id;
 
             var skill = _skillService.GetById(model.Id) ?? new Skill();
@@ -110,12 +110,14 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     var skillCustomer = _customerService.GetCustomerById(model.CustomerId);
                     if (skillCustomer == null)
                     {
-                        return Response(new { Success = false, Message = "Customer doesn't exist" });
+                        return Response(new {Success = false, Message = "Customer doesn't exist"});
                     }
                 }
-                
+                else
+                {
+                    model.CustomerId = _workContext.CurrentCustomer.Id;
+                }
 
-                skill.CustomerId = model.CustomerId;
             }
             else
             {
@@ -124,7 +126,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     return Unauthorized();
                 }
             }
-
+            skill.CustomerId = model.CustomerId;
             skill.DisplayOrder = model.DisplayOrder;
             skill.SkillName = model.SkillName;
             skill.Description = model.Description;
@@ -135,7 +137,18 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             else
                 _skillService.Update(skill);
 
-            return Response(new { Success = true });
+            return Response(new
+            {
+                Success = true,
+                Skill = new SkillModel()
+                {
+                    SkillName = skill.SkillName,
+                    Description = skill.Description,
+                    Id = skill.Id,
+                    CustomerId = skill.CustomerId,
+                    DisplayOrder = skill.DisplayOrder
+                }
+            });
         }
 
         [HttpDelete]
