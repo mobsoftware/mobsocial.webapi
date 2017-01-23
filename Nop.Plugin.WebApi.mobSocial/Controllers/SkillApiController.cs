@@ -153,7 +153,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpDelete]
         [ApiAuthorize]
-        [Route("delete")]
+        [Route("delete/{skillId:int}")]
         public IHttpActionResult Delete(int skillId)
         {
             var skill = _skillService.GetById(skillId);

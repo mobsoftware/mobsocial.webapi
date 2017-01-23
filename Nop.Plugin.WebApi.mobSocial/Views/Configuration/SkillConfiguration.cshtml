@@ -38,8 +38,10 @@
                                                 dataType: "json"
                                             },
                                             destroy: {
-                                                url: "/api/skills/delete",
-                                                type: "POST",
+                                                url: function (model) {
+                                                    return "/api/skills/delete/" + model.Id;
+                                                },
+                                                type: "DELETE",
                                                 dataType: "json"
                                             },
                                             parameterMap: function (options, type) {
