@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Controllers\FriendsApiController.cs" />
     <Compile Include="Controllers\BaseMobApiController.cs" />
+    <Compile Include="Controllers\MediaApiController.cs" />
     <Compile Include="Controllers\PaymentApiController.cs" />
     <Compile Include="Controllers\SkillApiController.cs" />
     <Compile Include="Controllers\SponsorApiController.cs" />
@@ -62,16 +63,25 @@
     <Compile Include="Controllers\VideoBattleApiController.cs" />
     <Compile Include="Data\CustomerCommentMap.cs" />
     <Compile Include="Data\CustomerLikeMap.cs" />
+    <Compile Include="Data\EntityMediaMap.cs" />
+    <Compile Include="Data\MediaMap.cs" />
     <Compile Include="Data\SkillMap.cs" />
     <Compile Include="Data\TimelinePostMap.cs" />
+    <Compile Include="Data\UserSkillMap.cs" />
     <Compile Include="Domain\CustomerComment.cs" />
     <Compile Include="Domain\CustomerLike.cs" />
+    <Compile Include="Domain\EntityMedia.cs" />
+    <Compile Include="Domain\Media.cs" />
     <Compile Include="Domain\Skill.cs" />
     <Compile Include="Domain\TimelinePost.cs" />
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
+    <Compile Include="Domain\UserSkill.cs" />
+    <Compile Include="Enums\MediaType.cs" />
     <Compile Include="Events\InvitationAcceptedEvent.cs" />
     <Compile Include="Extensions\CustomerExtensions.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
+    <Compile Include="Extensions\ModelExtensions\MediaExtensions.cs" />
+    <Compile Include="Extensions\ModelExtensions\SkillExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="Helpers\VideoBattleHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
@@ -135,9 +145,12 @@
     <Compile Include="Models\FriendSearchModel.cs" />
     <Compile Include="Models\InviteVotersModel.cs" />
     <Compile Include="Models\InviteParticipantsModel.cs" />
+    <Compile Include="Models\MediaReponseModel.cs" />
     <Compile Include="Models\MobSocialProcessPaymentResultModel.cs" />
     <Compile Include="Models\PurchasePassModel.cs" />
+    <Compile Include="Models\SetFeaturedMediaModel.cs" />
     <Compile Include="Models\SkillModel.cs" />
+    <Compile Include="Models\SkillWithUsersModel.cs" />
     <Compile Include="Models\SponsorDataModel.cs" />
     <Compile Include="Models\SponsorModel.cs" />
     <Compile Include="Models\SponsorPublicModel.cs" />
@@ -151,6 +164,8 @@
     <Compile Include="Models\TimelinePostsRequestModel.cs" />
     <Compile Include="Models\UpdateParticipantStatusModel.cs" />
     <Compile Include="Models\UpdateSponsorModel.cs" />
+    <Compile Include="Models\UserSkillEntityModel.cs" />
+    <Compile Include="Models\UserSkillModel.cs" />
     <Compile Include="Models\VideoBattlePrizeModel.cs" />
     <Compile Include="Domain\WatchedVideo.cs" />
     <Compile Include="Enums\VideoBattlePrizeType.cs" />
@@ -175,6 +190,7 @@
     <Compile Include="Services\BusinessPageCouponService.cs" />
     <Compile Include="Services\BusinessPageService.cs" />
     <Compile Include="Services\EchoNestMusicService .cs" />
+    <Compile Include="Services\EntityMediaService.cs" />
     <Compile Include="Services\EventPageAttendanceService.cs" />
     <Compile Include="Services\FriendService.cs" />
     <Compile Include="Services\IApiUri.cs" />
@@ -192,9 +208,13 @@
     <Compile Include="Services\ICustomerPaymentMethodService.cs" />
     <Compile Include="Services\ICustomerProfileService.cs" />
     <Compile Include="Services\ICustomerProfileViewService.cs" />
+    <Compile Include="Services\IEntityMediaService.cs" />
     <Compile Include="Services\IFriendService.cs" />
+    <Compile Include="Services\IMediaService.cs" />
     <Compile Include="Services\IMobSecurityService.cs" />
+    <Compile Include="Services\IMobSocialImageProcessor.cs" />
     <Compile Include="Services\IMobSocialMessageService.cs" />
+    <Compile Include="Services\IMobSocialVideoProcessor.cs" />
     <Compile Include="Services\IMusicService.cs" />
     <Compile Include="Services\IOAuthCredentials.cs" />
     <Compile Include="Services\IOAuthService.cs" />
@@ -208,6 +228,7 @@
     <Compile Include="Services\ITeamPageGroupService.cs" />
     <Compile Include="Services\ITimelineAutoPublisher.cs" />
     <Compile Include="Services\ITimelineService.cs" />
+    <Compile Include="Services\IUserSkillService.cs" />
     <Compile Include="Services\IVideoBattleGenreService.cs" />
     <Compile Include="Services\IVideoBattleParticipantService.cs" />
     <Compile Include="Services\IVideoBattlePrizeService.cs" />
@@ -217,8 +238,11 @@
     <Compile Include="Services\IVideoGenreService.cs" />
     <Compile Include="Services\IVoterPassService.cs" />
     <Compile Include="Services\IWatchedVideoService.cs" />
+    <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\MobSecurityService.cs" />
+    <Compile Include="Services\MobSocialImageProcessor.cs" />
     <Compile Include="Services\MobSocialMessageService.cs" />
+    <Compile Include="Services\MobSocialVideoProcessor.cs" />
     <Compile Include="Services\MusicApiCredentials.cs" />
     <Compile Include="Services\MusicApiUri.cs" />
     <Compile Include="Services\NotificationService.cs" />
@@ -235,6 +259,7 @@
     <Compile Include="Services\TeamPageGroupService.cs" />
     <Compile Include="Services\TimelineAutoPublisher.cs" />
     <Compile Include="Services\TimelineService.cs" />
+    <Compile Include="Services\UserSkillService.cs" />
     <Compile Include="Services\VideBattlePrizeService.cs" />
     <Compile Include="Services\VideoGenreService.cs" />
     <Compile Include="Services\VideoBattleVoteService.cs" />
@@ -486,6 +511,11 @@
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\Websites\Testing\nopCommerce_3.80_Source\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageProcessor, Version=2.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\Websites\Testing\nopCommerce_3.80_Source\packages\ImageProcessor.2.5.2\lib\net45\ImageProcessor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
