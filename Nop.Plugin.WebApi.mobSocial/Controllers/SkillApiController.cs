@@ -15,7 +15,7 @@ using Nop.Services.Seo;
 
 namespace Nop.Plugin.WebApi.MobSocial.Controllers
 {
-    [RoutePrefix("skills")]
+    [RoutePrefix("api/skills")]
     public class SkillController : BaseMobApiController
     {
         #region fields
