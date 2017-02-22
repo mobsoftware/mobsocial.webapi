@@ -23,7 +23,7 @@
                                         type: "json",
                                         transport: {
                                             read: {
-                                                url: "/api/skills/system/get",
+                                                url: "/api/skills/get/all",
                                                 type: "GET",
                                                 dataType: "json"
                                             },
@@ -45,6 +45,10 @@
                                                 dataType: "json"
                                             },
                                             parameterMap: function (options, type) {
+                                                if(type == "create" || type == "update") {
+                                                    options['SystemSkill'] = true;
+                                                    options['Id'] = options['Id'] || 0;
+                                                };
                                                 return options;
                                             }
                                         },
