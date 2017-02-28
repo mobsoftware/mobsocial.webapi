@@ -36,7 +36,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             var skills = _skillService.SearchSkills(searchText, 1, count);
             var skillModels = skills.Select(x => new SkillModel() {
-                SkillName = x.SkillName,
+                SkillName = x.Name,
                 DisplayOrder = x.DisplayOrder,
                 Id = x.Id
             });

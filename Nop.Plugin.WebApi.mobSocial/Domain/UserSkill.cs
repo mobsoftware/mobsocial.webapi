@@ -1,5 +1,4 @@
 ﻿using Mob.Core.Domain;
-using Nop.Core.Domain.Customers;
 
 namespace Nop.Plugin.WebApi.MobSocial.Domain
 {
@@ -10,8 +9,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
         public virtual Skill Skill { get; set; }
 
         public int UserId { get; set; }
-
-        public virtual Customer User { get; set; }
 
         public string ExternalUrl { get; set; }
 

@@ -23,10 +23,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         public IList<Skill> GetAllSkills(out int total, string search = "", int page = 1, int count = 15)
         {
-            var q = Repository.Table.Where(x => search == "" || x.SkillName.StartsWith(search));
+            var q = Repository.Table.Where(x => search == "" || x.Name.StartsWith(search));
             total = q.Count(); //total records
             return
-                q.OrderBy(x => x.SkillName)
+                q.OrderBy(x => x.Name)
                     .Skip(count*(page - 1))
                     .Take(count)
                     .ToList();
@@ -36,7 +36,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         {
             searchText = searchText.ToLower();
             return
-               Repository.Table.Where(x => x.SkillName.ToLower().StartsWith(searchText))
+               Repository.Table.Where(x => x.Name.ToLower().StartsWith(searchText))
                    .OrderBy(x => x.DisplayOrder)
                    .AsEnumerable()
                    .Distinct(new SkillComparer())
@@ -56,12 +56,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
     {
         public bool Equals(Skill x, Skill y)
         {
-            return x.SkillName == y.SkillName;
+            return x.Name == y.Name;
         }
 
         public int GetHashCode(Skill obj)
         {
-            return obj.SkillName.GetHashCode();
+            return obj.Name.GetHashCode();
         }
     }
 }

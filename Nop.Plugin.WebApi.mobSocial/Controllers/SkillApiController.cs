@@ -160,10 +160,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
            
             //get skill, 1.) by id 2.) by name 3.) create new otherwise
             var skill = _skillService.GetById(model.Id) ??
-                        (_skillService.FirstOrDefault(x => x.SkillName == model.SkillName) ?? new Skill() {
+                        (_skillService.FirstOrDefault(x => x.Name == model.SkillName) ?? new Skill() {
                             DisplayOrder = model.DisplayOrder,
                             UserId = currentUser.Id,
-                            SkillName = model.SkillName,
                             Name = model.SkillName
                         });
 
@@ -174,9 +173,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             }
             else
             {
-                if (model.SystemSkill && isAdmin)
+                if (model.SystemSkill && isAdmin && skill.Name != model.SkillName)
                 {
-                    skill.SkillName = model.SkillName;
+                    skill.Name = model.SkillName;
                     _skillService.Update(skill);
                 }
             }

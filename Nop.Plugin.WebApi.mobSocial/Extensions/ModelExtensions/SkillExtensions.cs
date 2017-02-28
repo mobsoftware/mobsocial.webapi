@@ -17,7 +17,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
         {
             var model = new SkillModel() {
                 DisplayOrder = skill.DisplayOrder,
-                SkillName = skill.SkillName,
+                SkillName = skill.Name,
                 Id = skill.Id,
                 UserId = skill.UserId
             };
@@ -32,12 +32,13 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             UrlHelper url, bool onlySkillData = false, bool firstMediaOnly = false, bool withNextAndPreviousMedia = false, bool withSocialInfo = false)
         {
             var entityMedias = mediaService.GetEntityMedia<UserSkill>(userSkill.Id, null, count: int.MaxValue).ToList();
+            var customer = onlySkillData ? null : customerService.GetCustomerById(userSkill.UserId);
             var model = new UserSkillModel() {
                 DisplayOrder = userSkill.Skill.DisplayOrder,
-                SkillName = userSkill.Skill.SkillName,
+                SkillName = userSkill.Skill.Name,
                 UserSkillId = userSkill.Id,
                 Id = userSkill.SkillId,
-                User = onlySkillData ? null : userSkill.User.ToPublicModel(workContext, customerProfileViewService, customerProfileService, pictureService, mediaSettings, url),
+                User = onlySkillData ? null : customer.ToPublicModel(workContext, customerProfileViewService, customerProfileService, pictureService, mediaSettings, url),
                 Media =
                     entityMedias.Take(firstMediaOnly ? 1 : 15)
                         .ToList()

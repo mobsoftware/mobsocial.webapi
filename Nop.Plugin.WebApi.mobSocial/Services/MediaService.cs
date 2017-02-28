@@ -149,7 +149,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             }
 
             //get the directory path from the relative path
-            var directoryPath = MobSocialConstant.MobSocialPicturePath;
+            var directoryPath = ServerHelper.GetLocalPathFromRelativePath(MobSocialConstant.MobSocialPicturePath);
             var fileExtension = PathUtility.GetFileExtensionFromContentType(picture.MimeType);
 
             if (string.IsNullOrEmpty(picture.SystemName))
