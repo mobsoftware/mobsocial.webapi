@@ -13,13 +13,14 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
 {
     public static class SkillExtensions
     {
-        public static SkillModel ToModel(this Skill skill)
+        public static SkillModel ToModel(this Skill skill, IWorkContext workContext)
         {
             var model = new SkillModel() {
                 DisplayOrder = skill.DisplayOrder,
                 SkillName = skill.Name,
                 Id = skill.Id,
-                UserId = skill.UserId
+                UserId = skill.UserId,
+                SeName = skill.GetSeName(workContext.WorkingLanguage.Id, true, false)
             };
             return model;
         }
@@ -51,7 +52,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                 TotalVideoCount = entityMedias.Count(x => x.MediaType == MediaType.Video),
                 ExternalUrl = userSkill.ExternalUrl,
                 Description = userSkill.Description,
-                SeName = userSkill.Skill.GetSeName(workContext.WorkingLanguage.Id)
+                SeName = userSkill.Skill.GetSeName(workContext.WorkingLanguage.Id, true, false)
             };
             return model;
         }
@@ -61,7 +62,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
         {
             var currentUser = workContext.CurrentCustomer;
             var model = new SkillWithUsersModel() {
-                Skill = skill.ToModel(),
+                Skill = skill.ToModel(workContext),
                 FeaturedMediaImageUrl = skill.FeaturedImageId > 0 ? mediaService.GetPictureUrl(skill.FeaturedImageId) : ""
             };
 
@@ -74,7 +75,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                 userSkills.Select(
                     x =>
                         x.ToModel(mediaService, mediaSettings, workContext, storeContext, customerService,
-                            customerProfileViewService, customerProfileService, pictureService, urlHelper, true, true, true, false)).ToList();
+                            customerProfileViewService, customerProfileService, pictureService, urlHelper, false, true, true, false)).ToList();
 
             model.CurrentPage = 1;
             model.UsersPerPage = perPage;

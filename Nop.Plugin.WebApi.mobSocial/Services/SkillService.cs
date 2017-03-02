@@ -2,7 +2,9 @@
 using System.Linq;
 using Mob.Core.Data;
 using Mob.Core.Services;
+using Nop.Core;
 using Nop.Plugin.WebApi.MobSocial.Domain;
+using Nop.Services.Seo;
 
 namespace Nop.Plugin.WebApi.MobSocial.Services
 {
@@ -10,7 +12,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
     {
         private readonly IMobRepository<UserSkill> _userSkillDataRepository;
 
-        public SkillService(IMobRepository<Skill> dataRepository, IMobRepository<UserSkill> userSkillDataRepository) : base(dataRepository)
+        public SkillService(IMobRepository<Skill> dataRepository, IMobRepository<UserSkill> userSkillDataRepository, IWorkContext workContext, IUrlRecordService urlRecordService) : base(dataRepository, workContext, urlRecordService)
         {
             _userSkillDataRepository = userSkillDataRepository;
         }

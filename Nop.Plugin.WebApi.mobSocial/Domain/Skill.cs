@@ -6,7 +6,7 @@ using Nop.Core.Domain.Seo;
 
 namespace Nop.Plugin.WebApi.MobSocial.Domain
 {
-    public class Skill : BaseMobEntity, ISlugSupported, IFollowSupported
+    public class Skill : BaseMobEntity, ISlugSupported, INameSupported, IFollowSupported
     {
         public string Name { get; set; }
 

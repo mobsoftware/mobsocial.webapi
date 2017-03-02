@@ -77,7 +77,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             int total;
             var skills = _skillService.GetAllSkills(out total, string.Empty, page, count);
-            var model = skills.Select(x => x.ToModel()).ToList();
+            var model = skills.Select(x => x.ToModel(_workContext)).ToList();
             return Response(new { Success = true, Skills = model, Total = total });
         }
 
@@ -90,7 +90,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var skill = _skillService.GetById(id);
             if (skill == null)
                 return NotFound();
-            var model = skill.ToModel();
+            var model = skill.ToModel(_workContext);
             return Response(new { Success = true, Skill = model });
         }
 
@@ -207,7 +207,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             }
             return Response(new {
                 Success = true,
-                Skill = skill.ToModel()
+                Skill = skill.ToModel(_workContext)
             });
         }
 

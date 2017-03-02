@@ -9,5 +9,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
         public int DisplayOrder { get; set; }
 
         public int UserId { get; set; }
+
+        public string SeName { get; set; }
     }
 }
