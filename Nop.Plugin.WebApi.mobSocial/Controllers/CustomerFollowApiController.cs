@@ -40,6 +40,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 case FollowableEntityNames.Customer:
                     response = Follow<CustomerProfile>(id);
                     break;
+                case FollowableEntityNames.Skill:
+                    response = Follow<Skill>(id);
+                    break;
             }
             if (response)
                 newStatus = 1;
@@ -60,6 +63,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     break;
                 case FollowableEntityNames.Customer:
                     response = Unfollow<CustomerProfile>(id);
+                    break;
+                case FollowableEntityNames.Skill:
+                    response = Unfollow<Skill>(id);
                     break;
             }
             if (response)
@@ -90,6 +96,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         {
             public const string VideoBattle = "videobattle";
             public const string Customer = "customer";
+            public const string Skill = "skill";
         }
 
         #endregion
