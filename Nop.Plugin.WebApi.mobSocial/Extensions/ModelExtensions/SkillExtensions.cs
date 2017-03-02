@@ -84,7 +84,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
 
             //does this user follow this skill?
             var userFollow = followService.GetCustomerFollow<Skill>(currentUser.Id, skill.Id);
-            model.CanFollow = currentUser.Id != skill.UserId;
+            model.CanFollow = true;
             model.FollowStatus = userFollow == null ? 0 : 1;
 
             model.TotalComments = commentService.GetCommentsCount(skill.Id, "skill");
