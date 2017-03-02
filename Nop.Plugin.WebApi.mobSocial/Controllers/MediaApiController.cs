@@ -65,11 +65,29 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             if (media == null)
                 return NotFound();
 
+            var entityMedia = _entityMediaService.FirstOrDefault(x => x.MediaId == id);
             MediaReponseModel model = null;
-            model = media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
+            //todo: verify permissions to see if media can be viewed by logged in user
+            switch (entityMedia.EntityName)
+            {
+                case "Skill":
+                    model = media.ToModel<Skill>(entityMedia.EntityId, _mediaService, _mediaSettings, _workContext,
+                        _storeContext, _userService,
+                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _friendService,
+                        _commentService, _likeService, true, true, true, true);
+                    break;
+                case "UserSkill":
+                    model = media.ToModel<UserSkill>(entityMedia.EntityId, _mediaService, _mediaSettings, _workContext,
+                        _storeContext, _userService,
+                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _friendService,
+                        _commentService, _likeService, true, true, true, true);
+                    break;
+                default:
+                    model = media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
                    _customerProfileService, _customerProfileViewService, _customerFollowService, _friendService,
-                   _commentService, _likeService, _pictureService, Url);
-
+                   _commentService, _likeService, _pictureService, Url, true, true, true);
+                    break;
+            }
 
             return Response(new { Success = true, Media = model });
         }
@@ -180,7 +198,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _mediaService.Insert(media);
             return Response(new
             {
-                Media =
+                Success = true,
+                Video =
                 media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
                     _customerProfileService, _customerProfileViewService, _customerFollowService, _friendService,
                     _commentService, _likeService, _pictureService, Url)
