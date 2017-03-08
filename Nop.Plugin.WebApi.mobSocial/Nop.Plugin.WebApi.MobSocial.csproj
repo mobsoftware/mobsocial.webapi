@@ -47,6 +47,7 @@
     <Compile Include="Controllers\CommentApiController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\ControllerUtil.cs" />
+    <Compile Include="Controllers\MobSocialCustomerController.cs" />
     <Compile Include="Controllers\CustomerLikeApiController.cs" />
     <Compile Include="Controllers\CustomerFollowApiController.cs" />
     <Compile Include="Controllers\CustomerProfileApiController.cs">
@@ -77,6 +78,7 @@
     <Compile Include="Domain\TimelinePostOwnerTypeNames.cs" />
     <Compile Include="Domain\UserSkill.cs" />
     <Compile Include="Enums\MediaType.cs" />
+    <Compile Include="Events\AdminTabStripCreatedEventConsumer.cs" />
     <Compile Include="Events\InvitationAcceptedEvent.cs" />
     <Compile Include="Extensions\CustomerExtensions.cs" />
     <Compile Include="Extensions\GenericAttributeServiceExtensions.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Models\InviteVotersModel.cs" />
     <Compile Include="Models\InviteParticipantsModel.cs" />
     <Compile Include="Models\MediaReponseModel.cs" />
+    <Compile Include="Models\MobSocialCustomerModel.cs" />
     <Compile Include="Models\MobSocialProcessPaymentResultModel.cs" />
     <Compile Include="Models\PurchasePassModel.cs" />
     <Compile Include="Models\SetFeaturedMediaModel.cs" />
@@ -425,6 +428,7 @@
     <Compile Include="Tasks\FriendRequestNotificationTask.cs" />
     <Compile Include="Tasks\ReminderNotificationsTask.cs" />
     <Compile Include="Tasks\VideoBattlesStatusUpdateTask.cs" />
+    <Compile Include="ViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="Fakes\EntityFramework.fakes" />
@@ -453,6 +457,12 @@
     <Content Include="Views\Configuration\SkillConfiguration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Views\Customer\CustomerTabContents.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Customer\CustomerTab.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Description.txt">

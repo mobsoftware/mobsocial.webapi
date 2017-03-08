@@ -52,6 +52,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IRepository<UrlRecord> _urlRecordRepository;
         private readonly ICustomerVideoAlbumService _customerVideoAlbumService;
         private readonly CustomerProfileViewService _customerProfileViewService;
+        private readonly IGenericAttributeService _genericAttributeService;
+        private readonly ICustomerProfileService _customerProfileService;
 
         public mobSocialApiController(IPermissionService permissionService,
             IWorkContext workContext, AdminAreaSettings adminAreaSettings, ILocalizationService localizationService,
@@ -59,7 +61,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             ICustomerAlbumPictureService customerAlbumPictureService, mobSocialSettings mobSocialSettings, MediaSettings mediaSettings, CustomerSettings customerSettings, 
             ForumSettings forumSettings, RewardPointsSettings rewardPointsSettings, OrderSettings orderSettings,
              IStoreContext storeContext, IWebHelper webHelper, IUrlRecordService urlRecordService, IRepository<UrlRecord> urlRecordRepository,
-            ICustomerVideoAlbumService customerVideoAlbumService, CustomerProfileViewService customerProfileViewService)
+            ICustomerVideoAlbumService customerVideoAlbumService, CustomerProfileViewService customerProfileViewService, IGenericAttributeService genericAttributeService, ICustomerProfileService customerProfileService)
         {
             _permissionService = permissionService;
             _workContext = workContext;
@@ -81,6 +83,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _urlRecordRepository = urlRecordRepository;
             _customerVideoAlbumService = customerVideoAlbumService;
             _customerProfileViewService = customerProfileViewService;
+            _genericAttributeService = genericAttributeService;
+            _customerProfileService = customerProfileService;
         }
 
         
@@ -118,32 +122,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             if (customerRole != null)
                 customerRoleIds[0] = customerRole.Id;
 
-            var customers = _customerService.GetAllCustomers(null, null, 0, 0, customerRoleIds).ToList();
+            var customers = _customerProfileService.SearchCustomers(term, customerRoleIds, excludeLoggedInUser, true,
+                _mobSocialSettings.PeopleSearchAutoCompleteNumberOfResults);
 
-            customers = excludeLoggedInUser ? customers.Where(x => x.Id != _workContext.CurrentCustomer.Id).ToList() : customers;
-            var count = _mobSocialSettings.PeopleSearchAutoCompleteNumberOfResults;
-            term = term.ToLowerInvariant();
-            var filteredCustomers = new List<Customer>();
-            customers.ForEach(x =>
-            {
+           var models = new List<object>();
 
-                if (filteredCustomers.Count >= _mobSocialSettings.PeopleSearchAutoCompleteNumberOfResults) return;
-                
-                var firstName = x.GetAttribute<string>(SystemCustomerAttributeNames.FirstName);
-                firstName = firstName == null ? "" : firstName.ToLowerInvariant();
-                var lastName = x.GetAttribute<string>(SystemCustomerAttributeNames.LastName);
-                lastName = lastName == null ? "" : lastName.ToLowerInvariant();
-                var email = x.Email;
-                if (!firstName.Contains(term) && !lastName.Contains(term) && email != term) return;
-                
-                count--;
-                filteredCustomers.Add(x);
-            });
-           
-           
-            var models = new List<object>();
-
-            foreach (var c in filteredCustomers)
+            foreach (var c in customers)
             {
 
                 models.Add(new
@@ -151,11 +135,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                         DisplayName = c.GetFullName(),
                         PictureUrl = _pictureService.GetPictureUrl(
                             c.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId), 50),
-
-                        ProfileUrl = Url.RouteUrl("CustomerProfileUrl", new RouteValueDictionary()
-                        {
-                             { "SeName" , SeoExtensions.GetSeName(c, 0) }
-                        }),
+                        ProfileUrl = "/" + SeoExtensions.GetSeName(c, 0),
                         Id = c.Id
                     });
 

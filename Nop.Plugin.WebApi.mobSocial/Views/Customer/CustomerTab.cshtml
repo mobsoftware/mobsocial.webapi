@@ -1,0 +1,16 @@
+﻿@model int
+<script type="text/ecmascript">
+    $(document).ready(function () {
+       var cEdit = $("#customer-edit");
+       cEdit.children("ul").append("<li><a data-ajax='/MobSocialCustomer/CustomerTabEditor?id=@Model' data-toggle='tab' href='#tab-mobsocial'>mobSocial</a></li>");
+       cEdit.children(".tab-content").append("<div class='tab-pane' id='tab-mobsocial'></div>");
+      $("a[data-ajax]").on("click", function(e){
+            var url = $(this).data('ajax');
+            $.get(url, function(data){
+            $("#tab-mobsocial").html(data);
+        });
+      });
+
+    });
+</script>
+

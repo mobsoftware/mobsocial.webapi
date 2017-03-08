@@ -1,0 +1,38 @@
+﻿@model Nop.Plugin.WebApi.MobSocial.Models.MobSocialCustomerModel
+
+<div>
+    <div class="form-group">
+        <div class="col-md-3">
+            <div class="label-wrapper">
+                <label class="control-label" for="hideProfile" title="">Hide Profile</label>
+                <div class="ico-help" title="Hide profile from public search"><i class="fa fa-question-circle"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <input type="checkbox" data-val="true" id="hideProfile" value="1" @(Model.HideProfile ? "checked" : "")>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document)
+        .ready(function() {
+
+            var saveMobSocialData = function() {
+                var saveData = {
+                    hideProfile : jQuery("#hideProfile").is(":checked")
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/MobSocialCustomer/CustomerTabEditor?id=@Model.CustomerId",
+                    data: saveData,
+                    success: function(res) {
+                        if (res.Success) {
+                        }
+                    }
+                });
+            };
+
+            $("#hideProfile").change(saveMobSocialData);
+        });
+</script>
