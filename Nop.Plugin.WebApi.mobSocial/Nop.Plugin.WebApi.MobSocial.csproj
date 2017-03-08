@@ -84,6 +84,7 @@
     <Compile Include="Extensions\ModelExtensions\SkillExtensions.cs" />
     <Compile Include="Helpers\DatabaseHelpers.cs" />
     <Compile Include="Helpers\VideoBattleHelpers.cs" />
+    <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="MediaFormatters\Converters\FormDataToObjectConverter.cs" />
     <Compile Include="MediaFormatters\Converters\HttpContentToFormDataConverter.cs" />
     <Compile Include="Core\FeatureToggle.cs" />
