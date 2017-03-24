@@ -58,6 +58,7 @@
                                                 id: "Id",
                                                 fields: {
                                                     SkillName: { editable: true, validation: { required: true } },
+                                                    Description: {editable: true},
                                                     Id: { editable: false }
                                                 }
                                             },
@@ -81,16 +82,21 @@
                                     },
                                     editable: {
                                         confirmation: "Are you sure you want to delete this item?",
-                                        mode: "inline"
+                                        mode: "popup"
                                     },
                                     scrollable: false,
                                     toolbar: ["create"],
                                     columns: [
                                     {
                                         field: "SkillName",
-                                        title: "Skill"
+                                        title: "Skill",
+                                        width:"250px"
+                                    },
+                                    {
+                                        field: "Description",
+                                        title: "Description"
                                     }, {
-                                        command: ["edit", "destroy"], title: "&nbsp;", width: "250px"
+                                        command: ["edit", "destroy"], title: "&nbsp;", width: "200px"
                                     }
                                     ]
                                 });

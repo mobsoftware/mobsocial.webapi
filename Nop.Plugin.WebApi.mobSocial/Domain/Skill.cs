@@ -15,5 +15,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Domain
         public int UserId { get; set; }
 
         public int FeaturedImageId { get; set; }
+
+        public string Description { get; set; }
     }
 }

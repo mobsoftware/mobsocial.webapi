@@ -11,5 +11,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
         public int UserId { get; set; }
 
         public string SeName { get; set; }
+
+        public string Description { get; set; }
     }
 }

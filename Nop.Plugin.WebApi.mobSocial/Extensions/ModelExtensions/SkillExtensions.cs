@@ -20,7 +20,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                 SkillName = skill.Name,
                 Id = skill.Id,
                 UserId = skill.UserId,
-                SeName = skill.GetSeName(workContext.WorkingLanguage.Id, true, false)
+                SeName = skill.GetSeName(workContext.WorkingLanguage.Id, true, false),
+                Description = skill.Description
             };
             return model;
         }

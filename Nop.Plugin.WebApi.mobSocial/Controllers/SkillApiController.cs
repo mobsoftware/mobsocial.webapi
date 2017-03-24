@@ -95,7 +95,6 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("get/{slug}")]
         public IHttpActionResult GetSkill(string slug)
         {
@@ -163,7 +162,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                         (_skillService.FirstOrDefault(x => x.Name == model.SkillName) ?? new Skill() {
                             DisplayOrder = model.DisplayOrder,
                             UserId = currentUser.Id,
-                            Name = model.SkillName
+                            Name = model.SkillName,
+                            Description = model.Description
                         });
 
             //should we add this?
@@ -173,9 +173,10 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             }
             else
             {
-                if (model.SystemSkill && isAdmin && skill.Name != model.SkillName)
+                if (model.SystemSkill && isAdmin)
                 {
                     skill.Name = model.SkillName;
+                    skill.Description = model.Description;
                     _skillService.Update(skill);
                 }
             }
