@@ -699,7 +699,10 @@ namespace Nop.Plugin.WebApi.MobSocial
                 "MobSocial.SponsorAppliedNotification",
                 "MobSocial.SponsorshipStatusChangeNotification",
                 "MobSocial.xDaysToBattleStartNotification",
-                "MobSocial.xDaysToBattleEndNotification"
+                "MobSocial.xDaysToBattleEndNotification",
+                "MobSocial.VideoBattleDisqualifiedNotification",
+                "MobSocial.VideoBattleOpenNotification",
+                "MobSocial.InvitationToJoinNotification"
             };
 
             foreach (var template in messageTemplates)
