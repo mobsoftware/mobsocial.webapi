@@ -73,12 +73,15 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpGet]
         [Route("get/all")]
-        public IHttpActionResult GetSystemSkills(int page = 1, int count = 15)
+        public IHttpActionResult GetSystemSkills(string search = "", int page = 1, int count = 15)
         {
             int total;
-            var skills = _skillService.GetAllSkills(out total, string.Empty, page, count);
+            if (page < 1 || count < 1)
+                return NotFound();
+
+            var skills = _skillService.GetAllSkills(out total, search, page, count);
             var model = skills.Select(x => x.ToModel(_workContext)).ToList();
-            return Response(new { Success = true, Skills = model, Total = total });
+            return Response(new { Success = true, Skills = model, Total = total, Page = page, Count = count });
         }
 
         [HttpGet]
