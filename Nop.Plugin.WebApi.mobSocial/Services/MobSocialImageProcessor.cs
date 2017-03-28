@@ -52,5 +52,39 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             //write the resized image
             WriteResizedImage(imageBytes, width, height, destinationFile, imageFormat);
         }
+
+        public byte[] CropImage(byte[] imageBytes, int left, int top, int width, int height)
+        {
+            var rectangle = new Rectangle(left, top, width, height);
+            using (var inStream = new MemoryStream(imageBytes))
+            using (var outStream = new MemoryStream())
+            using (var imageFactory = new ImageFactory(preserveExifData: true))
+            {
+                imageFactory.Load(inStream)
+                    .Crop(rectangle)
+                    .Save(outStream);
+                return outStream.ToArray();
+            }
+        }
+
+        public void WriteCroppedImage(byte[] imageBytes, int left, int top, int width, int height, string filePath,
+            ImageFormat imageFormat)
+        {
+            var croppedBytes = CropImage(imageBytes, left, top, width, height);
+            WriteBytesToImage(croppedBytes, filePath, imageFormat);
+        }
+
+        public void WriteCroppedImage(string sourceFile, string destinationFile, int left, int top, int width, int height,
+            string filePath, ImageFormat imageFormat)
+        {
+            if (!File.Exists(sourceFile))
+            {
+                return;
+            }
+
+            //read bytes from image 
+            var imageBytes = File.ReadAllBytes(sourceFile);
+            WriteCroppedImage(imageBytes, left, top, width, height, filePath, imageFormat);
+        }
     }
 }

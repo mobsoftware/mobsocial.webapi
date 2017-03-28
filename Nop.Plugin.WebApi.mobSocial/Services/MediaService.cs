@@ -168,6 +168,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             picture.ThumbnailPath = ServerHelper.GetRelativePathFromLocalPath(filePath);
         }
 
+        public void WritePictureBytesCropped(Media picture, int left, int top, int width, int height)
+        {
+            picture.Binary = _imageProcessor.CropImage(picture.Binary, left, top, width, height);
+            WritePictureBytes(picture);
+        }
+
         public void WriteVideoBytes(Media video)
         {
             //we need to save the file on file system

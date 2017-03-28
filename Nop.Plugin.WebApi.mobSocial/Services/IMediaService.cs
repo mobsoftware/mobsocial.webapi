@@ -32,6 +32,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
 
         void WritePictureBytes(Media picture);
 
+        void WritePictureBytesCropped(Media picture, int left, int top, int width, int height);
+
         void WriteVideoBytes(Media video);
 
         IQueryable<Media> GetEntityMedia<TEntityType>(int entityId, MediaType? mediaType, int page = 1, int count = 15) where TEntityType : BaseEntity;

@@ -151,6 +151,7 @@
     <Compile Include="Models\MediaReponseModel.cs" />
     <Compile Include="Models\MobSocialCustomerModel.cs" />
     <Compile Include="Models\MobSocialProcessPaymentResultModel.cs" />
+    <Compile Include="Models\PictureCropModel.cs" />
     <Compile Include="Models\PurchasePassModel.cs" />
     <Compile Include="Models\SetFeaturedMediaModel.cs" />
     <Compile Include="Models\SkillModel.cs" />

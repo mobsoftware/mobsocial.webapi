@@ -97,10 +97,28 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         [HttpPost]
         public IHttpActionResult UploadPictures()
         {
-            var files = HttpContext.Current.Request.Files;
+            var request = HttpContext.Current.Request;
+            var files = request.Files;
             if (files.Count == 0)
             {
-                return Response(new { Success = false});
+                return Response(new { Success = false });
+            }
+            //a little hack here.//if we pass model as paramter to this method we get -> This method or property is not supported after HttpRequest.GetBufferlessInputStream has been invoked
+            PictureCropModel cropModel = null;
+            if (request.Params["crop"] != null)
+            {
+                int left, width, top, height;
+                int.TryParse(request.Params["left"] ?? "0", out left);
+                int.TryParse(request.Params["width"] ?? "0", out width);
+                int.TryParse(request.Params["top"] ?? "0", out top);
+                int.TryParse(request.Params["height"] ?? "0", out height);
+                cropModel = new PictureCropModel()
+                {
+                    Width = width,
+                    Height = height,
+                    Left = left,
+                    Top = top
+                };
             }
             var newImages = new List<object>();
             for (var index = 0; index < files.Count; index++)
@@ -135,8 +153,16 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     UserId = _workContext.CurrentCustomer.Id,
                     DateCreated = DateTime.UtcNow
                 };
-
-                _mediaService.WritePictureBytes(picture);
+                //should we crop or not
+                if (cropModel?.Height > 0 && cropModel.Width > 0)
+                {
+                    _mediaService.WritePictureBytesCropped(picture, cropModel.Left, cropModel.Top, cropModel.Width,
+                        cropModel.Height);
+                }
+                else
+                {
+                    _mediaService.WritePictureBytes(picture);
+                }
                 //save it
                 _mediaService.Insert(picture);
                 newImages.Add(picture.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
@@ -155,7 +181,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var files = HttpContext.Current.Request.Files;
             if (files.Count == 0)
             {
-                return Response(new { Success = false});
+                return Response(new { Success = false });
             }
 
             var file = files[0];
@@ -196,8 +222,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _mediaService.WriteVideoBytes(media);
             //insert now
             _mediaService.Insert(media);
-            return Response(new
-            {
+            return Response(new {
                 Success = true,
                 Video =
                 media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
