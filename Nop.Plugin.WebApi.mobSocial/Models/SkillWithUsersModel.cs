@@ -28,5 +28,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Models
         public int LikeStatus { get; set; }
 
         public int TotalLikes { get; set; }
+
+        public bool HasSkill { get; set; }
     }
 }

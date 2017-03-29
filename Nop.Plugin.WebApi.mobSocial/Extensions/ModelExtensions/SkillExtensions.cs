@@ -73,7 +73,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             var userSkills = userSkillService.Get(x => x.SkillId == skill.Id).ToList();
 
             model.UserSkills =
-                userSkills.Select(
+                userSkills.OrderBy(x => x.Id).Take(perPage).Select(
                     x =>
                         x.ToModel(mediaService, mediaSettings, workContext, storeContext, customerService,
                             customerProfileViewService, customerProfileService, pictureService, urlHelper, false, true, true, false)).ToList();
@@ -87,7 +87,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             var userFollow = followService.GetCustomerFollow<Skill>(currentUser.Id, skill.Id);
             model.CanFollow = true;
             model.FollowStatus = userFollow == null ? 0 : 1;
-
+            model.HasSkill = userSkills.Any(x => x.UserId == currentUser.Id);
             model.TotalComments = commentService.GetCommentsCount(skill.Id, "skill");
             model.LikeStatus = likeService.GetCustomerLike<Skill>(currentUser.Id, skill.Id) == null ? 0 : 1;
             model.TotalLikes = likeService.GetLikeCount<Skill>(skill.Id);

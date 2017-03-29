@@ -122,8 +122,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var skill = _skillService.GetById(id);
             if (skill == null)
                 return NotFound();
-
-            var userSkills = _userSkillService.Get(x => x.SkillId == id).ToList();
+            var count = 15; //todo: make it configurable
+            var userSkills = _userSkillService.Get(x => x.SkillId == id).OrderBy(x => x.Id).Skip((page - 1) * count).Take(count).ToList();
             var model =
                 userSkills.Select(
                     x =>
