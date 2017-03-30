@@ -217,6 +217,35 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
 
         [HttpPost]
         [Authorize]
+        [Route("media/post")]
+        public IHttpActionResult Post(UserSkillEntityMediaModel model)
+        {
+            if (model.MediaId == 0 || model.UserSkillId == 0)
+                return BadRequest();
+
+            var currentUser = _workContext.CurrentCustomer;
+            //check if user skill exists and that media exists
+            var userSkill =
+                _userSkillService.Get(x => x.Id == model.UserSkillId && x.UserId == currentUser.Id).FirstOrDefault();
+
+            if (userSkill == null)
+                return NotFound();
+
+            var media = _mediaService.GetById(model.MediaId);
+            if (media == null || media.UserId != currentUser.Id)
+                return Response(new {Success = false, Message = "Invalid media"});
+
+            //attach media
+            _mediaService.AttachMediaToEntity(userSkill, media);
+
+            return Response(new
+            {
+                Success = true,
+                MediaType = media.MediaType
+            });
+        }
+        [HttpPost]
+        [Authorize]
         [Route("featured-media")]
         public IHttpActionResult Post(SetFeaturedMediaModel requestModel)
         {

@@ -169,6 +169,7 @@
     <Compile Include="Models\TimelinePostsRequestModel.cs" />
     <Compile Include="Models\UpdateParticipantStatusModel.cs" />
     <Compile Include="Models\UpdateSponsorModel.cs" />
+    <Compile Include="Models\UserSkillEntityMediaModel.cs" />
     <Compile Include="Models\UserSkillEntityModel.cs" />
     <Compile Include="Models\UserSkillModel.cs" />
     <Compile Include="Models\VideoBattlePrizeModel.cs" />
