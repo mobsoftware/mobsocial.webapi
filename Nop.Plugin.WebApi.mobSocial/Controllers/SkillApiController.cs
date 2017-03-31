@@ -34,10 +34,11 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly IPictureService _pictureService;
         private readonly IUrlRecordService _urlRecordService;
         private readonly IStoreContext _storeContext;
+        private readonly IWebHelper _webHelper;
         #endregion
 
         #region ctor
-        public SkillController(ISkillService skillService, ICustomerService userService, IMediaService mediaService, MediaSettings mediaSettings, IUserSkillService userSkillService, ICustomerFollowService followService, ICustomerLikeService likeService, ICustomerCommentService commentService, IWorkContext workContext, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, IPictureService pictureService, IUrlRecordService urlRecordService, IStoreContext storeContext)
+        public SkillController(ISkillService skillService, ICustomerService userService, IMediaService mediaService, MediaSettings mediaSettings, IUserSkillService userSkillService, ICustomerFollowService followService, ICustomerLikeService likeService, ICustomerCommentService commentService, IWorkContext workContext, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, IPictureService pictureService, IUrlRecordService urlRecordService, IStoreContext storeContext, IWebHelper webHelper)
         {
             _skillService = skillService;
             _userService = userService;
@@ -53,6 +54,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _pictureService = pictureService;
             _urlRecordService = urlRecordService;
             _storeContext = storeContext;
+            _webHelper = webHelper;
         }
         #endregion
 
@@ -67,7 +69,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 return NotFound();
 
             var userSkills = _skillService.GetUserSkills(userId).OrderBy(x => x.DisplayOrder);
-            var model = userSkills.Select(x => x.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext , _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url));
+            var model = userSkills.Select(x => x.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext , _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url, _webHelper));
 
             return Response(new { Success = true, Skills = model });
         }
@@ -112,7 +114,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             if (skill == null)
                 return NotFound();
 
-            var model = skill.ToSkillWithUsersModel(_workContext, _storeContext,_userService, _userSkillService, _mediaService, _mediaSettings, _followService, _likeService, _commentService,_customerProfileService, _customerProfileViewService, _pictureService, Url);
+            var model = skill.ToSkillWithUsersModel(_workContext, _storeContext,_userService, _userSkillService, _mediaService, _mediaSettings, _followService, _likeService, _commentService,_customerProfileService, _customerProfileViewService, _pictureService, Url, _webHelper);
             return Response(new { Success = true, SkillData = model });
         }
 
@@ -128,7 +130,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             var model =
                 userSkills.Select(
                     x =>
-                        x.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url, firstMediaOnly: true,
+                        x.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url, _webHelper, firstMediaOnly: true,
                             withNextAndPreviousMedia: true, withSocialInfo: false));
 
             return Response(new {
@@ -207,7 +209,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                     _mediaService.AttachMediaToEntity(userSkill, media);
                 return Response(new {
                     Success = true,
-                    Skill = userSkill.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url)
+                    Skill = userSkill.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService, _customerProfileViewService, _customerProfileService, _pictureService, Url, _webHelper)
                 });
             }
             return Response(new {

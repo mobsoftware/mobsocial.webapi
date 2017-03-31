@@ -36,8 +36,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         private readonly ICustomerCommentService _customerCommentService;
         private readonly IFriendService _friendService;
         private readonly IPictureService _pictureService;
-
-        public MediaApiController(MediaService mediaService, MediaSettings mediaSettings, IMobSocialVideoProcessor videoProcessor, ICustomerService userService, ICustomerCommentService commentService, ICustomerLikeService likeService, IEntityMediaService entityMediaService, IWorkContext workContext, IStoreContext storeContext, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, ICustomerLikeService customerLikeService, ICustomerFollowService customerFollowService, ICustomerCommentService customerCommentService, IFriendService friendService, IPictureService pictureService)
+        private readonly IWebHelper _webHelper;
+        public MediaApiController(MediaService mediaService, MediaSettings mediaSettings, IMobSocialVideoProcessor videoProcessor, ICustomerService userService, ICustomerCommentService commentService, ICustomerLikeService likeService, IEntityMediaService entityMediaService, IWorkContext workContext, IStoreContext storeContext, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, ICustomerLikeService customerLikeService, ICustomerFollowService customerFollowService, ICustomerCommentService customerCommentService, IFriendService friendService, IPictureService pictureService, IWebHelper webHelper)
         {
             _mediaService = mediaService;
             _mediaSettings = mediaSettings;
@@ -55,6 +55,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             _customerCommentService = customerCommentService;
             _friendService = friendService;
             _pictureService = pictureService;
+            _webHelper = webHelper;
         }
 
         [HttpGet]
@@ -74,19 +75,19 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 case "Skill":
                     model = media.ToModel<Skill>(entityMedia.EntityId, _mediaService, _mediaSettings, _workContext,
                         _storeContext, _userService,
-                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _friendService,
+                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _webHelper, _friendService,
                         _commentService, _likeService, true, true, true, true);
                     break;
                 case "UserSkill":
                     model = media.ToModel<UserSkill>(entityMedia.EntityId, _mediaService, _mediaSettings, _workContext,
                         _storeContext, _userService,
-                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _friendService,
+                        _customerProfileService, _customerProfileViewService, _pictureService, Url, _webHelper, _friendService,
                         _commentService, _likeService, true, true, true, true);
                     break;
                 default:
                     model = media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
                    _customerProfileService, _customerProfileViewService, _customerFollowService, _friendService,
-                   _commentService, _likeService, _pictureService, Url, true, true, true);
+                   _commentService, _likeService, _pictureService, Url, _webHelper, true, true, true);
                     break;
             }
 
@@ -168,7 +169,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 _mediaService.Insert(picture);
                 newImages.Add(picture.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
                     _customerProfileService, _customerProfileViewService, _customerFollowService, _friendService,
-                    _commentService, _likeService, _pictureService, Url));
+                    _commentService, _likeService, _pictureService, Url, _webHelper));
             }
 
             return Response(new { Success = true, Images = newImages });
@@ -228,7 +229,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
                 Video =
                 media.ToModel(_mediaService, _mediaSettings, _workContext, _storeContext, _userService,
                     _customerProfileService, _customerProfileViewService, _customerFollowService, _friendService,
-                    _commentService, _likeService, _pictureService, Url)
+                    _commentService, _likeService, _pictureService, Url, _webHelper)
             });
         }
     }

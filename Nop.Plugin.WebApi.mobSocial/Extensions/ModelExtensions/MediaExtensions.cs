@@ -31,10 +31,12 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             ICustomerLikeService likeService,
             IPictureService pictureService,
             UrlHelper urlHelper,
+            IWebHelper webHelper,
             bool withUserInfo = true,
             bool withSocialInfo = false,
             bool withNextAndPreviousMedia = false)
         {
+            var storeUrl = webHelper.GetStoreLocation();
             var model = new MediaReponseModel()
             {
                 Id = media.Id,
@@ -48,7 +50,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                 ThumbnailUrl =
                     media.MediaType == MediaType.Image
                         ? mediaService.GetPictureUrl(media)
-                        : media.ThumbnailPath.Replace("~", storeContext.CurrentStore.Url)
+                        : media.ThumbnailPath.Replace("~", storeUrl)
             };
             if (withUserInfo && userService != null)
             {
@@ -102,6 +104,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             ICustomerProfileViewService customerProfileViewService,
             IPictureService pictureService,
             UrlHelper urlHelper,
+            IWebHelper webHelper,
             IFriendService friendService = null,
             ICustomerCommentService commentService = null,
             ICustomerLikeService likeService = null,
@@ -110,13 +113,14 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             bool withNextAndPreviousMedia = false,
             bool avoidMediaTypeForNextAndPreviousMedia = false) where T: BaseEntity
         {
+            var storeUrl = webHelper.GetStoreLocation();
             var model = new MediaReponseModel() {
                 Id = media.Id,
                 MediaType = media.MediaType,
                 Url = media.MediaType == MediaType.Image ? mediaService.GetPictureUrl(media) : mediaService.GetVideoUrl(media),
                 MimeType = media.MimeType,
                 DateCreatedUtc = media.DateCreated,
-                ThumbnailUrl = media.MediaType == MediaType.Image ? mediaService.GetPictureUrl(media) : media.ThumbnailPath.Replace("~", storeContext.CurrentStore.Url)
+                ThumbnailUrl = media.MediaType == MediaType.Image ? mediaService.GetPictureUrl(media) : media.ThumbnailPath.Replace("~", storeUrl)
             };
             if (withUserInfo && userService != null)
             {

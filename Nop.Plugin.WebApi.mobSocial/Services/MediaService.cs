@@ -23,7 +23,8 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
         private readonly IMobSocialImageProcessor _imageProcessor;
         private readonly IStoreContext _storeContext;
         private readonly IMobSocialVideoProcessor _videoProcessor;
-        public MediaService(IMobRepository<Media> mediaRepository, IEntityMediaService entityMediaService, MediaSettings mediaSettings, IPictureService pictureService, IMobSocialImageProcessor imageProcessor, IStoreContext storeContext, IMobSocialVideoProcessor videoProcessor) : base(mediaRepository)
+        private readonly IWebHelper _webHelper;
+        public MediaService(IMobRepository<Media> mediaRepository, IEntityMediaService entityMediaService, MediaSettings mediaSettings, IPictureService pictureService, IMobSocialImageProcessor imageProcessor, IStoreContext storeContext, IMobSocialVideoProcessor videoProcessor, IWebHelper webHelper) : base(mediaRepository)
         {
             _entityMediaService = entityMediaService;
             _mediaSettings = mediaSettings;
@@ -31,6 +32,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
             _imageProcessor = imageProcessor;
             _storeContext = storeContext;
             _videoProcessor = videoProcessor;
+            _webHelper = webHelper;
         }
 
 
@@ -116,8 +118,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
                 //save resized image
                 _imageProcessor.WriteResizedImage(fileSystemPathForOriginalImage, expectedFileSystemPath, width, height, imageFormat);
             }
+            var storeUrl = _webHelper.GetStoreLocation();
             //return the image url
-            var imageServeUrl = expectedFile.Replace("~", _storeContext.CurrentStore.Url);
+            var imageServeUrl = expectedFile.Replace("~", storeUrl);
             return imageServeUrl;
         }
 
@@ -134,9 +137,9 @@ namespace Nop.Plugin.WebApi.MobSocial.Services
                 return string.Empty;
 
             var expectedFile = media.LocalPath;
-            
+            var storeUrl = _webHelper.GetStoreLocation();
             //return the image url
-            var videoServeUrl = expectedFile.Replace("~", _storeContext.CurrentStore.Url);
+            var videoServeUrl = expectedFile.Replace("~", storeUrl);
             return videoServeUrl;
         }
 

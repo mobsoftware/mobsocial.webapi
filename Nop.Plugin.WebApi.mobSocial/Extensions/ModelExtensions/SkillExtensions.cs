@@ -31,7 +31,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
             ICustomerProfileViewService customerProfileViewService,
             ICustomerProfileService customerProfileService,
             IPictureService pictureService,
-            UrlHelper url, bool onlySkillData = false, bool firstMediaOnly = false, bool withNextAndPreviousMedia = false, bool withSocialInfo = false)
+            UrlHelper url, IWebHelper webHelper, bool onlySkillData = false, bool firstMediaOnly = false, bool withNextAndPreviousMedia = false, bool withSocialInfo = false)
         {
             var entityMedias = mediaService.GetEntityMedia<UserSkill>(userSkill.Id, null, count: int.MaxValue).ToList();
             var customer = onlySkillData ? null : customerService.GetCustomerById(userSkill.UserId);
@@ -46,7 +46,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                         .ToList()
                         .Select(
                             x =>
-                                x.ToModel<UserSkill>(userSkill.Id, mediaService, mediaSettings, workContext, storeContext, customerService, customerProfileService, customerProfileViewService, pictureService, url))
+                                x.ToModel<UserSkill>(userSkill.Id, mediaService, mediaSettings, workContext, storeContext, customerService, customerProfileService, customerProfileViewService, pictureService, url, webHelper))
                         .ToList(),
                 TotalMediaCount = entityMedias.Count,
                 TotalPictureCount = entityMedias.Count(x => x.MediaType == MediaType.Image),
@@ -59,7 +59,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
         }
 
         public static SkillWithUsersModel ToSkillWithUsersModel(this Skill skill, IWorkContext workContext, IStoreContext storeContext, ICustomerService customerService, IUserSkillService userSkillService, IMediaService mediaService,
-            MediaSettings mediaSettings, ICustomerFollowService followService, ICustomerLikeService likeService, ICustomerCommentService commentService, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, IPictureService pictureService, UrlHelper urlHelper)
+            MediaSettings mediaSettings, ICustomerFollowService followService, ICustomerLikeService likeService, ICustomerCommentService commentService, ICustomerProfileService customerProfileService, ICustomerProfileViewService customerProfileViewService, IPictureService pictureService, UrlHelper urlHelper, IWebHelper webHelper)
         {
             var currentUser = workContext.CurrentCustomer;
             var model = new SkillWithUsersModel() {
@@ -76,7 +76,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions
                 userSkills.OrderBy(x => x.Id).Take(perPage).Select(
                     x =>
                         x.ToModel(mediaService, mediaSettings, workContext, storeContext, customerService,
-                            customerProfileViewService, customerProfileService, pictureService, urlHelper, false, true, true, false)).ToList();
+                            customerProfileViewService, customerProfileService, pictureService, urlHelper, webHelper, false, true, true, false)).ToList();
 
             model.CurrentPage = 1;
             model.UsersPerPage = perPage;
