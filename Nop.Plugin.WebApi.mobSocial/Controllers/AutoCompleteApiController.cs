@@ -2,6 +2,7 @@
 using System.Dynamic;
 using System.Linq;
 using System.Web.Http;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Models;
 using Nop.Plugin.WebApi.MobSocial.Services;
 
@@ -18,7 +19,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [Route("{autoCompleteType}/get")]
-        [Authorize]
+        [ApiAuthorize]
         public IHttpActionResult Get(string autoCompleteType, string searchText, int count = 10)
         {
             dynamic model = new ExpandoObject();

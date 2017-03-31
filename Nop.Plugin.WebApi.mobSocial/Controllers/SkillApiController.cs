@@ -4,6 +4,7 @@ using System.Web.Http;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions;
@@ -85,7 +86,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("get/{id:int}")]
         public IHttpActionResult GetSkill(int id)
         {
@@ -137,7 +138,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("post")]
         public IHttpActionResult Post(UserSkillEntityModel model)
         {
@@ -216,7 +217,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("media/post")]
         public IHttpActionResult Post(UserSkillEntityMediaModel model)
         {
@@ -245,7 +246,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             });
         }
         [HttpPost]
-        [Authorize]
+        [ApiAuthorize]
         [Route("featured-media")]
         public IHttpActionResult Post(SetFeaturedMediaModel requestModel)
         {
@@ -278,7 +279,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("user/media/delete/{userSkillId}/{mediaId}")]
         public IHttpActionResult DeleteMedia(int userSkillId, int mediaId)
         {
@@ -306,7 +307,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("delete/{skillId:int}")]
         public IHttpActionResult Delete(int skillId)
         {
@@ -327,7 +328,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [ApiAuthorize]
         [Route("users/delete/{userSkillId:int}")]
         public IHttpActionResult DeleteUserSkill(int userSkillId)
         {

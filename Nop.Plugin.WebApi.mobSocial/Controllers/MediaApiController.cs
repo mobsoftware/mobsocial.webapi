@@ -6,6 +6,7 @@ using System.Web.Http;
 using Mob.Core;
 using Nop.Core;
 using Nop.Core.Domain.Media;
+using Nop.Plugin.WebApi.MobSocial.Attributes;
 using Nop.Plugin.WebApi.MobSocial.Domain;
 using Nop.Plugin.WebApi.MobSocial.Enums;
 using Nop.Plugin.WebApi.MobSocial.Extensions.ModelExtensions;
@@ -57,7 +58,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         [Route("get/{id:int}")]
         public IHttpActionResult Get(int id)
         {
@@ -92,7 +93,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Response(new { Success = true, Media = model });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadpictures")]
         [HttpPost]
         public IHttpActionResult UploadPictures()
@@ -173,7 +174,7 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             return Response(new { Success = true, Images = newImages });
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [Route("uploadvideo")]
         [HttpPost]
         public IHttpActionResult UploadVideo()
