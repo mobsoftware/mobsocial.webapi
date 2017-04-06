@@ -190,6 +190,20 @@ namespace Nop.Plugin.WebApi.MobSocial.Controllers
             //if user id is not 0, attach this skill with user
             if (model.UserId != 0)
             {
+                //but first check if this skill has already been assigned to user or not
+                if (model.UserSkillId == 0)
+                {
+                    var savedSkill = _userSkillService.FirstOrDefault(x => x.SkillId == skill.Id);
+                    if (savedSkill != null)
+                    {
+                        //the skill is already part of user, we won't add it again
+                        return Response(new
+                        {
+                            Success = false,
+                            Message = "The skill has already been added to this profile"
+                        });
+                    }
+                }
                 var userSkill = model.UserSkillId > 0 ? _userSkillService.GetById(model.UserSkillId) : new UserSkill()
                 {
                     UserId = model.UserId,
